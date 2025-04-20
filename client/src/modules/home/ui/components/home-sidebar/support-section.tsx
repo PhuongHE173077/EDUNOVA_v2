@@ -1,47 +1,32 @@
 "use client"
-import { SidebarGroup, SidebarGroupContent, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar'
-import { CalendarIcon, FileBadgeIcon, FlameIcon, HomeIcon, LibraryBigIcon, PlaySquareIcon } from 'lucide-react'
+import { SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar'
+import { CircleHelpIcon, MessageSquareIcon, SettingsIcon } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import React from 'react'
 
 const items = [
   {
-    title: 'Home',
-    url: "/student",
-    icon: HomeIcon
+    title: 'Settings',
+    url: "/setting",
+    icon: SettingsIcon
   },
   {
-    title: 'Courses',
-    url: "/course",
-    icon: LibraryBigIcon,
-    auth: true
+    title: 'Send Feedback',
+    url: "/feed/subscriptions",
+    icon: MessageSquareIcon,
   },
   {
-    title: 'Schedule',
-    url: "/schedule",
-    icon: CalendarIcon,
+    title: 'help',
+    url: "/feed/trending",
+    icon: CircleHelpIcon,
   },
-  {
-    title: 'Videos Recoder',
-    url: "/video-recoder",
-    icon: PlaySquareIcon,
-  },
-  {
-    title: 'Achievements',
-    url: "/achievement",
-    icon: FileBadgeIcon,
-  },
-  {
-    title: 'Ranked',
-    url: "/rank",
-    icon: FlameIcon,
-  },
+
 ]
-export const MainSection = () => {
+export const SupportSection = () => {
   const pathname = usePathname();
   return (
     <SidebarGroup>
+      <SidebarGroupLabel className='text-muted-foreground text-lg'>Support</SidebarGroupLabel>
       <SidebarGroupContent>
         <SidebarMenu >
           {items.map((item) => (
@@ -50,7 +35,7 @@ export const MainSection = () => {
                 tooltip={item.title}
                 asChild
                 isActive={pathname === item.url}
-
+              // onClick={() => {}}
               >
                 <Link href={item.url} className='flex items-center gap-2 p-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent rounded-md transition-colors'>
                   <item.icon />

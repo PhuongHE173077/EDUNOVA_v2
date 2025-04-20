@@ -8,9 +8,12 @@ export const HomeLayout = ({ children }: { children: React.ReactNode }) => {
     <SidebarProvider>
       <div className="w-full">
         <HomeNavbar />
-        <div className="flex  ">
+        <div className="flex pt-2 ">
           <HomeSidebar />
-          {children}
+          <main className='flex-1 overflow-y-auto'>
+            {children}
+          </main>
+
         </div>
 
       </div>

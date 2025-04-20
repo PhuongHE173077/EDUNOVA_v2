@@ -31,6 +31,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
+import Link from "next/link"
 
 export function NavUser({
   user,
@@ -53,13 +54,13 @@ export function NavUser({
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground relative"
             >
 
-              <Avatar className="h-10 w-10 rounded-lg">
+              <Avatar className="h-8 w-8 rounded-lg">
                 <AvatarImage src={user.avatar} alt={user.name} />
                 <AvatarFallback className="rounded-lg">CN</AvatarFallback>
               </Avatar>
 
               <div className="absolute bottom-0 right-1 bg-gray-100 rounded-full">
-                <ChevronDownIcon className=" h-5 w-5 text-black" />
+                <ChevronDownIcon className=" h-4 w-4 text-black" />
               </div>
 
 
@@ -104,10 +105,14 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <LogOutIcon />
-              Log out
-            </DropdownMenuItem>
+            <Link href="/sign-in" >
+              <DropdownMenuItem >
+
+                <LogOutIcon />
+                Log out
+
+              </DropdownMenuItem>
+            </Link>
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>

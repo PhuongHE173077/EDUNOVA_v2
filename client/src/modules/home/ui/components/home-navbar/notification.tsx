@@ -4,7 +4,7 @@ import React from 'react';
 function Notification() {
   return (
     <div>
-      <BellIcon />
+      <BellIcon className='h-5 w-5 text-gray-500' />
     </div>
   );
 }

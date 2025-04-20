@@ -14,7 +14,7 @@ export const HomeNavbar = () => {
     avatar: "https://res.cloudinary.com/dl3ucqngx/image/upload/v1741794853/main-course_xrfads.png"
   }
   return (
-    <nav className="flex top-0 left-0 w-full h-16 bg-white border-b items-center justify-between px-4">
+    <nav className="flex top-0 left-0 w-full h-16 bg-white border-b items-center justify-between px-4" style={{ position: 'sticky', top: 0, zIndex: 10 }}>
       <div className="flex items-center flex-shrink-0">
         <SidebarTrigger />
         <Link href='/' >
@@ -31,7 +31,7 @@ export const HomeNavbar = () => {
 
       </div>
       <div className="flex items-center gap-5 ">
-        <Input placeholder="Search" className="w-80" />
+        {/* <Input placeholder="Search" className="w-80" /> */}
 
         <Notification />
 
