@@ -4,6 +4,7 @@ import { env } from './config/environment'
 import cookieParser from 'cookie-parser'
 import { errorHandlingMiddleware } from './middlewares/errorHandlingMiddleware'
 import { corsOptions } from './config/cors'
+import { APIs_V1 } from './routes/v1'
 var cors = require('cors')
 const app = express()
 
@@ -17,6 +18,10 @@ const START_SERVER = () => {
   app.use(express.json())
 
   app.use(cookieParser())
+
+  app.use(express.urlencoded({ extended: true }))
+
+  app.use('/api/v1', APIs_V1)
 
   app.use(errorHandlingMiddleware)
 
