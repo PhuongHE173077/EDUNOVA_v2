@@ -24,3 +24,9 @@ export const CarouselData = [
       "Explore a future in IT. Start learning toward AWS certification, CompTIA A+ certification, and more.",
   },
 ];
+
+export const USER_ROLE = {
+  STUDENT: "student",
+  TEACHER: "teacher",
+  ADMIN: "admin",
+}

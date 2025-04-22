@@ -1,14 +1,11 @@
 "use client"
 
 import {
-  ArrowDownUpIcon,
   BellIcon,
   ChevronDownIcon,
-  ChevronsDownUpIcon,
   CreditCardIcon,
   LogOutIcon,
-  MoreVerticalIcon,
-  UserCircleIcon,
+  UserCircleIcon
 } from "lucide-react"
 
 import {
@@ -32,17 +29,25 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 import Link from "next/link"
+import { useAppDispatch, useAppSelector } from "@/lib/redux/store"
+import { logoutUserAPIs, selectedCurrentUser } from "@/lib/redux/user/user.slide"
+import { useRouter } from "next/navigation"
 
-export function NavUser({
-  user,
-}: {
-  user: {
-    name: string
-    email: string
-    avatar: string
-  }
-}) {
+export function NavUser() {
+  const user = useAppSelector(selectedCurrentUser)
   const { isMobile } = useSidebar()
+  const dispatch = useAppDispatch()
+
+  const router = useRouter()
+
+  const handleLogout = async () => {
+    const resultAction = await dispatch(logoutUserAPIs());
+    if (resultAction.meta.requestStatus === 'fulfilled') {
+      router.push('/sign-in')
+    }
+  }
+
+
 
   return (
     <SidebarMenu>
@@ -55,7 +60,7 @@ export function NavUser({
             >
 
               <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage src={user.avatar} alt={user.name} />
+                <AvatarImage src={user?.avatar} alt={user?.name} />
                 <AvatarFallback className="rounded-lg">CN</AvatarFallback>
               </Avatar>
 
@@ -78,13 +83,13 @@ export function NavUser({
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={user.avatar} alt={user.name} />
+                  <AvatarImage src={user?.avatar} alt={user?.name} />
                   <AvatarFallback className="rounded-lg">CN</AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">{user.name}</span>
+                  <span className="truncate font-medium">{user?.name}</span>
                   <span className="truncate text-xs text-muted-foreground">
-                    {user.email}
+                    {user?.email}
                   </span>
                 </div>
               </div>
@@ -105,14 +110,13 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <Link href="/sign-in" >
-              <DropdownMenuItem >
 
-                <LogOutIcon />
-                Log out
+            <DropdownMenuItem onClick={handleLogout} >
 
-              </DropdownMenuItem>
-            </Link>
+              <LogOutIcon />
+              Log out
+            </DropdownMenuItem>
+
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>

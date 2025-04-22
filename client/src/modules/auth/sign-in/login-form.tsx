@@ -1,18 +1,53 @@
-import { cn } from "@/lib/utils"
+'use client'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-
+import { useAppDispatch } from "@/lib/redux/store"
+import { loginUserAPIs } from "@/lib/redux/user/user.slide"
+import { cn } from "@/lib/utils"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useRouter } from "next/navigation"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+const formSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(6, "Password must be at least 6 characters long"),
+})
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+
+  const dispatch = useAppDispatch();
+  const router = useRouter()
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  })
+
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    try {
+      const resultAction = await dispatch(loginUserAPIs(data));
+      if (resultAction.meta.requestStatus === 'fulfilled') {
+        router.push('/')
+      }
+    } catch (error) {
+      console.error('Login failed:', error);
+    }
+
+
+  }
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="overflow-hidden">
         <CardContent className="grid p-0 md:grid-cols-2">
-          <form className="p-6 md:p-8">
+          <form className="p-6 md:p-8"
+            onSubmit={form.handleSubmit(onSubmit)}>
             <div className="flex flex-col gap-6">
               <div className="flex flex-col items-center text-center">
                 <h1 className="text-2xl font-bold">Welcome back</h1>
@@ -26,8 +61,14 @@ export function LoginForm({
                   id="email"
                   type="email"
                   placeholder="m@example.com"
-                  required
+                  {...form.register("email")}
+                  aria-label="Email"
                 />
+                {
+                  form.formState.errors.email && (
+                    <p className="text-red-500 text-sm">{form.formState.errors.email.message}</p>
+                  )
+                }
               </div>
               <div className="grid gap-2">
                 <div className="flex items-center">
@@ -39,7 +80,18 @@ export function LoginForm({
                     Forgot your password?
                   </a>
                 </div>
-                <Input id="password" type="password" required />
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="********"
+                  {...form.register("password")}
+                  aria-label="Password"
+                />
+                {
+                  form.formState.errors.password && (
+                    <p className="text-red-500 text-sm">{form.formState.errors.password.message}</p>
+                  )
+                }
               </div>
               <Button type="submit" className="w-full">
                 Login

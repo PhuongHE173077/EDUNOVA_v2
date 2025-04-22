@@ -38,7 +38,7 @@ const verifityAccount = async (req, res, next) => {
 const login = async (req, res, next) => {
   const schema = Joi.object({
     email: Joi.string().pattern(EMAIL_RULE).message(EMAIL_RULE_MESSAGE).required(),
-    password: Joi.string().pattern(PASSWORD_RULE).message(PASSWORD_RULE_MESSAGE).required()
+    password: Joi.string().min(6).required()
   })
 
 
