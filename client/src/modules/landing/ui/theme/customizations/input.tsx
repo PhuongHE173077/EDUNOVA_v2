@@ -1,3 +1,4 @@
+'use client'
 import { alpha, Theme, Components } from '@mui/material/styles';
 import { outlinedInputClasses } from '@mui/material/OutlinedInput';
 import { svgIconClasses } from '@mui/material/SvgIcon';

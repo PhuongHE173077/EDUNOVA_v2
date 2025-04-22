@@ -1,12 +1,17 @@
 'use client';
-import React from "react";
-import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
-import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
-import { styled } from "@mui/material/styles";
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
+import InputLabel from '@mui/material/InputLabel';
+import Link from '@mui/material/Link';
+import Stack from '@mui/material/Stack';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import visuallyHidden from '@mui/utils/visuallyHidden';
+import { styled } from '@mui/material/styles';
 
-// Styled components cho carousel
+
 const Card = styled(Box)(() => ({
   width: "300px",
   border: "1px solid #ddd",
@@ -45,10 +50,76 @@ const CarouselWrapper = styled(Box)({
 
 const Carousel = styled(Box)({
   display: "flex",
-  transition: "transform 0.5s ease-in-out", // Hiệu ứng chuyển động mượt
+  transition: "transform 0.5s ease-in-out",
 });
 
+
+const courses = [
+  {
+    id: 1,
+    title: "Track Your Progress",
+    description:
+      "Personalized dashboards to keep track of learning progress.",
+    image:
+      "https://www.shutterstock.com/image-photo/business-concept-attached-board-announcement-260nw-2160920239.jpg",
+  },
+  {
+    id: 2,
+    title: "Plan Your Studies",
+    description: "Effective study plans tailored to your goals.",
+    image:
+      "https://www.shutterstock.com/image-photo/steps-education-leading-success-goal-600nw-2309134389.jpg",
+  },
+  {
+    id: 3,
+    title: "Exam Preparation",
+    description: "Access tools and resources to prepare for exams.",
+    image:
+      "https://www.shutterstock.com/image-vector/exam-preparation-school-test-vector-260nw-1956280858.jpg",
+  },
+  {
+    id: 4,
+    title: "Collaborate with Peers",
+    description: "Join study groups and share knowledge with classmates.",
+    image:
+      "https://www.shutterstock.com/image-photo/group-young-people-thinking-together-260nw-1185545020.jpg",
+  },
+  {
+    id: 5,
+    title: "Track Your Progress",
+    description:
+      "Personalized dashboards to keep track of learning progress.",
+    image:
+      "https://www.shutterstock.com/image-photo/business-concept-attached-board-announcement-260nw-2160920239.jpg",
+  },
+  {
+    id: 6,
+    title: "Plan Your Studies",
+    description: "Effective study plans tailored to your goals.",
+    image:
+      "https://www.shutterstock.com/image-photo/steps-education-leading-success-goal-600nw-2309134389.jpg",
+  },
+  {
+    id: 7,
+    title: "Exam Preparation",
+    description: "Access tools and resources to prepare for exams.",
+    image:
+      "https://www.shutterstock.com/image-vector/exam-preparation-school-test-vector-260nw-1956280858.jpg",
+  },
+  {
+    id: 8,
+    title: "Collaborate with Peers",
+    description: "Join study groups and share knowledge with classmates.",
+    image:
+      "https://www.shutterstock.com/image-photo/group-young-people-thinking-together-260nw-1185545020.jpg",
+  },
+];
+
 export default function Hero() {
+
+  const [currentIndex, setCurrentIndex] = React.useState(0);
+
+  const extendedCards = [...courses, ...courses];
   const sentences = [
     "Welcome to EduTrack 🎉",
     "Manage Your Learning",
@@ -59,78 +130,6 @@ export default function Hero() {
   ];
   const [displayedText, setDisplayedText] = React.useState("");
   const [sentenceIndex, setSentenceIndex] = React.useState(0);
-
-  const courses = [
-    {
-      id: 1,
-      title: "Track Your Progress",
-      description:
-        "Personalized dashboards to keep track of learning progress.",
-      image:
-        "https://www.shutterstock.com/image-photo/business-concept-attached-board-announcement-260nw-2160920239.jpg",
-    },
-    {
-      id: 2,
-      title: "Plan Your Studies",
-      description: "Effective study plans tailored to your goals.",
-      image:
-        "https://www.shutterstock.com/image-photo/steps-education-leading-success-goal-600nw-2309134389.jpg",
-    },
-    {
-      id: 3,
-      title: "Exam Preparation",
-      description: "Access tools and resources to prepare for exams.",
-      image:
-        "https://www.shutterstock.com/image-vector/exam-preparation-school-test-vector-260nw-1956280858.jpg",
-    },
-    {
-      id: 4,
-      title: "Collaborate with Peers",
-      description: "Join study groups and share knowledge with classmates.",
-      image:
-        "https://www.shutterstock.com/image-photo/group-young-people-thinking-together-260nw-1185545020.jpg",
-    },
-    {
-      id: 5,
-      title: "Track Your Progress",
-      description:
-        "Personalized dashboards to keep track of learning progress.",
-      image:
-        "https://www.shutterstock.com/image-photo/business-concept-attached-board-announcement-260nw-2160920239.jpg",
-    },
-    {
-      id: 6,
-      title: "Plan Your Studies",
-      description: "Effective study plans tailored to your goals.",
-      image:
-        "https://www.shutterstock.com/image-photo/steps-education-leading-success-goal-600nw-2309134389.jpg",
-    },
-    {
-      id: 7,
-      title: "Exam Preparation",
-      description: "Access tools and resources to prepare for exams.",
-      image:
-        "https://www.shutterstock.com/image-vector/exam-preparation-school-test-vector-260nw-1956280858.jpg",
-    },
-    {
-      id: 8,
-      title: "Collaborate with Peers",
-      description: "Join study groups and share knowledge with classmates.",
-      image:
-        "https://www.shutterstock.com/image-photo/group-young-people-thinking-together-260nw-1185545020.jpg",
-    },
-  ];
-
-  // const translatedCourses = courses.map((course) => ({
-  //   ...course,
-  //   title: t(course.title),
-  //   description: t(course.description), // Dịch mô tả
-
-  // }));
-
-  const [currentIndex, setCurrentIndex] = React.useState(0);
-
-  const extendedCards = [...courses, ...courses];
 
   const cardWidth = 316;
 
@@ -169,89 +168,113 @@ export default function Hero() {
     <Box
       id="hero"
       sx={(theme) => ({
-        width: "100%",
-        backgroundRepeat: "no-repeat",
+        width: '100%',
+        backgroundRepeat: 'no-repeat',
+
         backgroundImage:
-          "radial-gradient(ellipse 80% 50% at 50% -20%, hsl(210, 100%, 90%), transparent)",
-        ...theme.applyStyles("dark", {
+          'radial-gradient(ellipse 80% 50% at 50% -20%, hsl(210, 100%, 90%), transparent)',
+        ...theme.applyStyles('dark', {
           backgroundImage:
-            "radial-gradient(ellipse 80% 50% at 50% -20%, hsl(210, 100%, 16%), transparent)",
+            'radial-gradient(ellipse 80% 50% at 50% -20%, hsl(210, 100%, 16%), transparent)',
         }),
       })}
     >
       <Container
         sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
           pt: { xs: 14, sm: 20 },
           pb: { xs: 8, sm: 12 },
         }}
       >
         <Stack
-          spacing={4}
+          spacing={2}
           useFlexGap
-          sx={{
-            alignItems: "center",
-            width: { xs: "100%", sm: "70%" },
-            marginBottom: "2rem",
-          }}
+          sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' } }}
         >
           <Typography
             variant="h1"
             sx={{
-              fontSize: "clamp(3rem, 10vw, 3.5rem)",
-              color: "primary.main",
-              textAlign: "center",
+              display: 'flex',
+              flexDirection: { xs: 'column', sm: 'row' },
+              alignItems: 'center',
+              fontSize: 'clamp(3rem, 10vw, 3.5rem)',
             }}
           >
-            {displayedText}
-            <Box
+            EDUCATION&nbsp;
+            <Typography
               component="span"
-              sx={{
-                display: "inline-block",
-                width: "10px",
-                height: "1.5rem",
-                backgroundColor: "currentColor",
-                animation: "blink 1s step-end infinite",
-                ml: 0.5,
-              }}
-            />
+              variant="h1"
+              sx={(theme) => ({
+                fontSize: 'inherit',
+                color: 'primary.main',
+                ...theme.applyStyles('dark', {
+                  color: 'primary.light',
+                }),
+              })}
+            >
+              Novation
+            </Typography>
           </Typography>
           <Typography
             sx={{
-              textAlign: "center",
-              color: "text.secondary",
-              width: { sm: "100%", md: "80%" },
-              fontSize: { xs: "0.9rem", sm: "1rem" },
+              textAlign: 'center',
+              color: 'text.secondary',
+              width: { sm: '100%', md: '80%' },
             }}
           >
-            <strong>
-              Simplify learning and exam management with EduTrack. Stay
-              organized, monitor progress, and achieve your academic goals
-              effortlessly through our intuitive dashboard.
-            </strong>
+            Explore our cutting-edge dashboard, delivering high-quality solutions
+            tailored to your needs. Elevate your experience with top-tier features
+            and services.
           </Typography>
-          <Typography>
-            <strong>
-              We are here to help! Please fill out the form below and we will
-              get back to you as soon as possible.
-            </strong>{" "}
-            <Box
-              component="span"
-              sx={{
-                color: "primary.main",
-                cursor: "pointer",
-                textDecoration: "underline",
-                fontSize: "1.1rem",
+          <Stack
+            direction={{ xs: 'column', sm: 'row' }}
+            spacing={1}
+            useFlexGap
+            sx={{ pt: 2, width: { xs: '100%', sm: '350px' } }}
+          >
+            <InputLabel htmlFor="email-hero" sx={visuallyHidden}>
+              Email
+            </InputLabel>
+            <TextField
+              id="email-hero"
+              hiddenLabel
+              size="small"
+              variant="outlined"
+              aria-label="Enter your email address"
+              placeholder="Your email address"
+              fullWidth
+              slotProps={{
+                htmlInput: {
+                  autoComplete: 'off',
+                  'aria-label': 'Enter your email address',
+                },
               }}
+            />
+            <Button
+              variant="contained"
+              color="primary"
+              size="small"
+              sx={{ minWidth: 'fit-content' }}
             >
-              CreateAccount
-            </Box>
+              Start now
+            </Button>
+          </Stack>
+          <Typography
+            variant="caption"
+            color="text.secondary"
+            sx={{ textAlign: 'center' }}
+          >
+            By clicking &quot;Start now&quot; you agree to our&nbsp;
+            <Link href="#" color="primary">
+              Terms & Conditions
+            </Link>
+            .
           </Typography>
         </Stack>
 
-        {/* Carousel Section */}
+
         <CarouselWrapper sx={{ marginTop: "1.5rem" }}>
           <Carousel
             sx={{

@@ -57,7 +57,7 @@ const updateUser = async (userId, data) => {
     throw new Error(error)
   }
 }
-export const userModal = {
+export const userModel = {
   USER_COLLECTION_NAME,
   findOneByEmail,
   findOneById,

@@ -9,6 +9,7 @@ const isAuthorized = (roles = []) => {
     //get accessToken from cookie
     const clientToken = req.cookies?.accessToken
 
+
     if (!clientToken) {
       next(new ApiError(StatusCodes.UNAUTHORIZED, 'Unauthorized(Token not found)'))
     }
@@ -16,8 +17,9 @@ const isAuthorized = (roles = []) => {
       //verify token
       const accessTokenDecoded = await JwtProvider.verifyToken(clientToken, env.ACCESS_TOKEN_SECRET_SIGNATURE)
 
-      if (roles.length && !roles.includes(req.jwtDecoded.role)) {
-        next(new ApiError(StatusCodes.FORBIDDEN, 'Forbidden'))
+
+      if (roles.length && !roles.includes(accessTokenDecoded.role)) {
+        next(new ApiError(StatusCodes.FORBIDDEN, 'The user does not have permission to access'))
         return
       }
 
@@ -31,9 +33,14 @@ const isAuthorized = (roles = []) => {
       if (error?.message?.includes('jwt expired')) {
         next(new ApiError(StatusCodes.GONE, 'Token is expired!'))
         return
+      } else if (error?.message?.includes('FORBIDDEN')) {
+        next(new ApiError(StatusCodes.GONE, 'Token is expired!'))
+        return
+      } else {
+        next(new ApiError(StatusCodes.UNAUTHORIZED, 'Unauthorized'))
       }
 
-      next(new ApiError(StatusCodes.UNAUTHORIZED, 'Unauthorized'))
+
     }
 
   }

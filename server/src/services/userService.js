@@ -1,5 +1,5 @@
 import { StatusCodes } from "http-status-codes"
-import { userModal } from "~/models/userModel"
+import { userModel } from "~/models/userModel"
 import ApiError from "~/utils/ApiError"
 import bcrypt from 'bcryptjs'
 import { v4 as uuidv4 } from 'uuid'
@@ -11,7 +11,7 @@ import { pickUser } from "~/utils/algorithms"
 const createNew = async (req) => {
   try {
     //check email exits
-    const userExits = await userModal.findOneByEmail(req.body.email)
+    const userExits = await userModel.findOneByEmail(req.body.email)
     if (userExits) {
       throw new ApiError(StatusCodes.CONFLICT, 'Email exits')
     }
@@ -36,10 +36,10 @@ const createNew = async (req) => {
     }
 
 
-    const createUser = await userModal.createNew(newUser)
+    const createUser = await userModel.createNew(newUser)
 
 
-    const getNewuser = await userModal.findOneById(createUser.insertedId)
+    const getNewuser = await userModel.findOneById(createUser.insertedId)
 
 
     //sent email for user to verify
@@ -61,7 +61,7 @@ const verifityAccount = async (data) => {
   // eslint-disable-next-line no-useless-catch
   try {
     //check email exits
-    const userExits = await userModal.findOneByEmail(data.email)
+    const userExits = await userModel.findOneByEmail(data.email)
 
 
     if (!userExits) throw new ApiError(StatusCodes.NOT_FOUND, 'Email not exits!')
@@ -81,7 +81,7 @@ const verifityAccount = async (data) => {
     }
 
 
-    const updatedUser = await userModal.updateUser(userExits._id, updateData)
+    const updatedUser = await userModel.updateUser(userExits._id, updateData)
 
 
     return pickUser(updatedUser)
@@ -94,7 +94,7 @@ const verifityAccount = async (data) => {
 const login = async (data) => {
   // eslint-disable-next-line no-useless-catch
   try {
-    const userExits = await userModal.findOneByEmail(data.email)
+    const userExits = await userModel.findOneByEmail(data.email)
 
 
     if (!userExits) throw new ApiError(StatusCodes.NOT_FOUND, 'Email not exits!')
@@ -108,7 +108,7 @@ const login = async (data) => {
 
     /** if it don't have error, create token return frontend */
     //create user info in jwt token
-    const userInfo = { _id: userExits._id, email: userExits.email }
+    const userInfo = { _id: userExits._id, email: userExits.email, role: userExits.role }
 
 
     // create access token and fresh token
@@ -168,7 +168,7 @@ const refreshToken = async (data) => {
 const update = async (userId, data, userAvataFile) => {
   // eslint-disable-next-line no-useless-catch
   try {
-    const exitsUser = await userModal.findOneById(userId)
+    const exitsUser = await userModel.findOneById(userId)
 
 
     if (!exitsUser) throw new ApiError(StatusCodes.NOT_FOUND, 'User not found!')
@@ -184,7 +184,7 @@ const update = async (userId, data, userAvataFile) => {
       if (!bcrypt.compareSync(data.currentPassword, exitsUser.password)) throw new ApiError(StatusCodes.NOT_ACCEPTABLE, 'The current password is incorrect!')
 
 
-      updatedUser = await userModal.updateUser(exitsUser._id, {
+      updatedUser = await userModel.updateUser(exitsUser._id, {
         password: bcrypt.hashSync(data.newPassword, 8)
       })
     } else if (userAvataFile) {
@@ -195,11 +195,11 @@ const update = async (userId, data, userAvataFile) => {
       // save url of file to db
 
 
-      // updatedUser = await userModal.updateUser(exitsUser._id, { avatar: resultUpload.secure_url })
+      // updatedUser = await userModel.updateUser(exitsUser._id, { avatar: resultUpload.secure_url })
 
 
     } else {
-      updatedUser = await userModal.updateUser(exitsUser._id, data)
+      updatedUser = await userModel.updateUser(exitsUser._id, data)
     }
     return pickUser(updatedUser)
   } catch (error) {

@@ -1,26 +1,24 @@
-'use client';
-
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Container from "@mui/material/Container";
-import IconButton from "@mui/material/IconButton";
-import Link from "@mui/material/Link";
-import Stack from "@mui/material/Stack";
-import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
-import GitHubIcon from "@mui/icons-material/GitHub";
-import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import TwitterIcon from "@mui/icons-material/Twitter";
-import * as React from "react";
-import SendIcon from "@mui/icons-material/Send";
-import { Grid, Alert } from "@mui/material";
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
+import IconButton from '@mui/material/IconButton';
+import InputLabel from '@mui/material/InputLabel';
+import Link from '@mui/material/Link';
+import Stack from '@mui/material/Stack';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import GitHubIcon from '@mui/icons-material/GitHub';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import TwitterIcon from '@mui/icons-material/X';
+import Image from 'next/image';
 
 function Copyright() {
   return (
-    <Typography variant="body2" sx={{ color: "text.secondary", mt: 1 }}>
-      {"Copyright © "}
-      <Link color="text.secondary" href="https://edutrack.com/">
-        EduTrack
+    <Typography variant="body2" sx={{ color: 'text.secondary', mt: 1 }}>
+      {'Copyright © '}
+      <Link color="text.secondary" href="https://mui.com/">
+        Sitemark
       </Link>
       &nbsp;
       {new Date().getFullYear()}
@@ -28,211 +26,163 @@ function Copyright() {
   );
 }
 
-
-
 export default function Footer() {
-  const [statusMessage, setStatusMessage] = React.useState<{
-    type: "success" | "error";
-    message: string;
-  } | null>(null);
-  const [isSubmitting, setIsSubmitting] = React.useState(false);
-
-  const sendEmail = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setStatusMessage(null);
-    setIsSubmitting(true);
-  };
-
   return (
     <Container
-
       sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
         gap: { xs: 4, sm: 8 },
         py: { xs: 8, sm: 10 },
-        textAlign: { sm: "center", md: "left" },
+        textAlign: { sm: 'center', md: 'left' },
       }}
     >
       <Box
         sx={{
-          display: "flex",
-          flexDirection: { xs: "column", sm: "row" },
-          width: "100%",
-          justifyContent: "space-between",
+          display: 'flex',
+          flexDirection: { xs: 'column', sm: 'row' },
+          width: '100%',
+          justifyContent: 'space-between',
         }}
       >
         <Box
           sx={{
-            display: "flex",
-            flexDirection: "column",
+            display: 'flex',
+            flexDirection: 'column',
             gap: 4,
-            minWidth: { xs: "100%", sm: "60%" },
+            minWidth: { xs: '100%', sm: '60%' },
           }}
         >
-          {/* Create Account Form Section */}
-          <Box sx={{ width: { xs: "100%", sm: "60%" } }}>
-            <Typography
-              variant="body2"
-              gutterBottom
-              sx={{ fontWeight: 600, mt: 2 }}
-            >
-              Yêu cầu cấp tài khoản
+          <Box sx={{ width: { xs: '100%', sm: '60%' } }}>
+            <Image
+              src="/images/logo.png"
+              alt="logo"
+              width={100}
+              height={40}
+
+            />
+            <Typography variant="body2" gutterBottom sx={{ fontWeight: 600, mt: 2 }}>
+              Join the newsletter
             </Typography>
-            <Typography variant="body2" sx={{ color: "text.secondary", mb: 2 }}>
-              Vui lòng điền vào biểu mẫu bên dưới để yêu cầu cấp tài khoản.
-              Chúng tôi sẽ xử lý và liên hệ lại với bạn trong thời gian sớm
-              nhất.
+            <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
+              Subscribe for weekly updates. No spams ever!
             </Typography>
-
-            <form onSubmit={sendEmail}>
-              <Grid container spacing={1}>
-                {/* Email Field */}
-                <Grid item xs={12}>
-                  <TextField
-                    label={"Email "}
-                    variant="outlined"
-                    name="email_from"
-                    placeholder="person@example.com"
-                    required
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        borderRadius: "8px",
-                        backgroundColor: "#f7f7f7",
-                        "&:hover": { backgroundColor: "#eeeeee" },
-                      },
-                      width: "95%",
-                    }}
-                  />
-                </Grid>
-
-                {/* Message Field */}
-                <Grid item xs={12}>
-                  <TextField
-                    label={"Student messages"}
-                    variant="outlined"
-                    name="message"
-                    placeholder="Your message for idStudent here..."
-                    required
-                    multiline
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        borderRadius: "8px",
-                        backgroundColor: "#f7f7f7",
-                        "&:hover": { backgroundColor: "#eeeeee" },
-                      },
-                      width: "95%",
-                    }}
-                  />
-                </Grid>
-              </Grid>
-
-              {/* Submit Button */}
-              <Button
-                type="submit"
-                variant="contained"
-                endIcon={<SendIcon />}
-                disabled={isSubmitting}
-                sx={{
-                  marginTop: 3,
-                  width: "100%",
-                  padding: "12px 0",
-                  fontSize: "14px",
-                  fontWeight: "bold",
-                  backgroundColor: "#007bff",
-                  color: "#ffffff",
-                  borderRadius: "6px",
-                  textTransform: "none",
-                  boxShadow: "none",
-                  "&:hover": {
-                    backgroundColor: "#0056b3",
+            <InputLabel htmlFor="email-newsletter">Email</InputLabel>
+            <Stack direction="row" spacing={1} useFlexGap>
+              <TextField
+                id="email-newsletter"
+                hiddenLabel
+                size="small"
+                variant="outlined"
+                fullWidth
+                aria-label="Enter your email address"
+                placeholder="Your email address"
+                slotProps={{
+                  htmlInput: {
+                    autoComplete: 'off',
+                    'aria-label': 'Enter your email address',
                   },
                 }}
+                sx={{ width: '250px' }}
+              />
+              <Button
+                variant="contained"
+                color="primary"
+                size="small"
+                sx={{ flexShrink: 0 }}
               >
-                {isSubmitting ? "Sending..." : "Send Message"}
+                Subscribe
               </Button>
-            </form>
-
-            {/* Status Message */}
-            {statusMessage && (
-              <Alert
-                severity={statusMessage.type}
-                sx={{ width: "100%", marginTop: 2 }}
-              >
-                {statusMessage.message}
-              </Alert>
-            )}
+            </Stack>
           </Box>
         </Box>
-
-        {/* Other Sections (Product, Company, Resources) */}
         <Box
           sx={{
-            display: { xs: "none", sm: "flex" },
-            flexDirection: "column",
+            display: { xs: 'none', sm: 'flex' },
+            flexDirection: 'column',
             gap: 1,
           }}
         >
-          <Typography variant="body2" sx={{ fontWeight: "medium" }}>
+          <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
             Product
           </Typography>
           <Link color="text.secondary" variant="body2" href="#">
             Features
           </Link>
           <Link color="text.secondary" variant="body2" href="#">
-            plans
+            Testimonials
           </Link>
           <Link color="text.secondary" variant="body2" href="#">
-            tutorials
+            Highlights
           </Link>
           <Link color="text.secondary" variant="body2" href="#">
-            faqs
+            Pricing
+          </Link>
+          <Link color="text.secondary" variant="body2" href="#">
+            FAQs
           </Link>
         </Box>
-
-        {/* Footer Links */}
         <Box
           sx={{
-            display: { xs: "none", sm: "flex" },
-            flexDirection: "column",
+            display: { xs: 'none', sm: 'flex' },
+            flexDirection: 'column',
             gap: 1,
           }}
         >
-          <Typography variant="body2" sx={{ fontWeight: "medium" }}>
+          <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
             Company
           </Typography>
           <Link color="text.secondary" variant="body2" href="#">
-            about us
+            About us
           </Link>
           <Link color="text.secondary" variant="body2" href="#">
-            careers
+            Careers
           </Link>
           <Link color="text.secondary" variant="body2" href="#">
-            contact
+            Press
+          </Link>
+        </Box>
+        <Box
+          sx={{
+            display: { xs: 'none', sm: 'flex' },
+            flexDirection: 'column',
+            gap: 1,
+          }}
+        >
+          <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
+            Legal
+          </Typography>
+          <Link color="text.secondary" variant="body2" href="#">
+            Terms
+          </Link>
+          <Link color="text.secondary" variant="body2" href="#">
+            Privacy
+          </Link>
+          <Link color="text.secondary" variant="body2" href="#">
+            Contact
           </Link>
         </Box>
       </Box>
-
       <Box
         sx={{
-          display: "flex",
-          justifyContent: "space-between",
+          display: 'flex',
+          justifyContent: 'space-between',
           pt: { xs: 4, sm: 8 },
-          width: "100%",
-          borderTop: "1px solid",
-          borderColor: "divider",
+          width: '100%',
+          borderTop: '1px solid',
+          borderColor: 'divider',
         }}
       >
         <div>
           <Link color="text.secondary" variant="body2" href="#">
-            privacy policy
+            Privacy Policy
           </Link>
-          <Typography sx={{ display: "inline", mx: 0.5, opacity: 0.5 }}>
+          <Typography sx={{ display: 'inline', mx: 0.5, opacity: 0.5 }}>
             &nbsp;•&nbsp;
           </Typography>
           <Link color="text.secondary" variant="body2" href="#">
-            terms of service
+            Terms of Service
           </Link>
           <Copyright />
         </div>
@@ -240,32 +190,32 @@ export default function Footer() {
           direction="row"
           spacing={1}
           useFlexGap
-          sx={{ justifyContent: "left", color: "text.secondary" }}
+          sx={{ justifyContent: 'left', color: 'text.secondary' }}
         >
           <IconButton
             color="inherit"
             size="small"
-            href="https://github.com/PhamKien2803/EDUTRACK-CPL_04_Group03"
+            href="https://github.com/mui"
             aria-label="GitHub"
-            sx={{ alignSelf: "center" }}
+            sx={{ alignSelf: 'center' }}
           >
             <GitHubIcon />
           </IconButton>
           <IconButton
             color="inherit"
             size="small"
-            href="https://twitter.com/edutrack"
-            aria-label="Twitter"
-            sx={{ alignSelf: "center" }}
+            href="https://x.com/MaterialUI"
+            aria-label="X"
+            sx={{ alignSelf: 'center' }}
           >
             <TwitterIcon />
           </IconButton>
           <IconButton
             color="inherit"
             size="small"
-            href="https://www.linkedin.com/company/edutrack"
+            href="https://www.linkedin.com/company/mui/"
             aria-label="LinkedIn"
-            sx={{ alignSelf: "center" }}
+            sx={{ alignSelf: 'center' }}
           >
             <LinkedInIcon />
           </IconButton>

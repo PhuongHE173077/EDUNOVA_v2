@@ -1,4 +1,5 @@
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const axiosCustomize = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -19,11 +20,12 @@ let refreshTokenPromise: any = null;
 
 axiosCustomize.interceptors.response.use(function (response) {
 
+
     return response;
 }, function (error) {
-
+    console.log("🚀 ~ error:", error?.response?.data?.message)
     if (error?.response?.status === 401) {
-
+        toast.error(error?.response?.data?.message)
     }
 
     const originalRequest = error.config;
@@ -46,6 +48,8 @@ axiosCustomize.interceptors.response.use(function (response) {
             //     })
         }
 
+    } else {
+        toast.error(error?.response?.data?.message)
     }
 
     return Promise.reject(error);

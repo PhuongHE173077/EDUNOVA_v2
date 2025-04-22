@@ -8,7 +8,6 @@ const createNew = async (req, res, next) => {
   try {
     const createBoard = await userService.createNew(req)
 
-
     res.status(StatusCodes.CREATED).json(createBoard)
   } catch (error) {
     next(error)

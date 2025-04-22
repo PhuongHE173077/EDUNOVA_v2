@@ -1,51 +1,56 @@
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid2';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
 import AutoFixHighRoundedIcon from '@mui/icons-material/AutoFixHighRounded';
 import ConstructionRoundedIcon from '@mui/icons-material/ConstructionRounded';
 import QueryStatsRoundedIcon from '@mui/icons-material/QueryStatsRounded';
 import SettingsSuggestRoundedIcon from '@mui/icons-material/SettingsSuggestRounded';
 import SupportAgentRoundedIcon from '@mui/icons-material/SupportAgentRounded';
 import ThumbUpAltRoundedIcon from '@mui/icons-material/ThumbUpAltRounded';
-import { useTranslation } from 'react-i18next';
+import { Grid2 } from '@mui/material';
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import Container from '@mui/material/Container';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
+
+const items = [
+  {
+    icon: <SettingsSuggestRoundedIcon />,
+    title: 'Adaptable performance',
+    description:
+      'Our product effortlessly adjusts to your needs, boosting efficiency and simplifying your tasks.',
+  },
+  {
+    icon: <ConstructionRoundedIcon />,
+    title: 'Built to last',
+    description:
+      'Experience unmatched durability that goes above and beyond with lasting investment.',
+  },
+  {
+    icon: <ThumbUpAltRoundedIcon />,
+    title: 'Great user experience',
+    description:
+      'Integrate our product into your routine with an intuitive and easy-to-use interface.',
+  },
+  {
+    icon: <AutoFixHighRoundedIcon />,
+    title: 'Innovative functionality',
+    description:
+      'Stay ahead with features that set new standards, addressing your evolving needs better than the rest.',
+  },
+  {
+    icon: <SupportAgentRoundedIcon />,
+    title: 'Reliable support',
+    description:
+      'Count on our responsive customer support, offering assistance that goes beyond the purchase.',
+  },
+  {
+    icon: <QueryStatsRoundedIcon />,
+    title: 'Precision in every detail',
+    description:
+      'Enjoy a meticulously crafted product where small touches make a significant impact on your overall experience.',
+  },
+];
 
 export default function Highlights() {
-  const { t } = useTranslation();
-  const items = [
-    {
-      icon: <SettingsSuggestRoundedIcon />,
-      title: t("customizable_learning_paths_title"),
-      description: t("customizable_learning_paths_description"),
-    },
-    {
-      icon: <ConstructionRoundedIcon />,
-      title: t("robust_exam_management_title"),
-      description: t("robust_exam_management_description"),
-    },
-    {
-      icon: <ThumbUpAltRoundedIcon />,
-      title: t("user_friendly_interface_title"),
-      description: t("user_friendly_interface_description"),
-    },
-    {
-      icon: <AutoFixHighRoundedIcon />,
-      title: t("innovative_reporting_tools_title"),
-      description: t("innovative_reporting_tools_description"),
-    },
-    {
-      icon: <SupportAgentRoundedIcon />,
-      title: t("dedicated_support_title"),
-      description: t("dedicated_support_description"),
-    },
-    {
-      icon: <QueryStatsRoundedIcon />,
-      title: t("real_time_progress_tracking_title"),
-      description: t("real_time_progress_tracking_description"),
-    },
-  ];
   return (
     <Box
       id="highlights"
@@ -72,15 +77,17 @@ export default function Highlights() {
           }}
         >
           <Typography component="h2" variant="h4" gutterBottom>
-            {t("highlights_title")}
+            Highlights
           </Typography>
           <Typography variant="body1" sx={{ color: 'grey.400' }}>
-            {t("highlights_subtitle")}
+            Explore why our product stands out: adaptability, durability,
+            user-friendly design, and innovation. Enjoy reliable customer support and
+            precision in every detail.
           </Typography>
         </Box>
-        <Grid container spacing={2}>
+        <Grid2 container spacing={2}>
           {items.map((item, index) => (
-            <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index}>
+            <Grid2 size={{ xs: 12, sm: 6, md: 4 }} key={index}>
               <Stack
                 direction="column"
                 component={Card}
@@ -92,11 +99,6 @@ export default function Highlights() {
                   height: '100%',
                   borderColor: 'hsla(220, 25%, 25%, 0.3)',
                   backgroundColor: 'grey.800',
-                  transition: 'transform 0.3s, box-shadow 0.3s',
-                  '&:hover': {
-                    transform: 'translateY(-8px)',
-                    boxShadow: '0px 8px 30px rgba(0, 180, 255, 1)',
-                  },
                 }}
               >
                 <Box sx={{ opacity: '50%' }}>{item.icon}</Box>
@@ -109,9 +111,9 @@ export default function Highlights() {
                   </Typography>
                 </div>
               </Stack>
-            </Grid>
+            </Grid2>
           ))}
-        </Grid>
+        </Grid2>
       </Container>
     </Box>
   );

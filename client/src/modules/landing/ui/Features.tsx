@@ -1,186 +1,272 @@
 'use client';
-import { useState } from "react";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Card from "@mui/material/Card";
-import Container from "@mui/material/Container";
-import Grow from "@mui/material/Grow";
-import { keyframes } from "@mui/system";
-import SchoolIcon from "@mui/icons-material/School";
-import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
-import AssignmentIcon from "@mui/icons-material/Assignment";
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import MuiChip from '@mui/material/Chip';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+import { styled } from '@mui/material/styles';
 
-// Define animations
-const shake = keyframes`
-  0%, 100% { transform: rotate(0deg); }
-  25% { transform: rotate(-15deg); }
-  50% { transform: rotate(15deg); }
-  75% { transform: rotate(-10deg); }
-`;
+import DevicesRoundedIcon from '@mui/icons-material/DevicesRounded';
+import EdgesensorHighRoundedIcon from '@mui/icons-material/EdgesensorHighRounded';
+import ViewQuiltRoundedIcon from '@mui/icons-material/ViewQuiltRounded';
 
-const bounce = keyframes`
-  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-  40% { transform: translateY(-20px); }
-  60% { transform: translateY(-10px); }
-`;
+const items = [
+  {
+    icon: <ViewQuiltRoundedIcon />,
+    title: 'Dashboard',
+    description:
+      'This item could provide a snapshot of the most important metrics or data points related to the product.',
+    imageLight: `url("${process.env.TEMPLATE_IMAGE_URL || 'https://mui.com'}/static/images/templates/templates-images/dash-light.png")`,
+    imageDark: `url("${process.env.TEMPLATE_IMAGE_URL || 'https://mui.com'}/static/images/templates/templates-images/dash-dark.png")`,
+  },
+  {
+    icon: <EdgesensorHighRoundedIcon />,
+    title: 'Mobile integration',
+    description:
+      'This item could provide information about the mobile app version of the product.',
+    imageLight: `url("${process.env.TEMPLATE_IMAGE_URL || 'https://mui.com'}/static/images/templates/templates-images/mobile-light.png")`,
+    imageDark: `url("${process.env.TEMPLATE_IMAGE_URL || 'https://mui.com'}/static/images/templates/templates-images/mobile-dark.png")`,
+  },
+  {
+    icon: <DevicesRoundedIcon />,
+    title: 'Available on all platforms',
+    description:
+      'This item could let users know the product is available on all platforms, such as web, mobile, and desktop.',
+    imageLight: `url("${process.env.TEMPLATE_IMAGE_URL || 'https://mui.com'}/static/images/templates/templates-images/devices-light.png")`,
+    imageDark: `url("${process.env.TEMPLATE_IMAGE_URL || 'https://mui.com'}/static/images/templates/templates-images/devices-dark.png")`,
+  },
+];
 
-export default function RedesignedFeaturesWithPopup() {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+interface ChipProps {
+  selected?: boolean;
+}
 
-  const features = [
+const Chip = styled(MuiChip)<ChipProps>(({ theme }: { theme: any }) => ({
+  variants: [
     {
-      icon: (
-        <SchoolIcon
-          sx={{
-            fontSize: 48,
-            color: "#673ab7",
-            animation: `${bounce} 2s infinite`,
-          }}
-        />
-      ),
-      title: "Comprehensive Study Management",
-      description:
-        "Organize and monitor study schedules in one centralized platform.",
-      details:
-        "Helps manage study materials, track goals, and create organized schedules for multiple tasks efficiently.",
+      props: ({ selected }) => selected,
+      style: {
+        background:
+          'linear-gradient(to bottom right, hsl(210, 98%, 48%), hsl(210, 98%, 35%))',
+        color: 'hsl(0, 0%, 100%)',
+        borderColor: (theme.vars || theme).palette.primary.light,
+        '& .MuiChip-label': {
+          color: 'hsl(0, 0%, 100%)',
+        },
+        ...theme.applyStyles('dark', {
+          borderColor: (theme.vars || theme).palette.primary.dark,
+        }),
+      },
     },
-    {
-      icon: (
-        <NotificationsActiveIcon
-          sx={{
-            fontSize: 48,
-            color: "#fdd835",
-            animation: `${shake} 1.5s infinite`,
-          }}
-        />
-      ),
-      title: "Timely Exam Notifications",
-      description: "Stay updated with exam schedules and deadlines.",
-      details:
-        "Receive reminders about upcoming exams and changes to reduce the chance of missing deadlines.",
-    },
-    {
-      icon: (
-        <AssignmentIcon
-          sx={{
-            fontSize: 48,
-            color: "#f4511e",
-            animation: `${bounce} 2s infinite`,
-          }}
-        />
-      ),
-      title: "Exam Performance Tracking",
-      description: "Analyze exam results to optimize performance.",
-      details:
-        "Gain insights into strengths and weaknesses using analytics to plan better for future improvements.",
-    },
-  ];
+  ],
+}));
+
+interface MobileLayoutProps {
+  selectedItemIndex: number;
+  handleItemClick: (index: number) => void;
+  selectedFeature: (typeof items)[0];
+}
+
+export function MobileLayout({
+  selectedItemIndex,
+  handleItemClick,
+  selectedFeature,
+}: MobileLayoutProps) {
+  if (!items[selectedItemIndex]) {
+    return null;
+  }
+
   return (
-    <Container sx={{ py: 8 }}>
-      <Typography
-        variant="h4"
-        sx={{
-          fontWeight: "bold",
-          mb: 6,
-          textAlign: "center",
-          color: "#333",
-        }}
-      >
-        System Difference
-      </Typography>
+    <Box
+      sx={{
+        display: { xs: 'flex', sm: 'none' },
+        flexDirection: 'column',
+        gap: 2,
+      }}
+    >
+      <Box sx={{ display: 'flex', gap: 2, overflow: 'auto' }}>
+        {items.map(({ title }, index) => (
+          <Chip
+            size="medium"
+            key={index}
+            label={title}
+            onClick={() => handleItemClick(index)}
+            selected={selectedItemIndex === index}
+          />
+        ))}
+      </Box>
+      <Card variant="outlined">
+        <Box
+          sx={(theme) => ({
+            mb: 2,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            minHeight: 280,
+            backgroundImage: 'var(--items-imageLight)',
+            ...theme.applyStyles('dark', {
+              backgroundImage: 'var(--items-imageDark)',
+            }),
+          })}
+          style={
+            items[selectedItemIndex]
+              ? ({
+                '--items-imageLight': items[selectedItemIndex].imageLight,
+                '--items-imageDark': items[selectedItemIndex].imageDark,
+              } as any)
+              : {}
+          }
+        />
+        <Box sx={{ px: 2, pb: 2 }}>
+          <Typography
+            gutterBottom
+            sx={{ color: 'text.primary', fontWeight: 'medium' }}
+          >
+            {selectedFeature.title}
+          </Typography>
+          <Typography variant="body2" sx={{ color: 'text.secondary', mb: 1.5 }}>
+            {selectedFeature.description}
+          </Typography>
+        </Box>
+      </Card>
+    </Box>
+  );
+}
+
+export default function Features() {
+  const [selectedItemIndex, setSelectedItemIndex] = React.useState(0);
+
+  const handleItemClick = (index: number) => {
+    setSelectedItemIndex(index);
+  };
+
+  const selectedFeature = items[selectedItemIndex];
+
+  return (
+    <Container id="features" sx={{ py: { xs: 8, sm: 16 } }}>
+      <Box sx={{ width: { sm: '100%', md: '60%' } }}>
+        <Typography
+          component="h2"
+          variant="h4"
+          gutterBottom
+          sx={{ color: 'text.primary' }}
+        >
+          Product features
+        </Typography>
+        <Typography
+          variant="body1"
+          sx={{ color: 'text.secondary', mb: { xs: 2, sm: 4 } }}
+        >
+          Provide a brief overview of the key features of the product. For example,
+          you could list the number of features, their types or benefits, and
+          add-ons.
+        </Typography>
+      </Box>
       <Box
         sx={{
-          display: "flex",
-          flexDirection: { xs: "column", sm: "row" },
-          gap: 4,
-          justifyContent: "center",
-          alignItems: "stretch",
+          display: 'flex',
+          flexDirection: { xs: 'column', md: 'row-reverse' },
+          gap: 2,
         }}
       >
-        {features.map(({ icon, title, description, details }, index) => (
+        <div>
           <Box
-            key={index}
             sx={{
-              position: "relative",
-              width: { xs: "100%", sm: "30%" },
-              transition: "transform 0.3s ease, box-shadow 0.3s ease",
-              "&:hover": {
-                transform: "translateY(-10px)",
-                boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.2)",
-              },
+              display: { xs: 'none', sm: 'flex' },
+              flexDirection: 'column',
+              gap: 2,
+              height: '100%',
             }}
-            onMouseEnter={() => setHoveredIndex(index)}
-            onMouseLeave={() => setHoveredIndex(null)}
           >
-            {/* Card */}
-            <Card
-              sx={{
-                p: 3,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                textAlign: "center",
-                gap: 2,
-                borderRadius: "20px",
-                background: "linear-gradient(135deg, #ffffff, #f4f4f4)",
-                boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-              }}
-            >
-              {icon}
-              <Typography
-                variant="h6"
-                sx={{
-                  fontWeight: "medium",
-                  mb: 1,
-                  color: "#333",
-                }}
-              >
-                {title}
-              </Typography>
-              <Typography
-                variant="body2"
-                sx={{
-                  color: "text.secondary",
-                  fontSize: "0.95rem",
-                }}
-              >
-                {description}
-              </Typography>
-            </Card>
-
-            {/* Popup */}
-            <Grow in={hoveredIndex === index}>
+            {items.map(({ icon, title, description }, index) => (
               <Box
-                sx={{
-                  position: "absolute",
-                  top: "100%",
-                  left: "50%",
-                  transform: "translateX(-50%)",
-                  mt: 2,
-                  p: 3,
-                  width: 320,
-                  bgcolor: "rgba(255, 255, 255, 0.9)",
-                  boxShadow: "0px 4px 15px rgba(0, 0, 0, 0.15)",
-                  borderRadius: "16px",
-                  zIndex: 10,
-                  textAlign: "left",
-                  border: "1px solid #e0e0e0",
-                  backdropFilter: "blur(10px)",
-                }}
+                key={index}
+                component={Button}
+                onClick={() => handleItemClick(index)}
+                sx={[
+                  (theme: any) => ({
+                    p: 2,
+                    height: '100%',
+                    width: '100%',
+                    '&:hover': {
+                      backgroundColor: (theme.vars || theme).palette.action.hover,
+                    },
+                  }),
+                  selectedItemIndex === index && {
+                    backgroundColor: 'action.selected',
+                  },
+                ]}
               >
-                <Typography
-                  variant="body2"
-                  sx={{
-                    fontSize: "0.9rem",
-                    color: "#555",
-                  }}
+                <Box
+                  sx={[
+                    {
+                      width: '100%',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'left',
+                      gap: 1,
+                      textAlign: 'left',
+                      textTransform: 'none',
+                      color: 'text.secondary',
+                    },
+                    selectedItemIndex === index && {
+                      color: 'text.primary',
+                    },
+                  ]}
                 >
-                  {details}
-                </Typography>
+                  {icon}
+
+                  <Typography variant="h6">{title}</Typography>
+                  <Typography variant="body2">{description}</Typography>
+                </Box>
               </Box>
-            </Grow>
+            ))}
           </Box>
-        ))}
+          <MobileLayout
+            selectedItemIndex={selectedItemIndex}
+            handleItemClick={handleItemClick}
+            selectedFeature={selectedFeature}
+          />
+        </div>
+        <Box
+          sx={{
+            display: { xs: 'none', sm: 'flex' },
+            width: { xs: '100%', md: '70%' },
+            height: 'var(--items-image-height)',
+          }}
+        >
+          <Card
+            variant="outlined"
+            sx={{
+              height: '100%',
+              width: '100%',
+              display: { xs: 'none', sm: 'flex' },
+              pointerEvents: 'none',
+            }}
+          >
+            <Box
+              sx={(theme) => ({
+                m: 'auto',
+                width: 420,
+                height: 500,
+                backgroundSize: 'contain',
+                backgroundImage: 'var(--items-imageLight)',
+                ...theme.applyStyles('dark', {
+                  backgroundImage: 'var(--items-imageDark)',
+                }),
+              })}
+              style={
+                items[selectedItemIndex]
+                  ? ({
+                    '--items-imageLight': items[selectedItemIndex].imageLight,
+                    '--items-imageDark': items[selectedItemIndex].imageDark,
+                  } as any)
+                  : {}
+              }
+            />
+          </Card>
+        </Box>
       </Box>
     </Container>
   );

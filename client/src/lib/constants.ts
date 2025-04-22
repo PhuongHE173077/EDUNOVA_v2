@@ -27,6 +27,6 @@ export const CarouselData = [
 
 export const USER_ROLE = {
   STUDENT: "student",
-  TEACHER: "teacher",
+  LECTURER: "lecturer",
   ADMIN: "admin",
 }
