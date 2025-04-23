@@ -20,11 +20,14 @@ const createNew = async (req, res, next) => {
 }
 
 
-const verifityAccount = async (req, res, next) => {
+
+
+const verifyAccount = async (req, res, next) => {
   const schema = Joi.object({
     email: Joi.string().pattern(EMAIL_RULE).message(EMAIL_RULE_MESSAGE).required(),
     token: Joi.string().required()
   })
+
 
   try {
     await schema.validateAsync(req.body, { abortEarly: false })
@@ -38,7 +41,7 @@ const verifityAccount = async (req, res, next) => {
 const login = async (req, res, next) => {
   const schema = Joi.object({
     email: Joi.string().pattern(EMAIL_RULE).message(EMAIL_RULE_MESSAGE).required(),
-    password: Joi.string().min(6).required()
+    password: Joi.string().pattern(PASSWORD_RULE).message(PASSWORD_RULE_MESSAGE).required()
   })
 
 
@@ -69,9 +72,11 @@ const update = async (req, res, next) => {
 }
 
 
+
+
 export const userValidation = {
   createNew,
   login,
-  verifityAccount,
+  verifyAccount,
   update
 }

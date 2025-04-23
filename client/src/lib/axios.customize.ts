@@ -1,3 +1,4 @@
+import { refreshTokenAPI } from "@/apis/auth.apis";
 import axios from "axios";
 import { toast } from "react-toastify";
 
@@ -23,7 +24,6 @@ axiosCustomize.interceptors.response.use(function (response) {
 
     return response;
 }, function (error) {
-    console.log("🚀 ~ error:", error?.response?.data?.message)
     if (error?.response?.status === 401) {
         toast.error(error?.response?.data?.message)
     }
@@ -34,20 +34,22 @@ axiosCustomize.interceptors.response.use(function (response) {
         originalRequest._retry = true;
 
         if (!refreshTokenPromise) {
-            // refreshTokenPromise = refreshTokenAPI()
-            //     .then((data:any) => {
-            //         return data?.accessToken
-            //     })
-            //     .catch((error:any) => {
-            //         //if have any error from API refresh token , we will logout
-            //         axiosRduxStore.dispatch(logoutUserAPI(false))
-            //         return Promise.reject(error)
-            //     })
-            //     .finally(() => {
-            //         refreshTokenPromise = null
-            //     })
+            refreshTokenPromise = refreshTokenAPI()
+                .then((data: any) => {
+                    return data?.data?.accessToken
+                })
+                .catch((error: any) => {
+                    // logout user
+                    return Promise.reject(error)
+                })
+                .finally(() => {
+                    refreshTokenPromise = null;
+                });
         }
 
+        return refreshTokenPromise.then(() => {
+            return axiosCustomize(originalRequest); // retry
+        });
     } else {
         toast.error(error?.response?.data?.message)
     }

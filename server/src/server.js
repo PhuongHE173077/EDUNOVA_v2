@@ -1,41 +1,63 @@
+
+
 import express from 'express'
-import { CONNECT_DB } from './config/mongodb'
 import { env } from './config/environment'
-import cookieParser from 'cookie-parser'
-import { errorHandlingMiddleware } from './middlewares/errorHandlingMiddleware'
-import { corsOptions } from './config/cors'
+import { CONNECT_DB } from './config/mongodb'
 import { APIs_V1 } from './routes/v1'
+import { errorHandlingMiddleware } from './middlewares/erroHandlingMiddlewares'
+import { corsOptions } from './config/cors'
+import cookieParser from 'cookie-parser'
 var cors = require('cors')
-const app = express()
+
+const http = require('http')
+const socketIo = require('socket.io')
+
 
 const START_SERVER = () => {
+  const app = express()
 
-  const hostname = env.HOST
-  const port = env.PORT
+  app.use((req, res, next) => {
+    res.set('Cache-Control', ' no-store')
+    next()
+  })
+
+  app.use(cookieParser())
+
+  const hostname = env.APP_HOST
+  const port = env.APP_POST
 
   app.use(cors(corsOptions))
 
   app.use(express.json())
 
-  app.use(cookieParser())
-
-  app.use(express.urlencoded({ extended: true }))
-
   app.use('/api/v1', APIs_V1)
 
+  //middleware erro (allways in last)
   app.use(errorHandlingMiddleware)
 
-  app.listen(port, hostname, () => {
-    console.log(`Hello , I am running at ${hostname}:${port}/`)
+  const server = http.createServer(app)
+
+  const io = socketIo(server, { cors: corsOptions })
+
+  io.on('connection', (socket) => {
+    socket.on('FE_INVITED_TO_BOARD', (invitation) => {
+      socket.broadcast.emit('BE_INVITED_TO_BOARD', invitation)
+    })
+  })
+
+  server.listen(port, hostname, () => {
+    // eslint-disable-next-line no-console
+    console.log(`Hello ${env.AUTHOR}, I am running at http://${hostname}:${port}/`)
   })
 }
 
-
 CONNECT_DB()
   .then(() =>
+    // eslint-disable-next-line no-console
     console.log('Connected database successfully !'))
   .then(() => START_SERVER())
   .catch((error) => {
+    // eslint-disable-next-line no-console
     console.log(error)
     process.exit(0)
   })

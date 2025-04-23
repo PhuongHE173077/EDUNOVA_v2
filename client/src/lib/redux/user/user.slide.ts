@@ -9,7 +9,7 @@ const initialState = {
 export const loginUserAPIs = createAsyncThunk(
     'user/loginUserAPIs',
     async (user: any) => {
-        const res = await axiosCustomize.post('/login', user)
+        const res = await axiosCustomize.post('v1/login', user)
         return res.data
     }
 )

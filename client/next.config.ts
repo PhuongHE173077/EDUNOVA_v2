@@ -5,6 +5,7 @@ const nextConfig: NextConfig = {
   images: {
     domains: ['res.cloudinary.com', 'img-c.udemycdn.com', 'img-a.udemycdn.com', 'img-b.udemycdn.com', 'img-a.udemycdn.com'],
   },
+  reactStrictMode: false,
 };
 
 export default nextConfig;

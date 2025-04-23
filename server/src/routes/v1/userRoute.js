@@ -1,7 +1,7 @@
 import express from 'express'
 import { userController } from '~/controllers/userController'
 import { authMiddlewares } from '~/middlewares/authMiddlewares'
-// import { multerUploadMiddlewares } from '~/middlewares/multerUploadMiddlewares'
+import { multerUploadMiddlewares } from '~/middlewares/multerUploadMiddlewares'
 import { userValidation } from '~/validations/userValidation'
 
 
@@ -13,7 +13,7 @@ Router.route('/register')
 
 
 Router.route('/verify')
-  .put(userValidation.verifityAccount, userController.verifityAccount)
+  .put(userValidation.verifyAccount, userController.verifyAccount)
 
 
 Router.route('/login')
@@ -27,12 +27,14 @@ Router.route('/logout')
 Router.route('/refresh_token')
   .get(userController.refreshToken)
 
+Router.route('/users/list')
+  .get(authMiddlewares.isAuthorized, userController.getAllUser)
 
-// Router.route('/update')
-//   .put(
-//     authMiddlewares.isAuthorized,
-//     multerUploadMiddlewares.upload.single('avatar'),
-//     userValidation.update,
-//     userController.update)
 
+Router.route('/update')
+  .put(
+    authMiddlewares.isAuthorized,
+    multerUploadMiddlewares.upload.single('avatar'),
+    userValidation.update,
+    userController.update)
 export const userRoutes = Router

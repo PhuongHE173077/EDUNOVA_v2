@@ -1,18 +1,30 @@
-const { MongoClient } = require("mongodb")
-const { env } = require("./environment")
+//phuongdang
+//xKs4Pum9zHbGtvsR
 
-let dbInstance = null
+import { MongoClient, ServerApiVersion } from 'mongodb'
+import { env } from './environment'
 
-const mongoClient = new MongoClient(env.MONGODB_URI)
+const MONGODB_URI = env.MONGODB_URI
+const MONGODB_DATABASE = env.MONGODB_DATABASE
+
+let trelloInstance = null
+
+const mongoClient = new MongoClient(MONGODB_URI,
+  {
+    serverApi: {
+      version: ServerApiVersion.v1,
+      strict: true,
+      deprecationErrors: true
+    }
+  })
 
 export const CONNECT_DB = async () => {
   await mongoClient.connect()
-  dbInstance = mongoClient.db(env.MONGODB_DB)
+  trelloInstance = mongoClient.db(MONGODB_DATABASE)
+
 }
 
 export const GET_DB = () => {
-  if (!dbInstance) {
-    throw new Error('You must connect to DB first')
-  }
-  return dbInstance
+  if (!trelloInstance) throw new Error('Must connect to database ')
+  return trelloInstance
 }

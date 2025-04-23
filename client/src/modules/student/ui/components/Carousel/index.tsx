@@ -7,7 +7,7 @@ export default function StudentCarousel() {
   return (
     <div className="w-full px-2 pt-10 md:px-4">
       <Carousel
-        className='w-full max-w-[1000px] h-[200px] sm:h-[300px] md:h-[350px] lg:h-[400px] mx-auto'
+        className='w-full max-w-[1000px] h-[200px] sm:h-[300px] md:h-[350px] lg:h-[300px] mx-auto overflow-hidden rounded-md'
       >
         <CarouselContent>
           {CarouselData.map((item, index) => (
@@ -17,7 +17,7 @@ export default function StudentCarousel() {
                 alt={item.title}
                 width={1000}
                 height={400}
-                className='object-cover w-full h-full rounded-md'
+                className='object-cover w-full h-full rounded-md '
                 priority={index === 0}
               />
             </CarouselItem>

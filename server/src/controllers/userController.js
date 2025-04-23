@@ -8,6 +8,7 @@ const createNew = async (req, res, next) => {
   try {
     const createBoard = await userService.createNew(req)
 
+
     res.status(StatusCodes.CREATED).json(createBoard)
   } catch (error) {
     next(error)
@@ -38,9 +39,9 @@ const login = async (req, res, next) => {
     next(error)
   }
 }
-const verifityAccount = async (req, res, next) => {
+const verifyAccount = async (req, res, next) => {
   try {
-    const result = await userService.verifityAccount(req.body)
+    const result = await userService.verifyAccount(req.body)
 
 
     res.status(StatusCodes.OK).json(result)
@@ -93,15 +94,23 @@ const update = async (req, res, next) => {
     res.status(StatusCodes.OK).json(result)
   } catch (error) {
     next(error)
+  }
+}
+const getAllUser = async (req, res, next) => {
+  try {
+    const result = await userService.getAllUser()
 
-
+    res.status(StatusCodes.OK).json(result)
+  } catch (error) {
+    next(error)
   }
 }
 export const userController = {
   createNew,
   login,
-  verifityAccount,
+  verifyAccount,
   logout,
   refreshToken,
-  update
+  update,
+  getAllUser
 }
