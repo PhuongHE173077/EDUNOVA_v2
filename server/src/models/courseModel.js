@@ -68,7 +68,10 @@ const findOneById = async (id) => {
             'semesterId',
             'subjectId'
         ]
-        const result2 = deleteFields(data, fieldName)
+
+        const result2 = data.map((course) => {
+            return deleteFields(course, fieldName)
+        })
 
         return result2[0] || null
     } catch (error) {

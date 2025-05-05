@@ -42,3 +42,21 @@ export interface Subject {
     documents: [string];
     _destroy: boolean;
 }
+
+export interface questionLesson {
+    _id: string;
+    lessonId: string;
+    description: string;
+    urlFile: string;
+    timeStart: Date;
+    timeEnd: Date;
+    status: string;
+}
+
+export interface lesson {
+    _id: string;
+    courseId: string;
+    title: string;
+    questions: [questionLesson];
+    status: boolean
+}

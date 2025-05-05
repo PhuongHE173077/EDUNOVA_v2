@@ -16,10 +16,11 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import SchoolIcon from '@mui/icons-material/School';
 import HomeIcon from '@mui/icons-material/Home';
+import { Course } from '@/types';
 
-export default function HeaderCourseDetail() {
+export default function HeaderCourseDetail({ course }: { course: Course }) {
+    // console.log("🚀 ~ HeaderCourseDetail ~ course:", course)
     const [activityFilter, setActivityFilter] = useState('All Activities');
-    console.log(activityFilter);
     const [isVisible, setIsVisible] = useState(true);
     const handleSelectChange = (event: SelectChangeEvent<string>) => {
         setActivityFilter(event.target.value as string);
@@ -42,7 +43,7 @@ export default function HeaderCourseDetail() {
                 </Link>
 
                 <Typography color="text.primary" display="flex" alignItems="center">
-                    234
+                    {course?.subject?.name}
                 </Typography>
             </Breadcrumbs>
 
@@ -52,7 +53,7 @@ export default function HeaderCourseDetail() {
                     {/* Slot Select with SlotName */}
                     <Select
                         variant="outlined"
-                        sx={{ minWidth: 120, color: "black", backgroundColor: "white" }}
+                        sx={{ minWidth: 100, color: "black", backgroundColor: "white" }}
                         size="small"
                         displayEmpty
                         // onChange={handleSlotChange}
@@ -69,7 +70,7 @@ export default function HeaderCourseDetail() {
                     {/* Class Select with "Select Class" placeholder */}
                     <Select
                         variant="outlined"
-                        sx={{ minWidth: 160, color: "black", backgroundColor: "white" }}
+                        sx={{ minWidth: 120, color: "black", backgroundColor: "white" }}
                         size="small"
                         // displayEmpty
                         defaultValue="index"
@@ -121,7 +122,7 @@ export default function HeaderCourseDetail() {
             <Box mt={2} display="flex" alignItems="center" gap={1}>
                 <SchoolIcon color="primary" />
                 <Typography variant="body2" color="textSecondary">
-                    Teacher Name:abc
+                    Teacher :{course?.lecturer?.displayName}
                 </Typography>
             </Box>
         </Box>
