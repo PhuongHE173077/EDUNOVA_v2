@@ -71,9 +71,6 @@ const update = async (req, res, next) => {
   }
 }
 
-
-
-
 export const userValidation = {
   createNew,
   login,

@@ -10,7 +10,7 @@ export const HomeLayout = ({ children }: { children: React.ReactNode }) => {
         <HomeNavbar />
         <div className="flex flex-col md:flex-row ">
           <HomeSidebar />
-          <main className='flex-1 overflow-y-auto bg-muted min-h-[calc(100vh-64px)]'>
+          <main className='flex-1 overflow-y-auto min-h-[calc(100vh-64px)]' style={{ backgroundColor: 'hsl(0, 0%, 99%)' }}>
             {children}
           </main>
         </div>

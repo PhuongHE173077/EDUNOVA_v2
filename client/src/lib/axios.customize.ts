@@ -24,13 +24,10 @@ axiosCustomize.interceptors.response.use(function (response) {
 
     return response;
 }, function (error) {
-    if (error?.response?.status === 401) {
-        toast.error(error?.response?.data?.message)
-    }
-
     const originalRequest = error.config;
-
-    if (error?.response?.status === 410 && !originalRequest._retry) {
+    if (error?.response?.status === 401) {
+        toast.error('log out')
+    } else if (error?.response?.status === 410 && !originalRequest._retry) {
         originalRequest._retry = true;
 
         if (!refreshTokenPromise) {

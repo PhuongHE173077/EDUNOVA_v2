@@ -8,21 +8,22 @@ import React, { useEffect, useState } from 'react';
 function layout({ children }: { children: React.ReactNode }) {
   const currentUser = useAppSelector(selectedCurrentUser)
   const router = useRouter()
-  const [isChecking, setIsChecking] = useState(true);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    if (!currentUser) {
-      router.push('/sign-in');
-    } else {
-      setIsChecking(false);
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (mounted) {
+      if (currentUser === null) {
+        router.push('/sign-in');
+      }
     }
-  }, [currentUser, router]);
+  }, [currentUser, router, mounted]);
 
-  if (isChecking) {
-
-    return (
-      <Loading />
-    )
+  if (!mounted || currentUser === undefined) {
+    return <Loading />;
   }
 
   return (
