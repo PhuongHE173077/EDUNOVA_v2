@@ -110,7 +110,7 @@ export default function ContentCourseDetail({ lesson }: { lesson: lesson[] }) {
                                     <ListItem
                                         key={`qs-${qIndex}`}
                                         onClick={() => {
-                                            router.push(`question?id=${qs._id}`);
+                                            router.push(`question?id=${qs._id}&courseId=${ls.courseId}&lessonId=${ls._id}`);
                                         }}
                                         sx={{
                                             display: 'flex',

@@ -60,8 +60,10 @@ const getAll = async () => {
 }
 
 
-const findAnswersByQuestionId = async (questionId) => {
+const findAnswersByQuestionId = async (questionId, page, itemsPerPage) => {
+
     try {
+
         const result = await GET_DB().collection(COLLECTION_NAME).aggregate([
             { $match: { questionId: new ObjectId(questionId) } },
             {
@@ -71,15 +73,30 @@ const findAnswersByQuestionId = async (questionId) => {
                     foreignField: '_id',
                     as: 'user'
                 }
+            },
+            { $sort: { answerAt: -1 } },
+            {
+                $facet: {
+                    'queryItems': [
+                        { $skip: (page - 1) * itemsPerPage },
+                        { $limit: itemsPerPage }
+                    ],
+
+                    'count': [{ $count: 'totalBoards' }]
+                }
             }
+
         ]).toArray()
-        const data = result.map((answer) => {
+        const data = result[0].queryItems.map((answer) => {
             return {
                 ...answer,
                 user: pickUser(answer.user[0])
             }
         })
-        return data
+        return {
+            answers: data,
+            totalAnswers: result[0]?.count[0]?.totalBoards || 0
+        }
     } catch (error) {
         throw error
     }

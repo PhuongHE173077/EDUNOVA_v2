@@ -58,6 +58,15 @@ const getAll = async () => {
     }
 }
 
+const getQuestionByLessonId = async (id) => {
+    try {
+        const result = await GET_DB().collection(Q_LESSON_COLLECTION_NAME).find({ lessonId: new ObjectId(id) }).toArray()
+        return result
+    } catch (error) {
+        throw error
+    }
+}
+
 
 export const questionLessonModel = {
     Q_LESSON_COLLECTION_NAME,
@@ -65,5 +74,5 @@ export const questionLessonModel = {
     createNew,
     update,
     getAll,
-
+    getQuestionByLessonId
 }

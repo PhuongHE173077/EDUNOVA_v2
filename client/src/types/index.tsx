@@ -61,3 +61,14 @@ export interface lesson {
     questions: [questionLesson];
     status: boolean
 }
+
+export interface answerLesson {
+    _id: string;
+    questionId: string;
+    answer: string;
+    urlFile: string;
+    star: number;
+    user: any;
+    type: string;
+    answerAt: Date;
+}

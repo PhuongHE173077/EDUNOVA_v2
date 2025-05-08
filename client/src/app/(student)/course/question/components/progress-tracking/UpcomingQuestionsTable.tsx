@@ -1,12 +1,12 @@
+import { lesson, questionLesson } from '@/types';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Button } from '@mui/material';
+import dayjs from 'dayjs';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 
-const UpcomingQuestionsTable: React.FC = () => {
-    const upcomingQuestions = [
-        { text: 'What is React?', dueDate: '2024-10-25', status: 'Upcoming' },
-        { text: 'Explain Hooks in React', dueDate: '2024-10-27', status: 'Upcoming' },
-        { text: 'What is JSX?', dueDate: '2024-10-30', status: 'Upcoming' },
-    ];
+function UpcomingQuestionsTable({ questions, questionId, lessonId, courseId }: { questions: questionLesson[], questionId: any, courseId: any, lessonId: any }) {
+    const router = useRouter()
 
     return (
         <TableContainer component={Paper} sx={{ marginTop: 4 }}>
@@ -21,21 +21,36 @@ const UpcomingQuestionsTable: React.FC = () => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {upcomingQuestions.map((question, index) => (
-                        <TableRow key={index}>
-                            <TableCell>{index + 1}</TableCell>
-                            <TableCell>{question?.text}</TableCell>
-                            <TableCell>{question?.dueDate}</TableCell>
-                            <TableCell>
-                                <Button variant="outlined" color="success">
-                                {question?.status}
-                                </Button>
-                            </TableCell>
-                        </TableRow>
+                    {questions.map((question, index) => (
+                        questionId === question._id ?
+                            <TableRow key={index} sx={{ backgroundColor: '#dfe6e9' }}>
+                                <TableCell>{index + 1}</TableCell>
+                                <TableCell>{question?.title.split(' ').slice(0, 6).join(' ') + '...'}</TableCell>
+                                <TableCell>{dayjs(question?.timeEnd).format('DD/MM/YYYY')}</TableCell>
+                                <TableCell>
+                                    <Button variant="outlined" color="success">
+                                        {question?.status}
+                                    </Button>
+                                </TableCell>
+                            </TableRow>
+                            :
+                            <TableRow key={index}
+                                onClick={() => router.push(`question?id=${question._id}&courseId=${courseId}&lessonId=${lessonId}`)}
+                                sx={{ cursor: 'pointer' }}
+                            >
+                                <TableCell>{index + 1}</TableCell>
+                                <TableCell>{question?.title.split(' ').slice(0, 6).join(' ') + '...'}</TableCell>
+                                <TableCell>{dayjs(question?.timeEnd).format('DD/MM/YYYY')}</TableCell>
+                                <TableCell>
+                                    <Button variant="outlined" color="success">
+                                        {question?.status}
+                                    </Button>
+                                </TableCell>
+                            </TableRow>
                     ))}
                 </TableBody>
             </Table>
-        </TableContainer>
+        </TableContainer >
     );
 }
 

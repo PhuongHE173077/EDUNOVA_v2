@@ -4,6 +4,7 @@ import { courseModel } from "~/models/courseModel"
 import { lessonModel } from "~/models/lessonModel"
 import { questionLessonModel } from "~/models/questionLessonModel"
 import ApiError from "~/utils/ApiError"
+import { ITEMS_PER_PAGE } from "~/utils/constants"
 
 const createNew = async (data) => {
     try {
@@ -21,9 +22,10 @@ const createNew = async (data) => {
     }
 }
 
-const getAnswerByQuestionId = async (questionId) => {
+const getAnswerByQuestionId = async (questionId, page = 1) => {
     try {
-        const result = await answerLessonModel.findAnswersByQuestionId(questionId)
+        const itemsPerPage = ITEMS_PER_PAGE
+        const result = await answerLessonModel.findAnswersByQuestionId(questionId, page, itemsPerPage)
 
         return result
     } catch (error) {

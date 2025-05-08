@@ -24,9 +24,9 @@ const createNew = async (req, res, next) => {
 
 const getAnswerByQuestionId = async (req, res, next) => {
     try {
-        const { questionId } = req.query
+        const { questionId, page } = req.query
 
-        const result = await answerLessonService.getAnswerByQuestionId(questionId)
+        const result = await answerLessonService.getAnswerByQuestionId(questionId, page)
         res.status(StatusCodes.OK).json(result)
 
     } catch (error) {

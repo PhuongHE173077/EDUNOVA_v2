@@ -20,3 +20,5 @@ export const TYPE_QUESTION = {
   QUESTION: 'question',
   ASSIGNMENT: 'assignment'
 }
+
+export const ITEMS_PER_PAGE = 10

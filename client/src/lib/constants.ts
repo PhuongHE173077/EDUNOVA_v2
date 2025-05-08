@@ -30,3 +30,10 @@ export const USER_ROLE = {
   LECTURER: "lecturer",
   ADMIN: "admin",
 }
+
+export const TYPE_QUESTION = {
+  QUESTION: 'question',
+  ASSIGNMENT: 'assignment'
+}
+
+export const DEFAULT_ITEMS_PER_PAGE = 10

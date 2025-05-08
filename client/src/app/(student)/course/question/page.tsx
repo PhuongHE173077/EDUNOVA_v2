@@ -1,5 +1,4 @@
 'use client'
-import { fetchQuestionByLessonId } from '@/apis/questionLesion.apis';
 import { useRouter, useSearchParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { QuestionLesion } from './components/question/Question';
@@ -8,24 +7,30 @@ import ProgressTracker from './components/progress-tracking/ProgressTracker';
 import { Button } from '@/components/ui/button';
 import { ArrowLeftIcon, StepBackIcon } from 'lucide-react';
 import { questionLesson } from '@/types';
+import { fetchQuestionById } from '@/apis/question.lesion.apis';
+import { Loading } from '@/components/ui/loading';
 
 export default function page() {
     const params = useSearchParams();
     const id = params.get('id');
     const [question, setQuestion] = useState<questionLesson>();
     const router = useRouter();
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
+
         const fetchData = async () => {
-            const res = await fetchQuestionByLessonId(id!);
+            const res = await fetchQuestionById(id!);
             setQuestion(res.data);
         };
         fetchData();
-    }, [])
+    }, [id])
 
+
+    if (isLoading) return <Loading />;
 
     return (
-        <div className='p-7'>
+        <div className='p-7 relative'>
             <Button variant='outline' className='mb-3' onClick={() => router.back()}>
                 <ArrowLeftIcon />
                 Back
@@ -37,7 +42,7 @@ export default function page() {
 
                 <div className='w-full lg:w-3/5'>
                     {question && <QuestionLesion question={question} />}
-                    <NavTabsLesson />
+                    <NavTabsLesson setIsLoading={setIsLoading} />
                 </div>
                 <div className="hidden lg:block w-2/5 ">
                     <ProgressTracker />

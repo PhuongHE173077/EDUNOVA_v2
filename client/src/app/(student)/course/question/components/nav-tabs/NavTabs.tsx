@@ -7,7 +7,7 @@ import { useState } from 'react';
 import Discussion from './Dicussion';
 import FeedBack from './FeedBack';
 
-export const NavTabsLesson = () => {
+export const NavTabsLesson = ({ setIsLoading }: any) => {
     const [value, setValue] = useState<string>('one');
     const [loading, setLoading] = useState<boolean>(false);
 
@@ -37,7 +37,7 @@ export const NavTabsLesson = () => {
             {!loading && (
                 <Box sx={{ marginTop: '20px' }}>
                     {value === 'one' && (
-                        <Discussion />
+                        <Discussion setIsLoading={setIsLoading} />
                     )}
                     {value == 'two' && (
                         <FeedBack />

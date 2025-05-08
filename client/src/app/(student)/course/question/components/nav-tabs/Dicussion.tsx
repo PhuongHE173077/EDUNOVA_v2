@@ -1,25 +1,76 @@
+import { createNewAnswer, fetchAnswerByQuestionId } from "@/apis/answer.lesson.apis";
+import { Loading } from "@/components/ui/loading";
+import { DEFAULT_ITEMS_PER_PAGE, TYPE_QUESTION } from "@/lib/constants";
+import { answerLesson } from "@/types";
 import SendIcon from "@mui/icons-material/Send";
 import {
     Box,
     Button,
-    TextField,
+    Pagination,
+    PaginationItem,
     Typography,
     useColorScheme
 } from "@mui/material";
 import MDEditor from "@uiw/react-md-editor";
-import { Fragment, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { Fragment, useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import rehypeSanitize from "rehype-sanitize";
-export default function Discussion() {
-    const [value, setValue] = useState<string>("");
+import { Comment } from "./Comment";
+import remarkBreaks from 'remark-breaks';
+import Link from "next/link";
+export default function Discussion({ setIsLoading }: any) {
+    const [value, setValue] = useState<any>("");
+    const [answers, setAnswers] = useState<answerLesson[]>([]);
     const { mode } = useColorScheme()
+    const searchParams = useSearchParams();
+    const id = searchParams.get("id");
+    const courseId = searchParams.get("courseId");
+    const lessonId = searchParams.get("lessonId");
+    const [totalAnswer, setTotalAnswer] = useState(0);
+    const pageQuery = searchParams.get("page")
+
+    const page = parseInt(pageQuery || "1")
+
+
+
+    useEffect(() => {
+        fetchAnswerByQuestionId(id, page).then((res) => {
+            setAnswers(res.data.answers);
+            setTotalAnswer(res.data.totalAnswers);
+        })
+    }, [id, page])
+
+    const handleSubmit = async () => {
+        if (!value) {
+            toast.error("Please enter your comment");
+        } else {
+            setIsLoading(true);
+            const data = {
+                answer: value,
+                questionId: id,
+                type: TYPE_QUESTION.QUESTION
+            }
+            await createNewAnswer(data)
+            await fetchAnswerByQuestionId(id, page).then((res) => {
+                setAnswers(res.data.answers);
+                setTotalAnswer(res.data.totalAnswers);
+            })
+            setValue("");
+            setTimeout(() => {
+                setIsLoading(false);
+            }, 1000);
+
+        }
+    }
+
+
     return (
         <Fragment>
-
             <Box>
-
                 <Box
                     sx={{
-                        maxWidth: "750px",
+
                         margin: "20px auto",
                         padding: "30px",
                         border: "1px solid #e0e0e0",
@@ -54,7 +105,10 @@ export default function Discussion() {
                         <MDEditor
                             value={value}
                             onChange={setValue}
-                            previewOptions={{ rehypePlugins: [[rehypeSanitize]] }}
+                            previewOptions={{
+                                rehypePlugins: [[rehypeSanitize]],
+                                remarkPlugins: [remarkBreaks]
+                            }}
                             preview="edit"
                             style={{
                                 backgroundColor: "transparent",
@@ -66,7 +120,7 @@ export default function Discussion() {
                     </Box>
 
 
-                    <Box sx={{ display: "flex", justifyContent: "space-between", gap: "15px" }}>
+                    <Box sx={{ display: "flex", justifyContent: "flex-end", gap: "15px" }}>
                         {/* {editingCommentId ? (
                             <>
                                 <Button >{t('cancel1')}</Button>
@@ -85,12 +139,10 @@ export default function Discussion() {
 
                             variant="contained"
                             sx={{
-                                backgroundColor: "#b0bec5",
+                                backgroundColor: "#fd9644",
                             }}
                             endIcon={<SendIcon />}
-                            onClick={() => {
-                                console.log(value);
-                            }}
+                            onClick={() => handleSubmit()}
                         >
                             Send
                         </Button>
@@ -103,55 +155,47 @@ export default function Discussion() {
             <Typography variant="h6" sx={{ margin: "1rem", fontWeight: "bold", color: "#3f51b5" }}>
                 Your Comments
             </Typography>
+            {(totalAnswer > 0) &&
+                <Box sx={{
+                    position: 'fixed',
+                    bottom: 5,
+                    left: 0,
+                    width: '100%',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    zIndex: 1000,
+                    py: 1,
 
-            {/* {filteredComments.map((answer) => (
-                <Paper
-                    key={answer.id}
-                    elevation={3}
-                    sx={{
-                        marginBottom: "10px",
-                        padding: "15px",
-                        borderRadius: "12px",
-                        backgroundColor: "#f9f9f9",
-                        position: "relative",
-                        boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.1)",
-                    }}
+                }}>
+                    <Pagination
+                        size="small"
+                        showFirstButton
+                        showLastButton
+                        variant="outlined"
+                        shape="rounded"
+                        count={Math.ceil(totalAnswer / DEFAULT_ITEMS_PER_PAGE)}
+                        page={page}
+                        renderItem={(item) => (
+                            <PaginationItem
+                                component={Link}
+                                href={`question?id=${id}&courseId=${courseId}&lessonId=${lessonId}${item.page === 1 ? '' : `&page=${item.page}`}`}
+                                {...item}
+                            />
+                        )}
+                    />
+                </Box>
+            }
+
+            {answers.map((answer) => (
+                <Box
+                    key={answer._id}
+                    sx={{ marginBottom: "10px" }}
                 >
                     <Comment
-                        userIds={answer?.UserID}
-                        username={getUsernameById(answer?.UserID)}
-                        rating={answer?.Rating}
-                        text={answer?.comment}
-                        questionID={answer?.QuestionID}
-                        timestamp={answer?.Timestamped}
-                        answerId={answer?.id}
-                        settingStatus={settingStatus}
+                        answer={answer}
                     />
-
-                    {answer.UserID === userid && (
-                        <IconButton
-                            aria-label="more"
-                            onClick={(event) => handleMenuOpen(event, answer?.id)}
-                            sx={{ position: "absolute", top: 10, right: 10, color: "#3f51b5" }}
-                        >
-                            <MoreVertIcon />
-                        </IconButton>
-                    )}
-
-                    <Menu
-                        anchorEl={anchorEl}
-                        open={Boolean(anchorEl) && selectedCommentId === answer.id}
-                        onClose={handleMenuClose}
-                    >
-                        {answer.UserID === userid && (
-                            <>
-                                <MenuItem onClick={() => handleEditComment(answer.id)}>{t('edit')}</MenuItem>
-                                <MenuItem onClick={() => handleDeleteComment(answer.id)}>{t('delete1')}</MenuItem>
-                            </>
-                        )}
-                    </Menu>
-                </Paper>
-            ))} */}
+                </Box>
+            ))}
         </Fragment>
     )
 }

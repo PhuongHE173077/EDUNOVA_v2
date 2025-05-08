@@ -8,6 +8,10 @@ const Router = express.Router()
 
 
 Router.route('/:id')
+    .get(authMiddlewares.isAuthorized, questionLessonController.getQuestionById)
+
+
+Router.route('/')
     .get(authMiddlewares.isAuthorized, questionLessonController.getQuestionByLessonId)
 
 export const questionLessonRouter = Router
