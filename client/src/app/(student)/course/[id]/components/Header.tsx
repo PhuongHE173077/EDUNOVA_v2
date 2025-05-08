@@ -32,11 +32,11 @@ export default function HeaderCourseDetail({ course }: { course: Course }) {
         <Box p={3}>
             {/* Breadcrumbs */}
             <Breadcrumbs aria-label="breadcrumb" sx={{ mb: 2 }}>
-                <Link href="/homePage" color="inherit" underline="hover" display="flex" alignItems="center">
+                <Link href="/student" color="inherit" underline="hover" display="flex" alignItems="center">
                     <HomeIcon fontSize="small" sx={{ mr: 0.5 }} />
                     Home
                 </Link>
-                <Link href="/homePage" color="inherit" underline="hover" display="flex" alignItems="center">
+                <Link href="/course" color="inherit" underline="hover" display="flex" alignItems="center">
                     <Typography color="text.secondary" display="flex" alignItems="center">
                         Course
                     </Typography>
@@ -122,7 +122,7 @@ export default function HeaderCourseDetail({ course }: { course: Course }) {
             <Box mt={2} display="flex" alignItems="center" gap={1}>
                 <SchoolIcon color="primary" />
                 <Typography variant="body2" color="textSecondary">
-                    Teacher :{course?.lecturer?.displayName}
+                    Teacher :<strong>{course?.lecturer?.displayName}</strong>
                 </Typography>
             </Box>
         </Box>

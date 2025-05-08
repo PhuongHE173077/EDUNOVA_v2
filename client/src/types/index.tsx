@@ -46,6 +46,7 @@ export interface Subject {
 export interface questionLesson {
     _id: string;
     lessonId: string;
+    title: string;
     description: string;
     urlFile: string;
     timeStart: Date;
