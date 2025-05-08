@@ -10,7 +10,7 @@ import MDEditor from "@uiw/react-md-editor";
 import { Fragment, useState } from "react";
 import rehypeSanitize from "rehype-sanitize";
 export default function Discussion() {
-    const [value, setValue] = useState<string>("Write a comment...");
+    const [value, setValue] = useState<string>("");
     const { mode } = useColorScheme()
     return (
         <Fragment>

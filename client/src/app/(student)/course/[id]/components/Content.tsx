@@ -1,26 +1,25 @@
-import React, { useState, useEffect, useRef } from 'react';
-import {
-    Box,
-    Typography,
-    Button,
-    Collapse,
-    List,
-    ListItem,
-    ListItemText,
-    ListItemIcon,
-    Divider,
-    Pagination,
-} from '@mui/material';
+import { Colors } from '@/lib/colors';
+import { lesson } from '@/types';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
-import AssignmentIcon from '@mui/icons-material/Assignment';
-import { lesson } from '@/types';
-import { Colors } from '@/lib/colors';
-import Link from 'next/link';
+import {
+    Box,
+    Button,
+    Collapse,
+    Divider,
+    List,
+    ListItem,
+    ListItemIcon,
+    ListItemText,
+    Typography
+} from '@mui/material';
+import { useRouter } from 'next/navigation';
+import React, { useRef, useState } from 'react';
 
 export default function ContentCourseDetail({ lesson }: { lesson: lesson[] }) {
     const [visibleSlots, setVisibleSlots] = useState<{ [key: string]: boolean }>({});
     const slotRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+    const router = useRouter();
     const toggleVisibility = (slotId: string) => {
         setVisibleSlots((prev) => ({
             ...prev,
@@ -107,51 +106,54 @@ export default function ContentCourseDetail({ lesson }: { lesson: lesson[] }) {
                         <List>
                             {ls.questions
                                 .map((qs, qIndex) => (
-                                    <Link href={`question?id=${qs._id}`} key={`qs-${qIndex}`}>
-                                        <ListItem
 
-                                            sx={{
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                cursor: 'pointer',
-                                                opacity: 1,
-                                                '&:hover': {
-                                                    backgroundColor: 'rgba(0, 123, 255, 0.1)',
-                                                    transform: 'scale(1.02)',
-                                                },
-                                                transition: 'background-color 0.3s, transform 0.3s',
+                                    <ListItem
+                                        key={`qs-${qIndex}`}
+                                        onClick={() => {
+                                            router.push(`question?id=${qs._id}`);
+                                        }}
+                                        sx={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            cursor: 'pointer',
+                                            opacity: 1,
+                                            '&:hover': {
+                                                backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                                                transform: 'scale(1.02)',
+                                            },
+                                            transition: 'background-color 0.3s, transform 0.3s',
+                                        }}
+                                    // onClick={() =>
+                                    //     qs.Status !== 0 &&
+                                    //     handleClicktoDiscussion(qs.QuestionID, sl)
+                                    // }
+                                    >
+                                        <ListItemIcon>
+                                            <HelpOutlineIcon color="action" />
+                                        </ListItemIcon>
+                                        <ListItemText
+                                            primary={`Q${qIndex + 1}: ${qs.title}`}
+                                            secondary={
+                                                qs.description.split('\n').map((line, index) => (
+                                                    <React.Fragment key={index}>
+                                                        {line}
+                                                        <br />
+                                                    </React.Fragment>
+                                                ))
+                                            }
+                                            secondaryTypographyProps={{
+                                                color: 'success',
+                                                fontWeight: 'bold',
                                             }}
-                                        // onClick={() =>
-                                        //     qs.Status !== 0 &&
-                                        //     handleClicktoDiscussion(qs.QuestionID, sl)
-                                        // }
-                                        >
-                                            <ListItemIcon>
-                                                <HelpOutlineIcon color="action" />
-                                            </ListItemIcon>
-                                            <ListItemText
-                                                primary={`Q${qIndex + 1}: ${qs.title}`}
-                                                secondary={
-                                                    qs.description.split('\n').map((line, index) => (
-                                                        <React.Fragment key={index}>
-                                                            {line}
-                                                            <br />
-                                                        </React.Fragment>
-                                                    ))
-                                                }
-                                                secondaryTypographyProps={{
-                                                    color: 'success',
-                                                    fontWeight: 'bold',
-                                                }}
+                                        />
+                                        {qs.status !== 'pending' && (
+                                            <ArrowForwardIosIcon
+                                                fontSize="small"
+                                                color="action"
                                             />
-                                            {qs.status !== 'pending' && (
-                                                <ArrowForwardIosIcon
-                                                    fontSize="small"
-                                                    color="action"
-                                                />
-                                            )}
-                                        </ListItem>
-                                    </Link>
+                                        )}
+                                    </ListItem>
+
                                 ))}
                         </List>
                     </Collapse>
