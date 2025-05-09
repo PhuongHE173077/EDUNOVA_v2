@@ -63,7 +63,7 @@ const SidebarProvider = React.forwardRef<
 >(
   (
     {
-      defaultOpen = true,
+      defaultOpen = localStorage.getItem('sidebar_state') === "true",
       open: openProp,
       onOpenChange: setOpenProp,
       className,
@@ -285,6 +285,8 @@ const SidebarTrigger = React.forwardRef<
       onClick={(event) => {
         onClick?.(event)
         toggleSidebar()
+        const state = localStorage.getItem("sidebar_state") !== 'true'
+        localStorage.setItem("sidebar_state", state.toString())
       }}
       {...props}
     >

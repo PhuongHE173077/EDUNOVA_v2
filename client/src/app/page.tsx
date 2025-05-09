@@ -17,6 +17,8 @@ export default function Home() {
     if (currentUser) {
       if (currentUser.role === USER_ROLE.STUDENT) {
         router.push('/student');
+      } else if (currentUser.role === USER_ROLE.LECTURER) {
+        router.push('/Lecturer');
       }
 
     } else {
