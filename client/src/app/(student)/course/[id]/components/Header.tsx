@@ -17,9 +17,10 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import SchoolIcon from '@mui/icons-material/School';
 import HomeIcon from '@mui/icons-material/Home';
 import { Course } from '@/types';
+import { useRouter } from 'next/navigation';
 
 export default function HeaderCourseDetail({ course }: { course: Course }) {
-    // console.log("🚀 ~ HeaderCourseDetail ~ course:", course)
+    const router = useRouter();
     const [activityFilter, setActivityFilter] = useState('All Activities');
     const [isVisible, setIsVisible] = useState(true);
     const handleSelectChange = (event: SelectChangeEvent<string>) => {
@@ -89,7 +90,7 @@ export default function HeaderCourseDetail({ course }: { course: Course }) {
                     <Button
                         variant="contained"
                         color="secondary"
-                        // onClick={navigateToExam}
+                        onClick={() => router.push(`exam?courseId=${course?._id}`)}
                         size="medium"
                         sx={{ whiteSpace: 'nowrap' }}
                     >

@@ -13,6 +13,7 @@ import { Loading } from '@/components/ui/loading';
 export default function page() {
     const params = useSearchParams();
     const id = params.get('id');
+    const courseId = params.get('courseId');
     const [question, setQuestion] = useState<questionLesson>();
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
@@ -31,7 +32,7 @@ export default function page() {
 
     return (
         <div className='p-7 relative'>
-            <Button variant='outline' className='mb-3' onClick={() => router.back()}>
+            <Button variant='outline' className='mb-3' onClick={() => router.push(`/course/${courseId}`)}>
                 <ArrowLeftIcon />
                 Back
             </Button>
