@@ -6,6 +6,8 @@ import { courseRouter } from './courseRouter'
 import { lessonRouter } from './lessonRouter'
 import { questionLessonRouter } from './questionLessonRouter'
 import { answerLessonRouter } from './answerLessonRouter'
+import { imageRouter } from './imageRouter'
+import { examRouter } from './examRouter'
 
 
 const Router = express.Router()
@@ -20,6 +22,9 @@ Router.use('/courses', courseRouter)
 Router.use('/lessons', lessonRouter)
 Router.use('/question_lessons', questionLessonRouter)
 Router.use('/answer_lessons', answerLessonRouter)
+Router.use('/image', imageRouter)
+Router.use('/exams', examRouter)
+
 
 
 export const APIs_V1 = Router
