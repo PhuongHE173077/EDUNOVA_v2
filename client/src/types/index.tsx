@@ -72,3 +72,13 @@ export interface answerLesson {
     type: string;
     answerAt: Date;
 }
+
+export interface exam {
+    _id: string;
+    title: string;
+    time: string;
+    date: string;
+    timeEnd: string;
+    viewAnswer: Date;
+    status: string;
+}

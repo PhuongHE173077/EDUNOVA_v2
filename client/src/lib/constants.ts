@@ -42,3 +42,10 @@ export const TYPE_QUESTION_EXAM = {
   MULTIPLE: 'multiple',
   SINGLE: 'single'
 }
+
+export const STATUS_EXAM = {
+  PENDING: 'pending',
+  START: 'start',
+  FINISHED: 'finished',
+  DOING: 'doing'
+}

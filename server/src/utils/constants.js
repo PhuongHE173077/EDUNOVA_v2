@@ -22,3 +22,10 @@ export const TYPE_QUESTION = {
 }
 
 export const ITEMS_PER_PAGE = 10
+
+export const STATUS_EXAM = {
+  PENDING: 'pending',
+  START: 'start',
+  FINISHED: 'finished',
+  DOING: 'doing'
+}

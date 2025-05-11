@@ -11,6 +11,10 @@ export default {
 	theme: {
 		extend: {
 			colors: {
+				warning: "#f1c40f",
+				"warning-foreground": "black",
+				success: "#2ecc71",
+				// "success-foreground": "#ffffff",
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
 				card: {

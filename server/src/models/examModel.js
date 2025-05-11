@@ -1,4 +1,5 @@
 import { pickUser } from "~/utils/slugify"
+import { questionExamModel } from "./questionExamModel"
 
 const { ObjectId } = require("mongodb")
 const { GET_DB } = require("~/config/mongodb")
@@ -60,6 +61,90 @@ const getAll = async () => {
     }
 }
 
+const getExamsByCourseId = async (courseId) => {
+    try {
+
+        const result = await GET_DB().collection(COLLECTION_NAME).find({ courseId: new ObjectId(courseId) }).toArray()
+
+        return result
+
+    } catch (error) {
+        throw error
+    }
+}
+
+const getExamDetail = async (examId) => {
+    try {
+
+        const result = await GET_DB().collection(COLLECTION_NAME).aggregate([
+            { $match: { _id: new ObjectId(examId) } },
+            {
+                $lookup: {
+                    from: questionExamModel.COLLECTION_NAME,
+                    localField: '_id',
+                    foreignField: 'examId',
+                    as: 'questions'
+                }
+            },
+
+        ]).toArray()
+
+        const data = {
+            ...result[0],
+            questions: result[0].questions.map((question) => {
+                return {
+                    ...question,
+                    options: question.options.map((option) => {
+                        return {
+                            id: option.id,
+                            content: option.content,
+
+                        }
+                    }),
+                    numberCorrectAnswer: question.options.filter((option) => option.isCorrect).length
+                }
+            })
+        }
+        return data
+
+    } catch (error) {
+        throw error
+    }
+}
+const getExamDetailHasAnswer = async (examId) => {
+    try {
+
+        const result = await GET_DB().collection(COLLECTION_NAME).aggregate([
+            { $match: { _id: new ObjectId(examId) } },
+            {
+                $lookup: {
+                    from: questionExamModel.COLLECTION_NAME,
+                    localField: '_id',
+                    foreignField: 'examId',
+                    as: 'questions'
+                }
+            },
+
+        ]).toArray()
+
+        const data = {
+            ...result[0],
+            questions: result[0].questions.map((question) => {
+                return {
+                    ...question,
+                    options: question.options,
+                    numberCorrectAnswer: question.options.filter((option) => option.isCorrect).length
+                }
+            })
+        }
+        return data
+
+    } catch (error) {
+        throw error
+    }
+}
+
+
 
 
 export const examModel = {
@@ -68,4 +153,7 @@ export const examModel = {
     createNew,
     update,
     getAll,
+    getExamsByCourseId,
+    getExamDetail,
+    getExamDetailHasAnswer
 }

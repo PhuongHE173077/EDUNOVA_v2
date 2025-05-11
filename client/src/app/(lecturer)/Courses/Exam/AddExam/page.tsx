@@ -208,6 +208,7 @@ export default function Page() {
 
 
     const onSubmit = async (data: any) => {
+        // console.log("🚀 ~ onSubmit ~ onSubmit:", courseId)
         const { title, time } = data;
         const newExam = {
             title,

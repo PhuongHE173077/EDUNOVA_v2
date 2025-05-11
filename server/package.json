@@ -34,6 +34,7 @@
     "nodemailer": "^6.9.16",
     "socket.io": "^4.8.1",
     "streamifier": "^0.1.1",
+    "sweetalert2": "^11.21.0",
     "uuid": "^11.0.5"
   },
   "devDependencies": {
