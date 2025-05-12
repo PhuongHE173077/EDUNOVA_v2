@@ -5,7 +5,16 @@ const getCourseByUserId = async (req, res, next) => {
     try {
         const userId = req.jwtDecoded._id
 
-        const result = await courseService.getCourseByUserId(userId)
+        const semesterId = req.query.semesterId
+        const subjectId = req.query.subjectId
+        let result
+        if (semesterId && subjectId) {
+            result = await courseService.getCourseBySemesterIdAndSubjectId(semesterId, subjectId)
+        } else {
+            result = await courseService.getCourseByUserId(userId)
+        }
+
+
 
         res.status(StatusCodes.OK).json(result)
     } catch (error) {

@@ -17,7 +17,16 @@ const getCourseById = async (courseId) => {
         throw error
     }
 }
+
+export const getCourseBySemesterIdAndSubjectId = async (semesterId, subjectId) => {
+    try {
+        return await courseModel.getCourseBySemesterIdAndSubjectId(semesterId, subjectId)
+    } catch (error) {
+        throw error
+    }
+}
 export const courseService = {
     getCourseByUserId,
-    getCourseById
+    getCourseById,
+    getCourseBySemesterIdAndSubjectId
 }

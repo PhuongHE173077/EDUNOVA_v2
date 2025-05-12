@@ -1,12 +1,5 @@
 export const CarouselData = [
-  {
-    _id: 1,
-    image:
-      "https://img-c.udemycdn.com/notices/featured_carousel_slide/image/3176d602-2cd3-456c-9f0e-fc8c710f22db.png",
-    title: "Learn from anywhere",
-    description:
-      "On the couch, from the backyard, or on your commute. Our app lets you decide.",
-  },
+
   {
     _id: 2,
     image:

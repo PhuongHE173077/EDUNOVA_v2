@@ -26,8 +26,9 @@ const getExamsByCourseId = async (req, res, next) => {
 const getExamDetail = async (req, res, next) => {
     try {
         const examId = req.query.examId
+        const hasResult = req.query.hasResult
         const userId = req.jwtDecoded._id
-        const result = await examService.getExamDetail(examId, userId)
+        const result = await examService.getExamDetail(examId, userId, hasResult)
         res.status(StatusCodes.OK).json(result)
     } catch (error) {
         throw error

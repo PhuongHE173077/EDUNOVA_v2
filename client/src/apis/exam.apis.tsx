@@ -15,3 +15,7 @@ export const fetchExamDetail = async (id: any) => {
 export const updateExamById = async (id: any) => {
     return await axiosCustomize.put('v1/exams/' + id)
 }
+
+export const fetchExamDetailHasResult = async (id: any) => {
+    return await axiosCustomize.get('v1/exams?examId=' + id + '&hasResult=true')
+}

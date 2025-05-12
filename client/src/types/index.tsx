@@ -7,6 +7,7 @@ export interface Semesters {
 
 export interface Course {
     _id: string;
+    id: string;
     students: [User];
     lecturer: User;
     semester: Semesters;
@@ -76,6 +77,7 @@ export interface answerLesson {
 export interface exam {
     _id: string;
     title: string;
+    image: string;
     time: string;
     date: string;
     timeEnd: string;

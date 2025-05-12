@@ -45,9 +45,12 @@ const getExamsByCourseId = async (courseId, userId) => {
         throw error
     }
 }
-const getExamDetail = async (examId, userId) => {
+const getExamDetail = async (examId, userId, hasResult) => {
     try {
         const resultExam = await resultExamModel.findByExamIdAddUserId(examId, userId)
+        if (hasResult) {
+            return await examModel.getExamDetailHasAnswer(examId)
+        }
         const exam = await examModel.getExamDetail(examId)
         if (resultExam && resultExam.answers && resultExam.answers.length > 0) {
             exam.questions = resultExam.answers
@@ -56,6 +59,7 @@ const getExamDetail = async (examId, userId) => {
                 data: exam
             }
         }
+
         return {
             message: 'not doing',
             data: exam

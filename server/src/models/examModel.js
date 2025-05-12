@@ -64,7 +64,7 @@ const getAll = async () => {
 const getExamsByCourseId = async (courseId) => {
     try {
 
-        const result = await GET_DB().collection(COLLECTION_NAME).find({ courseId: new ObjectId(courseId) }).toArray()
+        const result = await GET_DB().collection(COLLECTION_NAME).find({ courseId: new ObjectId(courseId) }).sort({ date: -1 }).toArray()
 
         return result
 

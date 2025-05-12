@@ -188,6 +188,21 @@ const getCourseByUserId = async (userId) => {
     }
 }
 
+const getCourseBySemesterId = async (semesterId) => {
+    try {
+        return await GET_DB().collection(COURSE_COLLECTION_NAME).find({ semesterId: new ObjectId(semesterId) }).toArray()
+    } catch (error) {
+        throw error
+    }
+}
+
+const getCourseBySemesterIdAndSubjectId = async (semesterId, subjectId) => {
+    try {
+        return await GET_DB().collection(COURSE_COLLECTION_NAME).find({ semesterId: new ObjectId(semesterId), subjectId: new ObjectId(subjectId) }).toArray()
+    } catch (error) {
+        throw error
+    }
+}
 
 export const courseModel = {
     COURSE_COLLECTION_NAME,
@@ -195,5 +210,7 @@ export const courseModel = {
     createNew,
     update,
     getAll,
-    getCourseByUserId
+    getCourseByUserId,
+    getCourseBySemesterId,
+    getCourseBySemesterIdAndSubjectId
 }

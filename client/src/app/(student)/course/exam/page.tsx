@@ -17,7 +17,7 @@ export default function page() {
     const [exam, setExam] = React.useState<exam[]>([]);
     const searchLocation = useSearchParams();
     const courseId = searchLocation.get('courseId');
-    const [resultExams, setResultExams] = React.useState<any[]>([])]
+    const [resultExams, setResultExams] = React.useState<any[]>([])
     const router = useRouter();
     useEffect(() => {
         fetchExamsByCourseId(courseId).then((res) => {
@@ -33,7 +33,7 @@ export default function page() {
     }
 
     return (
-        <>
+        <div>
             <div className="mt-5 ml-5">
                 <Button onClick={() => router.push(`/course/${courseId}`)}>
                     <MoveLeftIcon className=' h-4 w-3' />
@@ -170,6 +170,6 @@ export default function page() {
 
 
 
-        </>
+        </div>
     )
 }
