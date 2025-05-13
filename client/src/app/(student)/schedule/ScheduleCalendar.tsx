@@ -24,18 +24,24 @@ const getGradient = (subjectId: string, isActive: boolean) => {
 };
 
 export default function ScheduleCalendar({ courses }: Props) {
-  const events = courses.map((course) => ({
-    id: course._id,
-    title: `${course.subject.name}`,
-    start: formatISO(new Date(course.startDate)),
-    end: formatISO(new Date(course.endDate)),
-    extendedProps: {
-      room: course.room || "N/A",
-      status: course.status,
-      subjectId: course.subject.id,
-      lecturer: course.lecturer.displayName,
-    },
-  }));
+  const events = courses.map((course) => {
+    const start = new Date(course.startDate);
+    const end = new Date(start.getTime() + 2 * 60 * 60 * 1000); // cộng 2 tiếng
+  
+    return {
+      id: course._id,
+      title: `${course.subject.name}`,
+      start: formatISO(start),
+      end: formatISO(end),
+      extendedProps: {
+        room: course.room || "N/A",
+        status: course.status,
+        subjectId: course.subject.id,
+        lecturer: course.lecturer.displayName,
+      },
+    };
+  });
+  
 
   return (
     <div className="p-4">
@@ -43,7 +49,7 @@ export default function ScheduleCalendar({ courses }: Props) {
         plugins={[timeGridPlugin, interactionPlugin]}
         initialView="timeGridWeek"
         slotMinTime="07:00:00"
-        slotMaxTime="20:00:00"
+        slotMaxTime="19:00:00"
         allDaySlot={false}
         nowIndicator
         height="auto"
