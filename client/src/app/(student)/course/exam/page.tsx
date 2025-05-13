@@ -63,7 +63,7 @@ export default function page() {
                                 <TableCell>
                                     <Chip
                                         icon={
-                                            <>
+                                            <div>
                                                 {item.status === STATUS_EXAM.FINISHED && (
                                                     <CheckCircleIcon style={{ color: "#2e7d32" }} />
                                                 )}
@@ -92,7 +92,7 @@ export default function page() {
                                                     item.status === STATUS_EXAM.START && !resultExams.find((result) => result.examId === item._id)
                                                     && <CircleCheck style={{ color: "#341f97" }} width={20} height={20} />
                                                 }
-                                            </>
+                                            </div>
                                         }
                                         label={item.status !== STATUS_EXAM.START ? item.status :
                                             (!resultExams.find((result) => result.examId === item._id) ? 'START' :

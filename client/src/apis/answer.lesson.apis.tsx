@@ -7,3 +7,7 @@ export const fetchAnswerByQuestionId = async (id: any, page: any) => {
 export const createNewAnswer = async (data: any) => {
     return await axiosCustomize.post(`v1/answer_lessons`, data)
 }
+
+export const updateAnswer = async (id: any, data: any) => {
+    return await axiosCustomize.put(`v1/answer_lessons/` + id, data)
+}

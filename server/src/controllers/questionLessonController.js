@@ -5,7 +5,6 @@ const getQuestionByLessonId = async (req, res, next) => {
     try {
         const { lessonId } = req.query
         const question = await questionLessonService.getQuestionByLessonId(lessonId)
-        console.log("🚀 ~ getQuestionByLessonId ~ lessonId:", lessonId)
         res.status(StatusCodes.OK).json(question)
     } catch (error) {
         next(error)

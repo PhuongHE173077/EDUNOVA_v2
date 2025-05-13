@@ -33,7 +33,17 @@ const getAnswerByQuestionId = async (questionId, page = 1) => {
     }
 }
 
+const updateAnswer = async (id, data) => {
+    try {
+        const result = await answerLessonModel.update(id, data)
+        return result
+    } catch (error) {
+        throw error
+    }
+}
+
 export const answerLessonService = {
     createNew,
-    getAnswerByQuestionId
+    getAnswerByQuestionId,
+    updateAnswer
 }
