@@ -19,6 +19,8 @@ export default function Home() {
         router.push('/student');
       } else if (currentUser.role === USER_ROLE.LECTURER) {
         router.push('/Lecturer');
+      } else if (currentUser.role === USER_ROLE.ADMIN) {
+        router.push('/dashboard');
       }
 
     } else {

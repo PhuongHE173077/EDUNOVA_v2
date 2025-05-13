@@ -34,7 +34,19 @@ const getAnswerByQuestionId = async (req, res, next) => {
     }
 }
 
+const updateAnswer = async (req, res, next) => {
+    try {
+        const data = req.body
+        const id = req.params.id
+        const result = await answerLessonService.updateAnswer(id, data)
+        res.status(StatusCodes.OK).json(result)
+    } catch (error) {
+        throw error
+    }
+}
+
 export const answerLessonController = {
     createNew,
-    getAnswerByQuestionId
+    getAnswerByQuestionId,
+    updateAnswer
 }

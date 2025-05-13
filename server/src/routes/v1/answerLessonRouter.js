@@ -5,6 +5,8 @@ import { answerLessonValidation } from '~/validations/answerLessonValidation'
 
 
 const Router = express.Router()
+Router.route('/:id')
+    .put(authMiddlewares.isAuthorized, answerLessonController.updateAnswer)
 
 Router.route('/')
     .post(authMiddlewares.isAuthorized, answerLessonValidation.create, answerLessonController.createNew)
