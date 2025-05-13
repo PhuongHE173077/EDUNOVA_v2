@@ -140,7 +140,7 @@ export function LoginForm({
           </form>
           <div className="relative hidden bg-muted md:block">
             <img
-              src="https://res.cloudinary.com/dl3ucqngx/image/upload/v1738847987/users/w1medkbqgpiqzbfszne3.jpg"
+              src="https://i.pinimg.com/736x/1c/55/dc/1c55dc18648bbc584206525725d8c710.jpg"
               alt="Image"
               className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
             />

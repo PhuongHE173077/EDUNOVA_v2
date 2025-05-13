@@ -192,3 +192,19 @@
 .scrollbar-custom2::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+/* FullCalendar button style - hiện đại hoá */
+.fc-button {
+  @apply rounded-md px-3 py-1 text-sm font-medium transition bg-white text-gray-700 border border-gray-300 hover:bg-gray-100 shadow-sm;
+}
+
+.fc-button-active,
+.fc-button-primary {
+  @apply bg-indigo-600 text-white border-indigo-600 hover:bg-indigo-700;
+}
+
+/* Xoá border xanh xấu của mỗi event */
+.fc-event {
+  border: none !important;
+  border-radius: 0.75rem !important;
+  padding: 0 !important;
+}

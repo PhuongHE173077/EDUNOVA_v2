@@ -8,13 +8,14 @@ export interface Semesters {
 export interface Course {
     _id: string;
     id: string;
-    students: [User];
+    students: User[];
     lecturer: User;
     semester: Semesters;
     subject: Subject;
     startDate: string;
     endDate: string;
     status: string;
+    room?: string;
 }
 
 export interface User {
@@ -33,14 +34,12 @@ export interface Subject {
     name: string;
     description: string;
     timeAllocation: string;
-    curriculums: [
-        {
-            _id: string;
-            title: string;
-            content: string;
-        },
-    ];
-    documents: [string];
+    curriculums: {
+        _id: string;
+        title: string;
+        content: string;
+      }[];
+    documents: string[];
     _destroy: boolean;
 }
 
@@ -84,3 +83,23 @@ export interface exam {
     viewAnswer: Date;
     status: string;
 }
+export interface VideoRecord {
+    _id: string;
+    courseId: string;               // Gắn với môn học cụ thể
+    title: string;                  // Tên video hoặc buổi học
+    description?: string;           // Tóm tắt nội dung buổi học
+    url: string;                    // Link nhúng YouTube, Google Meet, Drive...
+    createdAt: Date;                // Thời gian ghi hình
+    type: "youtube" | "drive" | "mp4"; 
+  }
+  export interface UserRank {
+    _id: string;
+    name: string;
+    avatar: string;
+    score: number;
+    subject: string;
+    badges?: string[];
+    streak?: number;
+  }
+  
+  
