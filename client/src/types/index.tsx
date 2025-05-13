@@ -90,6 +90,16 @@ export interface VideoRecord {
     description?: string;           // Tóm tắt nội dung buổi học
     url: string;                    // Link nhúng YouTube, Google Meet, Drive...
     createdAt: Date;                // Thời gian ghi hình
-    type: "youtube" | "drive" | "mp4"; // Loại video để render phù hợp
+    type: "youtube" | "drive" | "mp4"; 
   }
+  export interface UserRank {
+    _id: string;
+    name: string;
+    avatar: string;
+    score: number;
+    subject: string;
+    badges?: string[];
+    streak?: number;
+  }
+  
   
