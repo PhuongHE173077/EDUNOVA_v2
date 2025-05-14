@@ -7,7 +7,7 @@ import { SupportSection } from './support-section'
 export default function HomeSidebar() {
   return (
     <Sidebar className='mt-16 z-40 border-none' collapsible='icon'>
-      <SidebarContent className='bg-background shadow-md'>
+      <SidebarContent className='bg-[#F8FAFD] shadow-md'>
         <MainSection />
         <Separator />
         <SupportSection />

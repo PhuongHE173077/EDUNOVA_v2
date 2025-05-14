@@ -95,7 +95,7 @@ const login = async (data) => {
 
     /** if it don't have error, create token return frontend */
     //create user info in jwt token
-    const userInfo = { _id: userExits._id, email: userExits.email }
+    const userInfo = { _id: userExits._id, email: userExits.email, role: userExits.role }
 
     // create access token and fresh token
 

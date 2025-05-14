@@ -11,6 +11,7 @@ export default {
 	theme: {
 		extend: {
 			colors: {
+				'custom-gray': '#9b59b6',
 				warning: "#f1c40f",
 				"warning-foreground": "black",
 				success: "#2ecc71",

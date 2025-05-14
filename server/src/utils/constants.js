@@ -29,3 +29,8 @@ export const STATUS_EXAM = {
   FINISHED: 'finished',
   DOING: 'doing'
 }
+export const USER_ROLE = {
+  STUDENT: "student",
+  LECTURER: "lecturer",
+  ADMIN: "admin",
+}

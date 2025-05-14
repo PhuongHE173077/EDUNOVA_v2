@@ -10,7 +10,7 @@ export const HomeNavbar = () => {
 
 
   return (
-    <nav className="flex top-0 left-0 w-full h-16 bg-white border-b items-center justify-between px-4" style={{ position: 'sticky', top: 0, zIndex: 10 }}>
+    <nav className="flex top-0 left-0 w-full h-16 bg-[#F8FAFD] border-b items-center justify-between px-4" style={{ position: 'sticky', top: 0, zIndex: 10 }}>
       <div className="flex items-center flex-shrink-0">
         <SidebarTrigger />
         <Link href='/' >

@@ -10,6 +10,7 @@ import { imageRouter } from './imageRouter'
 import { examRouter } from './examRouter'
 import { resultExamRouter } from './resultExamRouter'
 import { subjectRouter } from './subjectRouter'
+import { scheduleRouter } from './scheduleRouter'
 
 
 const Router = express.Router()
@@ -28,6 +29,7 @@ Router.use('/image', imageRouter)
 Router.use('/exams', examRouter)
 Router.use('/result_exams', resultExamRouter)
 Router.use('/subjects', subjectRouter)
+Router.use('/schedules', scheduleRouter)
 
 
 

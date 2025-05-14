@@ -1,11 +1,21 @@
+'use client';
+import { useEffect, useState } from "react";
 import ScheduleCalendar from "./ScheduleCalendar";
 import { dummyCourses } from "./dummy";
+import { fetchSchedule } from "@/apis/schedule.apis";
 
 export default function Page() {
+  const [schedules, setSchedules] = useState([]);
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    fetchSchedule().then((res) => {
+      setSchedules(res.data);
+    })
+  }, [])
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <h1 className="text-2xl font-bold mb-4">Lịch học theo tuần</h1>
-      <ScheduleCalendar courses={dummyCourses} />
+    <div className="max-h-screen bg-gray-50 p-6">
+
+      <ScheduleCalendar courses={schedules} />
     </div>
   );
 }
