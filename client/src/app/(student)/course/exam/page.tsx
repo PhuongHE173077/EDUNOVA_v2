@@ -1,17 +1,17 @@
 'use client'
-import { fetchExamsByCourseId, updateExamById } from '@/apis/exam.apis'
+import { fetchExamsByCourseId } from '@/apis/exam.apis'
+import { fetchAFewRsExam } from '@/apis/result.exam.apis'
 import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { STATUS_EXAM } from '@/lib/constants'
 import { exam } from '@/types'
+import CheckCircleIcon from "@mui/icons-material/CheckCircle"
+import NewReleasesIcon from "@mui/icons-material/NewReleases"
 import { Chip } from '@mui/material'
+import dayjs from 'dayjs'
+import { CircleCheck, Loader, MoveLeftIcon } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import React, { useEffect } from 'react'
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import NewReleasesIcon from "@mui/icons-material/NewReleases";
-import { CircleCheck, CirclePowerIcon, Loader, MoveLeft, MoveLeftIcon } from 'lucide-react'
-import dayjs from 'dayjs'
-import { fetchAFewRsExam } from '@/apis/result.exam.apis'
-import { STATUS_EXAM } from '@/lib/constants'
 
 export default function page() {
     const [exam, setExam] = React.useState<exam[]>([]);

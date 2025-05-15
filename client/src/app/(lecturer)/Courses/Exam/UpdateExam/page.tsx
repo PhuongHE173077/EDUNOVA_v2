@@ -1,5 +1,6 @@
 'use client'
-import { fetchExamDetailHasResult } from '@/apis/exam.apis'
+
+import { fetchExamDetailHasResult, updateExamById } from '@/apis/exam.apis'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
@@ -8,6 +9,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { TYPE_QUESTION_EXAM } from '@/lib/constants'
 import { FormLabel, Tooltip } from '@mui/material'
+import { set } from 'date-fns'
 import { CheckIcon, EditIcon, EllipsisVertical, Image, Move, MoveLeftIcon, SaveIcon, Trash2Icon, XIcon } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import React, { useEffect } from 'react'
@@ -22,6 +24,10 @@ export default function page() {
     const questionRefs = React.useRef<(HTMLDivElement | null)[]>([])
     const [searchTerm, setSearchTerm] = React.useState('')
     const [selectedQuestion, setSelectedQuestion] = React.useState<any>({})
+    const [title, setTitle] = React.useState('')
+    const [time, setTime] = React.useState(0)
+    const [viewAnswer, setViewAnswer] = React.useState(true)
+    const [status, setStatus] = React.useState('')
 
 
     const router = useRouter()
@@ -29,6 +35,10 @@ export default function page() {
     useEffect(() => {
         fetchExamDetailHasResult(examId).then((res) => {
             setExam(res.data)
+            setTitle(res.data.title)
+            setTime(res.data.time)
+            setStatus(res.data.status)
+            setViewAnswer(res.data.viewAnswer)
             setLoading(false)
         })
     }, [examId])
@@ -56,6 +66,69 @@ export default function page() {
         setOpen(!open)
     }
 
+    const onSubmit = async () => {
+        const newData = {
+            title,
+            time,
+            status,
+            viewAnswer,
+            numberCorrectAnswer: exam.numberCorrectAnswer,
+            question: exam.questions.map((q: any) => {
+                return {
+                    ...q,
+                    numberCorrectAnswer: q.options.filter((opt: any) => opt.isCorrect).length
+                }
+            })
+        }
+
+        await updateExamById(examId, newData).then((res) => {
+            if (res.data) {
+                router.push('/Courses/Exam?courseId=' + exam.courseId)
+            }
+        })
+
+    }
+
+    const updateQuestion = (type: string, value: any) => {
+        const examClone = { ...exam };
+
+        const questionIndex = examClone.questions.findIndex((q: any) => q.id === selectedQuestion.id);
+        if (questionIndex !== -1) {
+            if (type === 'type') {
+                examClone.questions[questionIndex].type = value;
+                examClone.questions[questionIndex].options.forEach((opt: any) => {
+                    opt.isCorrect = false;
+                });
+            } else if (type === 'description') {
+                examClone.questions[questionIndex].description = value;
+            }
+        }
+        setExam(examClone);
+
+    }
+    const handleUpdateAnswer = (id: string, value: any, type: string) => {
+        const examClone = { ...exam };
+
+        const questionIndex = examClone.questions.findIndex((q: any) => q.id === selectedQuestion.id);
+
+        if (questionIndex !== -1) {
+            if (type === 'isCorrect') {
+                if (examClone.questions[questionIndex].type === TYPE_QUESTION_EXAM.SINGLE) {
+                    examClone.questions[questionIndex].options.forEach((opt: any) => {
+                        opt.isCorrect = opt.id === id ? value : false;
+                    });
+                } else {
+                    const answer = examClone.questions[questionIndex].options.find((a: any) => a.id === id);
+                    answer.isCorrect = !answer.isCorrect;
+                }
+
+            } else if (type === 'content') {
+                examClone.questions[questionIndex].options.find((a: any) => a.id === id).content = value;
+            }
+        }
+        setExam(examClone);
+    }
+
     return (
         <Dialog open={open} onOpenChange={handleModelToggle}>
             <div className=" border shadow-sm " style={{ marginBottom: '2px' }}>
@@ -73,7 +146,7 @@ export default function page() {
                             onChange={(e) => setSearchTerm(e.target.value)}
                             onKeyDown={(e) => { if (e.key === 'Enter') handleSearch() }}
                         />
-                        <Button variant={'warning'}> <SaveIcon /> Save</Button>
+                        <Button variant={'warning'} onClick={onSubmit}> <SaveIcon /> Save</Button>
                     </div>
                 </div>
             </div>
@@ -83,11 +156,11 @@ export default function page() {
                         <div className="flex flex-col items-center justify-center">
                             <div className="mb-4 flex items-center gap-5">
                                 <div className="font-semi">Title:</div>
-                                <Input defaultValue={exam.title} />
+                                <Input value={title} onChange={(e) => setTitle(e.target.value)} />
                             </div>
                             <div className="flex items-center gap-5 w-full ">
                                 <FormLabel className="text-black !text-black font-semibold">Timer:</FormLabel>
-                                <Select value={exam.time}>
+                                <Select value={time} onValueChange={(e: any) => setTime(e)}>
                                     <SelectTrigger className="w-full">
                                         <SelectValue placeholder="Please select" />
                                     </SelectTrigger>
@@ -104,7 +177,7 @@ export default function page() {
                             </div>
                             <div className="flex items-center gap-5 w-full mt-5">
                                 <FormLabel className="text-black !text-black font-semibold">Result:</FormLabel>
-                                <Select value={exam.viewAnswer.toString()}>
+                                <Select value={viewAnswer.toString()} onValueChange={(e) => setViewAnswer(e === 'true')}>
                                     <SelectTrigger className="w-full">
                                         <SelectValue placeholder="Please select" />
                                     </SelectTrigger>
@@ -116,14 +189,14 @@ export default function page() {
                             </div>
                             <div className="flex items-center gap-5 w-full mt-5">
                                 <FormLabel className="text-black !text-black font-semibold">Status:</FormLabel>
-                                <Select value={exam.status}>
+                                <Select value={status} onValueChange={(e) => setStatus(e)}>
                                     <SelectTrigger className="w-full">
                                         <SelectValue placeholder="Please select" />
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectItem value="start">Start</SelectItem>
                                         <SelectItem value="pending">Pending</SelectItem>
-                                        <SelectItem value="finish">Finish</SelectItem>
+                                        <SelectItem value="finished">Finish</SelectItem>
                                     </SelectContent>
                                 </Select>
                             </div>
@@ -215,7 +288,7 @@ export default function page() {
 
                     <Select
                         value={selectedQuestion.type}
-                    // onValueChange={(value) => handleUpdateQuestion(qs.id, 'type', value, '')}
+                        onValueChange={(value) => updateQuestion('type', value)}
                     >
                         <SelectTrigger className="w-[180px]">
                             <SelectValue placeholder="Please select " />
@@ -247,8 +320,8 @@ export default function page() {
                 <div className="flex flex-col gap-3">
 
                     <Input
-                        value={selectedQuestion.description}
-                        onChange={(e) => { }}
+                        value={selectedQuestion.description || ''}
+                        onChange={(e) => updateQuestion('description', e.target.value)}
                         placeholder="Enter question description"
                     />
                 </div>
@@ -286,10 +359,10 @@ export default function page() {
                             <Input
                                 type={selectedQuestion.type === TYPE_QUESTION_EXAM.SINGLE ? 'radio' : 'checkbox'}
                                 checked={option.isCorrect ?? false} className='w-4'
-                                onChange={(e) => { }} />
+                                onChange={(e) => handleUpdateAnswer(option.id, e.target.value, 'isCorrect')} />
                             <Input
-                                value={option.content}
-                                onChange={(e) => { }}
+                                value={option.content || ''}
+                                onChange={(e) => handleUpdateAnswer(option.id, e.target.value, 'content')}
                                 placeholder={`Option ${String.fromCharCode(65 + index)}`}
                             />
                         </div>
