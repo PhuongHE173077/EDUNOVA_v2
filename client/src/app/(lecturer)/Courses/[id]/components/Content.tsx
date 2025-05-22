@@ -70,8 +70,10 @@ export default function ContentCourseDetail({ lesson }: { lesson: lesson[] }) {
                                 </Typography>
 
                                 <Button
-                                    // component={Link}
-                                    // to={`/lession-infor/`}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        router.push(`QuestionUpdate?id=${ls._id}`);
+                                    }}
                                     variant="outlined"
                                     color="secondary"
                                     size="small"
@@ -109,7 +111,8 @@ export default function ContentCourseDetail({ lesson }: { lesson: lesson[] }) {
 
                                     <ListItem
                                         key={`qs-${qIndex}`}
-                                        onClick={() => {
+                                        onClick={(e) => {
+                                            e.stopPropagation();
                                             router.push(`/Courses/Question?id=${qs._id}&courseId=${ls.courseId}&lessonId=${ls._id}`);
                                         }}
                                         sx={{

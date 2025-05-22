@@ -6,6 +6,6 @@ import { authMiddlewares } from '~/middlewares/authMiddlewares'
 const Router = express.Router()
 
 Router.route('/:id')
-    .get(authMiddlewares.isAuthorized, lessonController.getLessonByCourseId)
+    .get(authMiddlewares.isAuthorized, lessonController.getLessonById)
 
 export const lessonRouter = Router

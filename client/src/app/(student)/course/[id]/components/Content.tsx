@@ -13,6 +13,7 @@ import {
     ListItemText,
     Typography
 } from '@mui/material';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useRef, useState } from 'react';
 
@@ -70,8 +71,7 @@ export default function ContentCourseDetail({ lesson }: { lesson: lesson[] }) {
                                 </Typography>
 
                                 <Button
-                                    // component={Link}
-                                    // to={`/lession-infor/`}
+
                                     variant="outlined"
                                     color="secondary"
                                     size="small"
