@@ -5,7 +5,14 @@ import { USER_ROLE } from "~/utils/constants"
 const getScheduleByUserId = async (userId, role) => {
     try {
         if (role == USER_ROLE.LECTURER) {
-            return await scheduleModel.getScheduleByLectureId(userId)
+            const schedule = await scheduleModel.getScheduleByLectureId(userId);
+            const result = await Promise.all(schedule.map(async (item) => {
+                return {
+                    ...item,
+                    course: await courseModel.findOneById(item.courseId),
+                };
+            }));
+            return result;
         }
         const courses = await courseModel.getCourseByUserId(userId)
         const getScheduleByCourseId = await scheduleModel.getScheduleByCourseId(courses.map(item => item._id));

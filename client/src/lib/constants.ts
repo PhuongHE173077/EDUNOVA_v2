@@ -42,3 +42,11 @@ export const STATUS_EXAM = {
   FINISHED: 'finished',
   DOING: 'doing'
 }
+
+export const subjectGradients: Record<string, string> = {
+  math12: "from-fuchsia-600 to-rose-500",
+  english12: "from-emerald-600 to-lime-500",
+  english11: "from-indigo-600 to-purple-500",
+  PHY111: "from-sky-600 to-blue-500",
+  HIS101: "from-neutral-600 to-stone-500",
+};
