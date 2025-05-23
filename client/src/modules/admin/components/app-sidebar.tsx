@@ -41,17 +41,17 @@ const data = {
 
         {
             title: "Users",
-            url: "/users",
+            url: "/manage-users",
             icon: UsersIcon,
         },
         {
             title: "Courses",
-            url: "#",
+            url: "/manage-courses",
             icon: BookIcon,
         },
         {
             title: "Schedules",
-            url: "#",
+            url: "/manage-schedules",
             icon: CalendarIcon,
         },
 
@@ -101,7 +101,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 <NavSecondary items={data.navSecondary} />
             </SidebarContent>
             <SidebarFooter>
-                <NavUser user={data.user} />
+                <NavUser />
             </SidebarFooter>
         </Sidebar>
     )
