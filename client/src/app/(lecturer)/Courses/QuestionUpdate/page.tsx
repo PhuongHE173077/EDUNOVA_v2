@@ -62,7 +62,7 @@ export default function LessonPage() {
                 }}
             >
                 <IconButton
-
+                    onClick={() => window.history.back()}
                     size="small"
                     sx={{
                         bgcolor: "primary.light",

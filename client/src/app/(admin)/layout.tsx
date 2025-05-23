@@ -3,7 +3,7 @@ import { Loading } from '@/components/ui/loading';
 import { USER_ROLE } from '@/lib/constants';
 import { useAppSelector } from '@/lib/redux/store';
 import { selectedCurrentUser } from '@/lib/redux/user/user.slide';
-import { HomeLayout } from '@/modules/admin/ui/layouts/home-page';
+import LayoutAdmin from '@/modules/admin';
 
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
@@ -32,10 +32,10 @@ function layout({ children }: { children: React.ReactNode }) {
     }
 
     return (
-        <HomeLayout >
+        <LayoutAdmin >
             {children}
 
-        </HomeLayout>
+        </LayoutAdmin>
     );
 }
 
