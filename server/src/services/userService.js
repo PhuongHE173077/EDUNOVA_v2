@@ -5,7 +5,7 @@ import bcrypt from 'bcryptjs'
 import { v4 as uuidv4 } from 'uuid';
 import { pickUser } from "~/utils/slugify";
 import { sendEmail } from "~/utils/sendMail";
-import { WEBSITE_DOMAIN } from "~/utils/constants";
+import { USER_ROLE, WEBSITE_DOMAIN } from "~/utils/constants";
 
 import { JwtProvider } from "~/providers/JwtProvider";
 import { env } from "~/config/environment";
@@ -95,7 +95,7 @@ const login = async (data) => {
 
     /** if it don't have error, create token return frontend */
     //create user info in jwt token
-    const userInfo = { _id: userExits._id, email: userExits.email }
+    const userInfo = { _id: userExits._id, email: userExits.email, role: userExits.role }
 
     // create access token and fresh token
 
@@ -195,7 +195,8 @@ const update = async (userId, data, userAvataFile) => {
 const getAllUser = async () => {
   // eslint-disable-next-line no-useless-catch
   try {
-    return await userModal.getAllUser()
+    const result = await userModal.getAllUser()
+    return result.filter((user) => user.role === USER_ROLE.STUDENT || user.role === USER_ROLE.TEACHER)
   } catch (error) {
     throw error
   }

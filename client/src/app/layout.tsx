@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { HomeLayout } from "@/modules/home/ui/layouts/home-page";
 import StoreProvider from "./StoreProvider";
 import { ToastContainer } from "react-toastify";
+import ClientOnlyToast from "@/components/toastify/ClientOnlyToast";
 
 const inter = Inter({
   subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -29,22 +30,11 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={inter.className}
+        cz-shortcut-listen="true"
       >
         <StoreProvider>
           {children}
-          <ToastContainer
-            position="top-right"
-            autoClose={2000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick={false}
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme="colored"
-
-          />
+          <ClientOnlyToast />
         </StoreProvider>
       </body>
     </html>

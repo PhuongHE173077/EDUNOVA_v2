@@ -71,7 +71,27 @@ const getExamDetail = async (examId, userId, hasResult) => {
 
 const updateExam = async (id, data) => {
     try {
-        return await examModel.update(id, data)
+        const dataUpdate = {
+            title: data.title,
+            time: data.time,
+            imageCover: data.imageCover,
+            viewAnswer: data.viewAnswer,
+            status: data.status
+        }
+        if (data.question) {
+            const questions = data.question.map((question) => {
+                return {
+                    ...question,
+                    examId: new ObjectId(question.examId)
+                }
+            })
+            const dataQuestions = questions.map(async (question) => {
+                await questionExamModel.update(question._id, question)
+            })
+            await questionExamModel.createMany(dataQuestions)
+        }
+
+        return await examModel.update(id, dataUpdate)
     } catch (error) {
         throw error
     }

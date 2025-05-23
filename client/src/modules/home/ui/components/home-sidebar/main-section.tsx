@@ -52,7 +52,7 @@ export const MainSection = () => {
                 isActive={pathname === item.url}
 
               >
-                <Link href={item.url} className='flex items-center gap-2 p-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent rounded-md transition-colors'>
+                <Link href={item.url} className='flex items-center gap-2 p-2 text-sm font-medium text-black-foreground hover:text-foreground hover:bg-accent rounded-md transition-colors'>
                   <item.icon />
                   <span className='text-sm font-medium'>{item.title}</span>
                 </Link>

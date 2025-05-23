@@ -5,7 +5,7 @@ import HomeSidebar from '../components/home-sidebar'
 
 export const HomeLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <SidebarProvider>
+    <SidebarProvider >
       <div className="w-full min-h-screen">
         <HomeNavbar />
         <div className="flex flex-col md:flex-row ">

@@ -17,7 +17,7 @@ export const loginUserAPIs = createAsyncThunk(
 export const logoutUserAPIs = createAsyncThunk(
     'user/logoutUserAPIs',
     async () => {
-        const res = await axiosCustomize.delete('/logout')
+        const res = await axiosCustomize.delete('v1/logout')
 
         return res.data
     }

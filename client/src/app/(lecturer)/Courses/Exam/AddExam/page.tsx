@@ -1,8 +1,9 @@
 'use client'
 import { createNewExam } from '@/apis/exam.apis'
 import { uploadImageAPIs } from '@/apis/image.apis'
+import { UploadFileDialog } from '@/components/dialog/upload.file.xlsx'
 import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import {
     Popover,
@@ -15,12 +16,13 @@ import { TYPE_QUESTION_EXAM } from '@/lib/constants'
 import { singleFileValidator } from '@/lib/validators'
 import { FormLabel, Tooltip } from '@mui/material'
 import { cloneDeep } from 'lodash'
-import { CirclePlus, EllipsisVertical, ImageIcon, ImagePlus, Trash2, Trash2Icon, Upload } from 'lucide-react'
+import { CirclePlus, Download, EllipsisVertical, ImageIcon, ImagePlus, Trash2, Trash2Icon, Upload } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import { v4 as uuidv4 } from 'uuid'
+import * as XLSX from 'xlsx';
 export default function Page() {
     const [viewAnswer, setViewAnswer] = useState(true);
     const [viewDate, setViewDate] = useState(false);
@@ -30,6 +32,50 @@ export default function Page() {
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const fileQuestionRef = useRef<{ [key: string]: HTMLInputElement | null }>({});
     const questionRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+    const [file, setFile] = useState(null);
+
+    const handleFileChangeF = (e: any) => {
+        setFile(e.target.files[0]);
+
+    };
+
+    const handleUpload = () => {
+        if (!file) {
+            alert("Vui lòng chọn một file trước khi tải lên.");
+            return;
+        }
+        const reader = new FileReader();
+
+        reader.onload = (event: any) => {
+            const data = new Uint8Array(event.target.result);
+            const workbook = XLSX.read(data, { type: 'array' });
+
+            const sheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[sheetName];
+            const jsonData = XLSX.utils.sheet_to_json(worksheet);
+
+            const newQuestions = jsonData.map((item: any) => ({
+                id: uuidv4(),
+                description: item.Question,
+                image: item.Image || '',
+                options: [
+                    item.Option_A && { id: uuidv4(), content: item.Option_A, isCorrect: item.Correct_Answer.split(',').includes('A') },
+                    item.Option_B && { id: uuidv4(), content: item.Option_B, isCorrect: item.Correct_Answer.split(',').includes('B') },
+                    item.Option_C && { id: uuidv4(), content: item.Option_C, isCorrect: item.Correct_Answer.split(',').includes('C') },
+                    item.Option_D && { id: uuidv4(), content: item.Option_D, isCorrect: item.Correct_Answer.split(',').includes('D') },
+                    item.Option_E && { id: uuidv4(), content: item.Option_D, isCorrect: item.Correct_Answer.split(',').includes('E') },
+                    item.Option_F && { id: uuidv4(), content: item.Option_D, isCorrect: item.Correct_Answer.split(',').includes('F') },
+                    item.Option_G && { id: uuidv4(), content: item.Option_D, isCorrect: item.Correct_Answer.split(',').includes('G') },
+                ].filter((option: any) => option !== undefined),
+                type: item.Type
+            }));
+            setQuestions(newQuestions);
+            setOpen2(false)
+            setHasChanges(true);
+        };
+        reader.readAsArrayBuffer(file);
+
+    };
     const { register, handleSubmit, control, formState: { errors } } = useForm({
         defaultValues: {
             title: '',
@@ -38,6 +84,7 @@ export default function Page() {
     });
     const searchParams = useSearchParams();
     const courseId = searchParams.get('courseId');
+    const [open2, setOpen2] = useState(false);
 
     const router = useRouter();
 
@@ -167,7 +214,7 @@ export default function Page() {
 
     const handleFileChange = async (e: any) => {
         const image = await uploadImage(e);
-        console.log("🚀 ~ handleFileChange ~ image:", image);
+
         if (image) setImageCover(image);
     };
 
@@ -257,6 +304,10 @@ export default function Page() {
         }
 
     }
+    const handleDownloadTemplate = () => {
+        // Thay link này bằng link thực tế đến file template
+        window.open("/templates/template_exam.xlsx", "_blank");
+    };
 
 
     return (
@@ -308,6 +359,11 @@ export default function Page() {
                             />
                         </div>
 
+                    </div>
+                    <div className="text-center mt-5 ">
+                        <Button className='bg-[#1dd1a1] hover:bg-[#1dd1a1]/80 text-black' onClick={() => setOpen2(true)}>
+                            Add File (.xlsx)
+                        </Button>
                     </div>
                 </div>
 
@@ -575,6 +631,16 @@ export default function Page() {
                     </div>
                 </form>
             </DialogContent>
+
+
+            <UploadFileDialog
+                open={open2}
+                setOpen={setOpen2}
+                handleChange={handleFileChangeF}
+                handleDownload={handleDownloadTemplate}
+                handleUpload={handleUpload}
+                required={'Question, Type, Answer(A,B,...), Answer correct'}
+            />
         </Dialog >
     )
 }

@@ -1,6 +1,7 @@
 import { StatusCodes } from "http-status-codes"
 import { courseModel } from "~/models/courseModel"
 import { lessonModel } from "~/models/lessonModel"
+import { questionLessonModel } from "~/models/questionLessonModel"
 import ApiError from "~/utils/ApiError"
 
 const getLessonByCourseId = async (courseId) => {
@@ -16,6 +17,22 @@ const getLessonByCourseId = async (courseId) => {
     }
 }
 
+const getLessonById = async (id) => {
+    try {
+
+        const result = await lessonModel.findOneById(id)
+        const questions = await questionLessonModel.getQuestionByLessonId(id)
+        return {
+            ...result,
+            questions
+        }
+    } catch (error) {
+        throw error
+    }
+}
+
+
 export const lessonService = {
-    getLessonByCourseId
+    getLessonByCourseId,
+    getLessonById
 }

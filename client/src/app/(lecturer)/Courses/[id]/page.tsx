@@ -97,9 +97,15 @@ export default function Page() {
                 </div>
             )}
 
-            <div className=' overflow-y-auto scrollbar-custom2' style={{ maxHeight: showHeader ? '66vh' : '90vh' }} >
+            {lessons.length > 0 ? <div className=' overflow-y-auto scrollbar-custom2' style={{ maxHeight: showHeader ? '66vh' : '90vh' }} >
                 <ContentCourseDetail lesson={lessons} />
-            </div>
+            </div> :
+                <div className="">
+                    <div className="flex items-center justify-center h-full">
+                        <div className="text-gray-500 text-lg">No lessons available for this course.</div>
+                    </div>
+                </div>
+            }
 
 
 

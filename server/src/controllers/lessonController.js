@@ -1,11 +1,19 @@
 import { StatusCodes } from "http-status-codes"
 import { lessonService } from "~/services/lessionService"
 
-const getLessonByCourseId = async (req, res, next) => {
+const getLessonById = async (req, res, next) => {
     try {
-        const courseId = req.params.id
+        const id = req.params.id
+        const populate = req.query.populate
+        let result
+        if (populate) {
+            result = await lessonService.getLessonByCourseId(id)
+        } else {
+            result = await lessonService.getLessonById(id)
+        }
 
-        const result = await lessonService.getLessonByCourseId(courseId)
+
+
 
         res.status(StatusCodes.OK).json(result)
     } catch (error) {
@@ -14,5 +22,5 @@ const getLessonByCourseId = async (req, res, next) => {
 }
 
 export const lessonController = {
-    getLessonByCourseId
+    getLessonById
 }
