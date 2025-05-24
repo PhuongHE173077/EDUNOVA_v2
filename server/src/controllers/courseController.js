@@ -81,11 +81,21 @@ const deleteCourse = async (req, res, next) => {
         next(error)
     }
 }
+const getAllCourses = async (req, res, next) => {
+    try {
+        const result = await courseService.getAllCourses()
+
+        res.status(StatusCodes.OK).json(result)
+    } catch (error) {
+        next(error)
+    }
+}
 
 export const courseController = {
     getCourseByUserId,
     getCourseById,
     updateCourse,
     createCourse,
-    deleteCourse
+    deleteCourse,
+    getAllCourses
 }

@@ -11,6 +11,10 @@ Router.route('/')
     .get(authMiddlewares.isAuthorized, courseController.getCourseByUserId)
     .post(authMiddlewares.isAuthorized, courseValidation.create, courseController.createCourse)
 
+Router.route('/list')
+    .get(courseController.getAllCourses)
+
+
 Router.route('/:id')
     .get(authMiddlewares.isAuthorized, courseController.getCourseById)
     .put(authMiddlewares.isAuthorized, courseController.updateCourse)
