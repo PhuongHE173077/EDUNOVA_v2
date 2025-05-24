@@ -24,7 +24,39 @@ const getCurrentSemester = async (req, res, next) => {
     }
 }
 
+const createSemester = async (req, res, next) => {
+    try {
+        const data = req.body
+
+        const newData = {
+            ...data,
+            startDate: new Date(data.startDate),
+            endDate: new Date(data.endDate)
+        }
+
+        const result = await semesterService.createSemester(newData)
+
+        res.status(StatusCodes.CREATED).json(result)
+    } catch (error) {
+        next(error)
+    }
+}
+
+const deleteSemester = async (req, res, next) => {
+    try {
+        const { id } = req.params
+
+        const result = await semesterService.deleteSemester(id)
+
+        res.status(StatusCodes.OK).json(result)
+    } catch (error) {
+        next(error)
+    }
+}
+
 export const semesterController = {
     getSemesterByUserId,
-    getCurrentSemester
+    getCurrentSemester,
+    createSemester,
+    deleteSemester
 }

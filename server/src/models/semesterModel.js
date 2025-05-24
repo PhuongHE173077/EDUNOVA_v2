@@ -20,7 +20,7 @@ const findOneById = async (id) => {
 
 const createNew = async (data) => {
     try {
-        return await GET_DB().collection(SEMESTER_COLLECTION_NAME).insertOne(validData)
+        return await GET_DB().collection(SEMESTER_COLLECTION_NAME).insertOne(data)
     } catch (error) {
         throw new Error(error)
     }
@@ -57,10 +57,25 @@ const getAll = async () => {
         throw error
     }
 }
+
+const deleteById = async (id) => {
+    try {
+        const result = await GET_DB().collection(SEMESTER_COLLECTION_NAME).deleteOne({ _id: new ObjectId(id) })
+
+        if (result.deletedCount === 0) {
+            throw new Error('Semester not found')
+        }
+
+        return result
+    } catch (error) {
+        throw error
+    }
+}
 export const semesterModel = {
     SEMESTER_COLLECTION_NAME,
     findOneById,
     createNew,
     update,
-    getAll
+    getAll,
+    deleteById
 }

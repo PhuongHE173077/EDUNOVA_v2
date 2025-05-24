@@ -47,7 +47,31 @@ const getCurrentSemester = async () => {
     }
 }
 
+const createSemester = async (data) => {
+    try {
+        const result = await semesterModel.createNew(data)
+        return result
+    } catch (error) {
+        throw error
+    }
+}
+
+const deleteSemester = async (id) => {
+    try {
+        const result = await semesterModel.deleteById(id)
+
+        if (!result) {
+            throw new Error('Semester not found')
+        }
+
+        return result
+    } catch (error) {
+        throw error
+    }
+}
 export const semesterService = {
     getSemesterByUserId,
-    getCurrentSemester
+    getCurrentSemester,
+    createSemester,
+    deleteSemester
 }
