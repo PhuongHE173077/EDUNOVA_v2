@@ -2,50 +2,54 @@
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { User } from "@/types";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 interface Props {
   open: boolean;
   onClose: () => void;
-  initial?: User;
-  onSubmit: (data: Partial<User>) => Promise<any>; // onSubmit trả về Promise
+  onSubmit: (data: Partial<User> & { username: string }) => Promise<any>;
 }
 
 const roles = ["admin", "student", "lecturer"];
 
-export default function UserFormModal({ open, onClose, initial, onSubmit }: Props) {
-  const [displayName, setDisplayName] = useState(initial?.displayName || "");
-  const [email, setEmail] = useState(initial?.email || "");
-  const [role, setRole] = useState(initial?.role || "student");
-  const [isActive, setIsActive] = useState(initial?.isActive ?? true);
+export default function UserCreateModal({ open, onClose, onSubmit }: Props) {
+  const [username, setUsername] = useState("");
+  const [displayName, setDisplayName] = useState("");
+  const [email, setEmail] = useState("");
+  const [role, setRole] = useState("student");
+  const [isActive, setIsActive] = useState(true);
   const [submitting, setSubmitting] = useState(false);
-
-  useEffect(() => {
-    if (initial) {
-      setDisplayName(initial.displayName);
-      setEmail(initial.email);
-      setRole(initial.role);
-      setIsActive(initial.isActive);
-    }
-  }, [initial]);
 
   const handleSubmit = async () => {
     setSubmitting(true);
     try {
       await onSubmit({
-        email,
+        username,
         displayName,
+        email,
         role,
         isActive,
       });
-      alert("Cập nhật thành công!");
+      alert("Tạo người dùng thành công! Mật khẩu đã được gửi đến email.");
+      // reset form
+      setUsername("");
+      setDisplayName("");
+      setEmail("");
+      setRole("student");
+      setIsActive(true);
       onClose();
     } catch (error) {
-      alert("Cập nhật thất bại. Vui lòng thử lại.");
+      alert("Tạo người dùng thất bại. Vui lòng thử lại.");
       console.error(error);
     } finally {
       setSubmitting(false);
@@ -56,25 +60,38 @@ export default function UserFormModal({ open, onClose, initial, onSubmit }: Prop
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>{initial ? "Chỉnh sửa người dùng" : "Tạo người dùng mới"}</DialogTitle>
+          <DialogTitle>Tạo người dùng mới</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-4">
+          <div>
+            <label className="block text-sm mb-1 font-medium">Tên đăng nhập (username)</label>
+            <Input
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              disabled={submitting}
+              placeholder="Nhập username"
+            />
+          </div>
+
           <div>
             <label className="block text-sm mb-1 font-medium">Tên hiển thị</label>
             <Input
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
               disabled={submitting}
+              placeholder="Nhập tên hiển thị"
             />
           </div>
 
           <div>
             <label className="block text-sm mb-1 font-medium">Email</label>
             <Input
+              type="email"
               value={email}
-              readOnly
-              disabled
+              onChange={(e) => setEmail(e.target.value)}
+              disabled={submitting}
+              placeholder="Nhập email"
             />
           </div>
 
@@ -103,8 +120,8 @@ export default function UserFormModal({ open, onClose, initial, onSubmit }: Prop
             <Button variant="ghost" onClick={onClose} disabled={submitting}>
               Huỷ
             </Button>
-            <Button onClick={handleSubmit} disabled={submitting}>
-              {initial ? "Cập nhật" : "Tạo mới"}
+            <Button onClick={handleSubmit} disabled={submitting || !username || !email || !displayName}>
+              Tạo mới
             </Button>
           </div>
         </div>

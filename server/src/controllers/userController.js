@@ -84,18 +84,21 @@ const refreshToken = async (req, res, next) => {
 
 const update = async (req, res, next) => {
   try {
-    const userId = req.jwtDecoded._id
-    const userAvataFile = req.file
+    const userId = req.params.id; // <-- lấy đúng userId cần update
+    const userAvataFile = req.file;
 
+    if (!userId) {
+      throw new ApiError(StatusCodes.BAD_REQUEST, "User ID is required");
+    }
 
-    const result = await userService.update(userId, req.body, userAvataFile)
+    const result = await userService.update(userId, req.body, userAvataFile);
 
-
-    res.status(StatusCodes.OK).json(result)
+    res.status(StatusCodes.OK).json(result);
   } catch (error) {
-    next(error)
+    next(error);
   }
-}
+};
+
 const getAllUser = async (req, res, next) => {
   try {
     const result = await userService.getAllUser()

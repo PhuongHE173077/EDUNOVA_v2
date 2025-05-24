@@ -14,44 +14,41 @@ import { FormMail } from "~/utils/fommat";
 import { generatePassword } from "~/utils/algorithms";
 const createNew = async (req) => {
   try {
-    //check email exits
-    const userExits = await userModal.findOneByEmail(req.body.email)
+    // Kiểm tra email đã tồn tại chưa
+    const userExits = await userModal.findOneByEmail(req.body.email);
     if (userExits) {
-      throw new ApiError(StatusCodes.CONFLICT, 'Email exits')
+      throw new ApiError(StatusCodes.CONFLICT, 'Email exits');
     }
-    //create new user
-    const formName = req.body.email.split('@')[0].toLowerCase()
 
+    const formName = req.body.email.split('@')[0].toLowerCase();
+
+    // Tạo mật khẩu tự động
     const password = generatePassword();
 
     const newUser = {
       email: req.body.email,
       password: bcrypt.hashSync(password, 8),
+      username: req.body.username || formName,
+      displayName: req.body.displayName || formName,
+      role: req.body.role || USER_ROLE.CLIENT,
+      isActive: req.body.isActive !== undefined ? req.body.isActive : true,
+      verifyToken: uuidv4(),
+    };
 
-      username: formName,
-      //set default display name , can be changed later
-      displayName: formName,
+    // Thêm user mới vào DB
+    const createUser = await userModal.createNew(newUser);
 
-      verifyToken: uuidv4()
-    }
+    // Lấy lại user vừa tạo để có đầy đủ trường (bao gồm _id)
+    const getNewUser = await userModal.findOneById(createUser.insertedId);
 
+    // Gửi email mật khẩu
+    const linkVerify = `${WEBSITE_DOMAIN}/account/reset-password?email=${req.body.email}&token=${getNewUser.verifyToken}`;
+    await sendEmail('EDUNOVA', req.body.email, 'Account Verification', FormMail('EDUNOVA', req.body.email, linkVerify, password));
 
-    const createUser = await userModal.createNew(newUser)
-
-
-    const getNewUser = await userModal.findOneById(createUser.insertedId)
-
-
-    //sent email for user to verify
-    const linkVerify = `${WEBSITE_DOMAIN}/account/reset-password?email=${req.body.email}&token=${getNewUser.verifyToken}`
-
-
-    await sendEmail('EDUNOVA', req.body.email, 'Account Verification', FormMail('EDUNOVA', req.body.email, linkVerify, password))
-
-    //return data for controller
-    return pickUser(newUser)
+    // Trả về user lấy từ DB
+    return pickUser(getNewUser);
   } catch (error) {
-    throw new Error(error)
+    throw new Error(error);
   }
 }
 
@@ -157,52 +154,47 @@ const update = async (userId, data, userAvataFile) => {
   try {
     const exitsUser = await userModal.findOneById(userId)
 
-
     if (!exitsUser) throw new ApiError(StatusCodes.NOT_FOUND, 'User not found!')
 
-
-    if (!exitsUser.isActive) throw new ApiError(StatusCodes.NOT_ACCEPTABLE, 'This account is not activated!')
-
+    // Bỏ đoạn kiểm tra này vì nó chặn update khi user inactive
+    // if (!exitsUser.isActive) throw new ApiError(StatusCodes.NOT_ACCEPTABLE, 'This account is not activated!')
 
     let updatedUser
 
-
     if (data.currentPassword && data.newPassword) {
-      if (!bcrypt.compareSync(data.currentPassword, exitsUser.password)) throw new ApiError(StatusCodes.NOT_ACCEPTABLE, 'The current password is incorrect!')
-
+      if (!bcrypt.compareSync(data.currentPassword, exitsUser.password))
+        throw new ApiError(StatusCodes.NOT_ACCEPTABLE, 'The current password is incorrect!')
 
       updatedUser = await userModal.updateUser(exitsUser._id, {
         password: bcrypt.hashSync(data.newPassword, 8)
       })
     } else if (userAvataFile) {
-      //upload file to cloudinary
+      // upload file to cloudinary
       const resultUpload = await cloudinaryProvider.streamUpload(userAvataFile.buffer, 'users')
 
-
       // save url of file to db
-
-
       updatedUser = await userModal.updateUser(exitsUser._id, { avatar: resultUpload.secure_url })
-
-
     } else {
       updatedUser = await userModal.updateUser(exitsUser._id, data)
     }
+
     return pickUser(updatedUser)
   } catch (error) {
     throw error
   }
 }
 
+
 const getAllUser = async () => {
-  // eslint-disable-next-line no-useless-catch
   try {
-    const result = await userModal.getAllUser()
-    return result.filter((user) => user.role === USER_ROLE.STUDENT || user.role === USER_ROLE.TEACHER)
+    const result = await userModal.getAllUser();
+    // Sửa filter đúng role đang dùng
+    return result.filter(user => user.role === "student" || user.role === "lecturer");
   } catch (error) {
-    throw error
+    throw error;
   }
 }
+
 
 const deleteUser = async (userId) => {
   try {

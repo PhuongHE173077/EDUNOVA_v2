@@ -32,12 +32,13 @@ Router.route('/users/list')
   .get(authMiddlewares.isAuthorized, userController.getAllUser)
 
 
-Router.route('/update')
+  Router.route('/user/:id')
   .put(
     authMiddlewares.isAuthorized,
     multerUploadMiddlewares.upload.single('avatar'),
     userValidation.update,
-    userController.update)
+    userController.update
+  );
 
 
 export const userRoutes = Router
