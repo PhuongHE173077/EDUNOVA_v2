@@ -37,16 +37,27 @@ const getCourseById = async (req, res, next) => {
 
 const updateCourse = async (req, res, next) => {
     try {
-        const courseId = req.params.id
-        const data = req.body
-
-        const result = await courseService.updateCourse(courseId, data)
-
-        res.status(StatusCodes.OK).json(result)
+      const courseId = req.params.id;
+      const data = req.body;
+  
+      // Chuyển các trường id sang ObjectId nếu tồn tại
+      if (data.lecturerId) data.lecturerId = new ObjectId(data.lecturerId);
+      if (data.subjectId) data.subjectId = new ObjectId(data.subjectId);
+      if (data.semesterId) data.semesterId = new ObjectId(data.semesterId);
+  
+      // Nếu có ngày thì chuyển sang Date object
+      if (data.startDate) data.startDate = new Date(data.startDate);
+      if (data.endDate) data.endDate = new Date(data.endDate);
+  
+      const result = await courseService.updateCourse(courseId, data);
+  
+      res.status(200).json(result);
     } catch (error) {
-        next(error)
+      next(error);
     }
-}
+  };
+  
+  
 
 const createCourse = async (req, res, next) => {
     try {
@@ -90,12 +101,20 @@ const getAllCourses = async (req, res, next) => {
         next(error)
     }
 }
-
+const getLecturers = async (req, res, next) => {
+    try {
+      const lecturers = await userModel.getLecturers();
+      res.status(200).json(lecturers);
+    } catch (error) {
+      next(error);
+    }
+  };
 export const courseController = {
     getCourseByUserId,
     getCourseById,
     updateCourse,
     createCourse,
     deleteCourse,
-    getAllCourses
+    getAllCourses,
+    getLecturers
 }

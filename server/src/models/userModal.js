@@ -129,6 +129,18 @@ const deleteUser = async (userId) => {
     throw error
   }
 }
+const getLecturers = async () => {
+  try {
+    // Lọc user có role = "lecturer"
+    const lecturers = await GET_DB()
+      .collection(USER_COLLECTION_NAME)
+      .find({ role: "lecturer" })
+      .toArray();
+    return lecturers;
+  } catch (error) {
+    throw error;
+  }
+};
 export const userModal = {
   USER_COLLECTION_NAME,
   USER_COLLECTION_SCHEMA,
@@ -137,5 +149,6 @@ export const userModal = {
   createNew,
   updateUser,
   getAllUser,
-  deleteUser
+  deleteUser,
+  getLecturers
 }

@@ -69,9 +69,14 @@ const deleteSemester = async (id) => {
         throw error
     }
 }
+const getAllSemesters = async () => {
+    return await semesterModel.getAllSemesters(); // gọi model
+  };
+  
 export const semesterService = {
     getSemesterByUserId,
     getCurrentSemester,
     createSemester,
-    deleteSemester
+    deleteSemester,
+    getAllSemesters
 }

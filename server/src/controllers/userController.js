@@ -119,7 +119,17 @@ const deleteUser = async (req, res, next) => {
   } catch (error) {
     next(error)
   }
+  
 }
+const getLecturers = async (req, res, next) => {
+  try {
+    const lecturers = await userService.getLecturers();
+    res.status(200).json(lecturers);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const userController = {
   createNew,
   login,
@@ -128,5 +138,6 @@ export const userController = {
   refreshToken,
   update,
   getAllUser,
-  deleteUser
+  deleteUser,
+  getLecturers
 }

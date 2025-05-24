@@ -28,12 +28,20 @@ export const getCourseBySemesterIdAndSubjectId = async (semesterId, subjectId) =
 
 const updateCourse = async (courseId, data) => {
     try {
-        const result = await courseModel.update(courseId, data)
-        return result
+      console.log("[Service] updateCourse - courseId:", courseId);
+      console.log("[Service] updateCourse - data:", data);
+  
+      const result = await courseModel.update(courseId, data);
+  
+      console.log("[Service] updateCourse - result:", result);
+  
+      return result;
     } catch (error) {
-        throw error
+      console.error("[Service] updateCourse - error:", error);
+      throw error;
     }
-}
+  };
+  
 
 const createCourse = async (data) => {
     try {

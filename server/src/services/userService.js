@@ -206,7 +206,14 @@ const deleteUser = async (userId) => {
   }
 }
 
-
+const getLecturers = async () => {
+  try {
+    const lecturers = await userModal.getLecturers();
+    return lecturers;
+  } catch (error) {
+    throw error;
+  }
+}
 export const userService = {
   createNew,
   login,
@@ -214,5 +221,6 @@ export const userService = {
   refreshToken,
   update,
   getAllUser,
-  deleteUser
+  deleteUser,
+  getLecturers
 }

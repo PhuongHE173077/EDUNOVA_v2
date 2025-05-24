@@ -39,6 +39,7 @@ Router.route('/users/list')
     userValidation.update,
     userController.update
   );
-
+  Router.route('/users/lecturers')
+  .get(authMiddlewares.isAuthorized, userController.getLecturers);
 
 export const userRoutes = Router

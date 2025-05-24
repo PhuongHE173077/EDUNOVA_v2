@@ -71,11 +71,24 @@ const deleteById = async (id) => {
         throw error
     }
 }
+const getAllSemesters = async () => {
+    try {
+      // Lấy toàn bộ document trong collection semester
+      // Chỉ lấy _id và name để trả về
+      const semesters = await GET_DB().collection(SEMESTER_COLLECTION_NAME)
+        .find({}, { projection: { _id: 1, name: 1 } })
+        .toArray();
+      return semesters;
+    } catch (error) {
+      throw error;
+    }
+  };
 export const semesterModel = {
     SEMESTER_COLLECTION_NAME,
     findOneById,
     createNew,
     update,
     getAll,
-    deleteById
+    deleteById,
+    getAllSemesters
 }

@@ -17,7 +17,16 @@ export interface Course {
     status: string;
     room?: string;
 }
-
+export interface CourseFormData {
+    subjectId: string;
+    lecturerId: string;
+    semesterId: string;
+    startDate: string;
+    endDate: string;
+    room?: string;
+    status?: string;
+  }
+  
 export interface User {
     _id: string;
     email: string;

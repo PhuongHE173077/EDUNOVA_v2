@@ -7,15 +7,11 @@ import { pickUser } from "~/utils/slugify"
 const { ObjectId } = require("mongodb")
 const { GET_DB } = require("~/config/mongodb")
 
-
 const COURSE_COLLECTION_NAME = 'courses'
-
 
 const INVALID_UPDATE_FILEDS = ['_id', 'email', 'username', 'createdAt']
 
-
 const findOneById = async (id) => {
-
     try {
         const result = await GET_DB().collection(COURSE_COLLECTION_NAME).aggregate([
             { $match: { _id: new ObjectId(id) } },
@@ -56,10 +52,10 @@ const findOneById = async (id) => {
         const data = result.map((course) => {
             return {
                 ...course,
-                lecturer: pickUser(course.lecturer[0]),
-                student: course.student.map((student) => student),
-                semester: course.semester[0],
-                subject: course.subject[0]
+                lecturer: course.lecturer.length > 0 ? pickUser(course.lecturer[0]) : null,
+                student: course.student || [],
+                semester: course.semester.length > 0 ? course.semester[0] : null,
+                subject: course.subject.length > 0 ? course.subject[0] : null,
             }
         })
 
@@ -80,7 +76,6 @@ const findOneById = async (id) => {
     }
 }
 
-
 const createNew = async (data) => {
     try {
         return await GET_DB().collection(COURSE_COLLECTION_NAME).insertOne(data)
@@ -89,33 +84,38 @@ const createNew = async (data) => {
     }
 }
 
-
 const update = async (id, data) => {
     try {
-        Object.keys(data).forEach((fieldName) => {
-            if (INVALID_UPDATE_FILEDS.includes(fieldName)) {
-                delete data[fieldName]
-            }
-        })
-
-        const result = await GET_DB().collection(COURSE_COLLECTION_NAME).findOneAndUpdate(
-            { _id: new ObjectId(id) },
-            { $set: data },
-            { returnDocument: 'after' }
-        )
-        return result.value
+      console.log("[Model] update - id:", id);
+      console.log("[Model] update - data before filtering:", data);
+  
+      Object.keys(data).forEach((fieldName) => {
+        if (INVALID_UPDATE_FILEDS.includes(fieldName)) {
+          delete data[fieldName];
+        }
+      });
+  
+      console.log("[Model] update - data after filtering:", data);
+  
+      const result = await GET_DB().collection(COURSE_COLLECTION_NAME).findOneAndUpdate(
+        { _id: new ObjectId(id) },
+        { $set: data },
+        { returnDocument: "after" }
+      );
+  
+      console.log("[Model] update - MongoDB result:", result);
+  
+      return result.value;
     } catch (error) {
-        throw new Error(error)
+      console.error("[Model] update - error:", error);
+      throw error;
     }
-}
-
+  };
+  
 
 const getAll = async () => {
     try {
-
-
         const result = await GET_DB().collection(COURSE_COLLECTION_NAME).aggregate([
-
             {
                 $lookup: {
                     from: userModal.USER_COLLECTION_NAME,
@@ -153,10 +153,10 @@ const getAll = async () => {
         const data = result.map((course) => {
             return {
                 ...course,
-                lecturer: course.lecturer[0],
-                student: course.student.map((student) => student),
-                semester: course.semester[0],
-                subject: course.subject[0]
+                lecturer: course.lecturer.length > 0 ? pickUser(course.lecturer[0]) : null,
+                student: course.student || [],
+                semester: course.semester.length > 0 ? course.semester[0] : null,
+                subject: course.subject.length > 0 ? course.subject[0] : null,
             }
         })
 
@@ -166,7 +166,7 @@ const getAll = async () => {
             'semesterId',
             'subjectId'
         ]
-        const result2 = deleteFields(data, fieldName)
+        const result2 = data.map(course => deleteFields(course, fieldName))
 
         return result2
     } catch (error) {
@@ -176,7 +176,6 @@ const getAll = async () => {
 
 const getCourseByUserId = async (userId) => {
     try {
-
         const conditionQuery = {
             $or: [
                 { studentIds: { $all: [new ObjectId(userId)] } },
@@ -223,10 +222,10 @@ const getCourseByUserId = async (userId) => {
         const data = result.map((course) => {
             return {
                 ...course,
-                lecturer: course.lecturer[0],
-                student: course.student.map((student) => student),
-                semester: course.semester[0],
-                subject: course.subject[0]
+                lecturer: course.lecturer.length > 0 ? pickUser(course.lecturer[0]) : null,
+                student: course.student || [],
+                semester: course.semester.length > 0 ? course.semester[0] : null,
+                subject: course.subject.length > 0 ? course.subject[0] : null,
             }
         })
 
@@ -236,7 +235,7 @@ const getCourseByUserId = async (userId) => {
             'semesterId',
             'subjectId'
         ]
-        const result2 = deleteFields(data, fieldName)
+        const result2 = data.map(course => deleteFields(course, fieldName))
 
         return result2
     } catch (error) {
@@ -245,19 +244,111 @@ const getCourseByUserId = async (userId) => {
 }
 
 const getCourseBySemesterId = async (semesterId) => {
-    try {
-        return await GET_DB().collection(COURSE_COLLECTION_NAME).find({ semesterId: new ObjectId(semesterId) }).toArray()
-    } catch (error) {
-        throw error
-    }
+  try {
+    const result = await GET_DB().collection(COURSE_COLLECTION_NAME).aggregate([
+      { $match: { semesterId: new ObjectId(semesterId) } },
+      {
+        $lookup: {
+          from: userModal.USER_COLLECTION_NAME,
+          localField: 'lecturerId',
+          foreignField: '_id',
+          as: 'lecturer'
+        }
+      },
+      {
+        $lookup: {
+          from: userModal.USER_COLLECTION_NAME,
+          localField: 'studentIds',
+          foreignField: '_id',
+          as: 'student'
+        }
+      },
+      {
+        $lookup: {
+          from: semesterModel.SEMESTER_COLLECTION_NAME,
+          localField: 'semesterId',
+          foreignField: '_id',
+          as: 'semester'
+        }
+      },
+      {
+        $lookup: {
+          from: subjectModel.SUBJECT_COLLECTION_NAME,
+          localField: 'subjectId',
+          foreignField: '_id',
+          as: 'subject'
+        }
+      }
+    ]).toArray()
+
+    const data = result.map(course => ({
+      ...course,
+      lecturer: course.lecturer.length > 0 ? pickUser(course.lecturer[0]) : null,
+      student: course.student || [],
+      semester: course.semester.length > 0 ? course.semester[0] : null,
+      subject: course.subject.length > 0 ? course.subject[0] : null,
+    }))
+
+    const fieldName = ['lecturerId', 'studentIds', 'semesterId', 'subjectId']
+
+    return data.map(course => deleteFields(course, fieldName))
+  } catch (error) {
+    throw error
+  }
 }
 
 const getCourseBySemesterIdAndSubjectId = async (semesterId, subjectId) => {
-    try {
-        return await GET_DB().collection(COURSE_COLLECTION_NAME).find({ semesterId: new ObjectId(semesterId), subjectId: new ObjectId(subjectId) }).toArray()
-    } catch (error) {
-        throw error
-    }
+  try {
+    const result = await GET_DB().collection(COURSE_COLLECTION_NAME).aggregate([
+      { $match: { semesterId: new ObjectId(semesterId), subjectId: new ObjectId(subjectId) } },
+      {
+        $lookup: {
+          from: userModal.USER_COLLECTION_NAME,
+          localField: 'lecturerId',
+          foreignField: '_id',
+          as: 'lecturer'
+        }
+      },
+      {
+        $lookup: {
+          from: userModal.USER_COLLECTION_NAME,
+          localField: 'studentIds',
+          foreignField: '_id',
+          as: 'student'
+        }
+      },
+      {
+        $lookup: {
+          from: semesterModel.SEMESTER_COLLECTION_NAME,
+          localField: 'semesterId',
+          foreignField: '_id',
+          as: 'semester'
+        }
+      },
+      {
+        $lookup: {
+          from: subjectModel.SUBJECT_COLLECTION_NAME,
+          localField: 'subjectId',
+          foreignField: '_id',
+          as: 'subject'
+        }
+      }
+    ]).toArray()
+
+    const data = result.map(course => ({
+      ...course,
+      lecturer: course.lecturer.length > 0 ? pickUser(course.lecturer[0]) : null,
+      student: course.student || [],
+      semester: course.semester.length > 0 ? course.semester[0] : null,
+      subject: course.subject.length > 0 ? course.subject[0] : null,
+    }))
+
+    const fieldName = ['lecturerId', 'studentIds', 'semesterId', 'subjectId']
+
+    return data.map(course => deleteFields(course, fieldName))
+  } catch (error) {
+    throw error
+  }
 }
 
 const deleteById = async (courseId) => {

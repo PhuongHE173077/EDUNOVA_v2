@@ -53,10 +53,20 @@ const deleteSemester = async (req, res, next) => {
         next(error)
     }
 }
-
+const getAllSemesters = async (req, res, next) => {
+    try {
+      const semesters = await semesterService.getAllSemesters(); // gọi service
+      res.status(200).json(semesters);  // phải trả nguyên mảng về client
+    } catch (error) {
+      next(error);
+    }
+  };
+  
+  
 export const semesterController = {
     getSemesterByUserId,
     getCurrentSemester,
     createSemester,
-    deleteSemester
+    deleteSemester,
+    getAllSemesters
 }
