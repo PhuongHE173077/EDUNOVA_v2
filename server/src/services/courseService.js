@@ -43,10 +43,20 @@ const createCourse = async (data) => {
         throw error
     }
 }
+
+const deleteCourse = async (courseId) => {
+    try {
+        const result = await courseModel.deleteById(courseId)
+        return result
+    } catch (error) {
+        throw error
+    }
+}
 export const courseService = {
     getCourseByUserId,
     getCourseById,
     getCourseBySemesterIdAndSubjectId,
     updateCourse,
-    createCourse
+    createCourse,
+    deleteCourse
 }

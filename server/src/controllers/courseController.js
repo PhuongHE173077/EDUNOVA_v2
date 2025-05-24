@@ -70,9 +70,22 @@ const createCourse = async (req, res, next) => {
     }
 }
 
+const deleteCourse = async (req, res, next) => {
+    try {
+        const courseId = req.params.id
+
+        await courseService.deleteCourse(courseId)
+
+        res.status(StatusCodes.NO_CONTENT).send()
+    } catch (error) {
+        next(error)
+    }
+}
+
 export const courseController = {
     getCourseByUserId,
     getCourseById,
     updateCourse,
-    createCourse
+    createCourse,
+    deleteCourse
 }

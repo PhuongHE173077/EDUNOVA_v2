@@ -205,6 +205,14 @@ const getCourseBySemesterIdAndSubjectId = async (semesterId, subjectId) => {
     }
 }
 
+const deleteById = async (courseId) => {
+    try {
+        return await GET_DB().collection(COURSE_COLLECTION_NAME).deleteOne({ _id: new ObjectId(courseId) })
+    } catch (error) {
+        throw error
+    }
+}
+
 export const courseModel = {
     COURSE_COLLECTION_NAME,
     findOneById,
@@ -213,5 +221,6 @@ export const courseModel = {
     getAll,
     getCourseByUserId,
     getCourseBySemesterId,
-    getCourseBySemesterIdAndSubjectId
+    getCourseBySemesterIdAndSubjectId,
+    deleteById
 }

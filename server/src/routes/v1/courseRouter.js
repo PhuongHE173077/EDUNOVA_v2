@@ -14,6 +14,7 @@ Router.route('/')
 Router.route('/:id')
     .get(authMiddlewares.isAuthorized, courseController.getCourseById)
     .put(authMiddlewares.isAuthorized, courseController.updateCourse)
+    .delete(authMiddlewares.isAuthorized, courseController.deleteCourse)
 
 
 

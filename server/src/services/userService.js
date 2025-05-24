@@ -46,10 +46,10 @@ const createNew = async (req) => {
     const linkVerify = `${WEBSITE_DOMAIN}/account/reset-password?email=${req.body.email}&token=${getNewUser.verifyToken}`
 
 
-    await sendEmail('EDUNOVA', req.body.email, 'Account Verification', FormMail('EDUNOVA', req.body.email, linkVerify, newUser.password))
+    await sendEmail('EDUNOVA', req.body.email, 'Account Verification', FormMail('EDUNOVA', req.body.email, linkVerify, password))
 
     //return data for controller
-    return pickUser(getNewUser)
+    return pickUser(newUser)
   } catch (error) {
     throw new Error(error)
   }
@@ -204,6 +204,16 @@ const getAllUser = async () => {
   }
 }
 
+const deleteUser = async (userId) => {
+  try {
+
+    const result = await userModal.deleteUser(userId)
+    return result
+  } catch (error) {
+    throw error
+  }
+}
+
 
 export const userService = {
   createNew,
@@ -211,5 +221,6 @@ export const userService = {
   verifyAccount,
   refreshToken,
   update,
-  getAllUser
+  getAllUser,
+  deleteUser
 }

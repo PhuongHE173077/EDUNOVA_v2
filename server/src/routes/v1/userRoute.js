@@ -7,9 +7,10 @@ import { userValidation } from '~/validations/userValidation'
 
 const Router = express.Router()
 
-
+Router.route('/user/:id')
+  .delete(authMiddlewares.isAuthorized, userController.deleteUser)
 Router.route('/register')
-  .post(userValidation.createNew, userController.createNew)
+  .post(userController.createNew)
 
 
 Router.route('/verify')
@@ -37,4 +38,6 @@ Router.route('/update')
     multerUploadMiddlewares.upload.single('avatar'),
     userValidation.update,
     userController.update)
+
+
 export const userRoutes = Router

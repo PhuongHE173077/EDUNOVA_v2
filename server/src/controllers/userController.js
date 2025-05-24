@@ -105,6 +105,18 @@ const getAllUser = async (req, res, next) => {
     next(error)
   }
 }
+
+
+const deleteUser = async (req, res, next) => {
+  try {
+    const userId = req.params.id
+    const result = await userService.deleteUser(userId)
+
+    res.status(StatusCodes.OK).json(result)
+  } catch (error) {
+    next(error)
+  }
+}
 export const userController = {
   createNew,
   login,
@@ -112,5 +124,6 @@ export const userController = {
   logout,
   refreshToken,
   update,
-  getAllUser
+  getAllUser,
+  deleteUser
 }

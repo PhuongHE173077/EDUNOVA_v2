@@ -111,6 +111,15 @@ const getAllUser = async () => {
     throw error
   }
 }
+
+const deleteUser = async (userId) => {
+  try {
+    const result = await GET_DB().collection(USER_COLLECTION_NAME).deleteOne({ _id: new ObjectId(userId) })
+    return result
+  } catch (error) {
+    throw error
+  }
+}
 export const userModal = {
   USER_COLLECTION_NAME,
   USER_COLLECTION_SCHEMA,
@@ -118,5 +127,6 @@ export const userModal = {
   findOneById,
   createNew,
   updateUser,
-  getAllUser
+  getAllUser,
+  deleteUser
 }
