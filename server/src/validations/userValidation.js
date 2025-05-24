@@ -1,13 +1,15 @@
 import { StatusCodes } from "http-status-codes"
 import Joi from "joi"
 import ApiError from "~/utils/ApiError"
+import { USER_ROLE } from "~/utils/constants"
 import { EMAIL_RULE, EMAIL_RULE_MESSAGE, PASSWORD_RULE, PASSWORD_RULE_MESSAGE } from "~/utils/validators"
 
 
 const createNew = async (req, res, next) => {
   const schema = Joi.object({
     email: Joi.string().pattern(EMAIL_RULE).message(EMAIL_RULE_MESSAGE).required(),
-    password: Joi.string().pattern(PASSWORD_RULE).message(PASSWORD_RULE_MESSAGE).required()
+    password: Joi.string().pattern(PASSWORD_RULE).message(PASSWORD_RULE_MESSAGE).required(),
+    role: Joi.string().valid(USER_ROLE.STUDENT, USER_ROLE.TEACHER).default(USER_ROLE.STUDENT).required(),
   })
 
 

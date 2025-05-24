@@ -10,6 +10,8 @@ import { USER_ROLE, WEBSITE_DOMAIN } from "~/utils/constants";
 import { JwtProvider } from "~/providers/JwtProvider";
 import { env } from "~/config/environment";
 import { cloudinaryProvider } from "~/providers/CloudinaryProvider";
+import { FormMail } from "~/utils/fommat";
+import { generatePassword } from "~/utils/algorithms";
 const createNew = async (req) => {
   try {
     //check email exits
@@ -20,10 +22,11 @@ const createNew = async (req) => {
     //create new user
     const formName = req.body.email.split('@')[0].toLowerCase()
 
+    const password = generatePassword();
 
     const newUser = {
       email: req.body.email,
-      password: bcrypt.hashSync(req.body.password, 8),
+      password: bcrypt.hashSync(password, 8),
 
       username: formName,
       //set default display name , can be changed later
@@ -40,14 +43,13 @@ const createNew = async (req) => {
 
 
     //sent email for user to verify
-    const linkVerify = `${WEBSITE_DOMAIN}/account/verify?email=${req.body.email}&token=${getNewUser.verifyToken}`
+    const linkVerify = `${WEBSITE_DOMAIN}/account/reset-password?email=${req.body.email}&token=${getNewUser.verifyToken}`
 
 
-    // await sendEmail('Trello APP', req.body.email, 'Verify Email', verifyForm('EDUNOVA', linkVerify))
-
+    await sendEmail('EDUNOVA', req.body.email, 'Account Verification', FormMail('EDUNOVA', req.body.email, linkVerify, newUser.password))
 
     //return data for controller
-    return pickUser(getNewuser)
+    return pickUser(getNewUser)
   } catch (error) {
     throw new Error(error)
   }

@@ -2,6 +2,7 @@ import { deleteFields } from "~/utils/algorithms"
 import { semesterModel } from "./semesterModel"
 import { subjectModel } from "./subjectModel"
 import { userModal } from "./userModal"
+import { pickUser } from "~/utils/slugify"
 
 const { ObjectId } = require("mongodb")
 const { GET_DB } = require("~/config/mongodb")
@@ -55,7 +56,7 @@ const findOneById = async (id) => {
         const data = result.map((course) => {
             return {
                 ...course,
-                lecturer: course.lecturer[0],
+                lecturer: pickUser(course.lecturer[0]),
                 student: course.student.map((student) => student),
                 semester: course.semester[0],
                 subject: course.subject[0]
@@ -82,7 +83,7 @@ const findOneById = async (id) => {
 
 const createNew = async (data) => {
     try {
-        return await GET_DB().collection(COURSE_COLLECTION_NAME).insertOne(validData)
+        return await GET_DB().collection(COURSE_COLLECTION_NAME).insertOne(data)
     } catch (error) {
         throw new Error(error)
     }

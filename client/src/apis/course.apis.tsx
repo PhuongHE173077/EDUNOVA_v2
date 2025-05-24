@@ -11,3 +11,7 @@ export const fetchCoursesById = async (id: any) => {
 export const fetchCourseBySemesterIdAndSubjectId = async (semesterId: any, subjectId: any) => {
     return await axiosCustomize.get(`v1/courses?semesterId=${semesterId}&subjectId=${subjectId}`)
 }
+
+export const updateCourse = async (id: any, data: any) => {
+    return await axiosCustomize.put(`v1/courses/${id}`, data)
+}
