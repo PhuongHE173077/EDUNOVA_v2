@@ -9,6 +9,10 @@ const Router = express.Router()
 Router.route('/')
     .get(authMiddlewares.isAuthorized, courseController.getCourseByUserId)
 
+Router.route('/list')
+    .get(courseController.getAllCourses)
+
+
 Router.route('/:id')
     .get(authMiddlewares.isAuthorized, courseController.getCourseById)
 

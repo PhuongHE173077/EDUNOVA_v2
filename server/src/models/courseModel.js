@@ -111,8 +111,63 @@ const update = async (id, data) => {
 
 const getAll = async () => {
     try {
-        const result = await GET_DB().collection(COURSE_COLLECTION_NAME).find({}).toArray()
-        return result
+
+
+        const result = await GET_DB().collection(COURSE_COLLECTION_NAME).aggregate([
+
+            {
+                $lookup: {
+                    from: userModal.USER_COLLECTION_NAME,
+                    localField: 'lecturerId',
+                    foreignField: '_id',
+                    as: 'lecturer'
+                }
+            },
+            {
+                $lookup: {
+                    from: userModal.USER_COLLECTION_NAME,
+                    localField: 'studentIds',
+                    foreignField: '_id',
+                    as: 'student'
+                }
+            },
+            {
+                $lookup: {
+                    from: semesterModel.SEMESTER_COLLECTION_NAME,
+                    localField: 'semesterId',
+                    foreignField: '_id',
+                    as: 'semester'
+                }
+            },
+            {
+                $lookup: {
+                    from: subjectModel.SUBJECT_COLLECTION_NAME,
+                    localField: 'subjectId',
+                    foreignField: '_id',
+                    as: 'subject'
+                }
+            }
+        ]).toArray()
+
+        const data = result.map((course) => {
+            return {
+                ...course,
+                lecturer: course.lecturer[0],
+                student: course.student.map((student) => student),
+                semester: course.semester[0],
+                subject: course.subject[0]
+            }
+        })
+
+        const fieldName = [
+            'lecturerId',
+            'studentIds',
+            'semesterId',
+            'subjectId'
+        ]
+        const result2 = deleteFields(data, fieldName)
+
+        return result2
     } catch (error) {
         throw error
     }

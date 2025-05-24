@@ -25,8 +25,48 @@ export const getCourseBySemesterIdAndSubjectId = async (semesterId, subjectId) =
         throw error
     }
 }
+
+const updateCourse = async (courseId, data) => {
+    try {
+        const result = await courseModel.update(courseId, data)
+        return result
+    } catch (error) {
+        throw error
+    }
+}
+
+const createCourse = async (data) => {
+    try {
+        const result = await courseModel.createNew(data)
+        return result
+    } catch (error) {
+        throw error
+    }
+}
+
+const deleteCourse = async (courseId) => {
+    try {
+        const result = await courseModel.deleteById(courseId)
+        return result
+    } catch (error) {
+        throw error
+    }
+}
+
+const getAllCourses = async () => {
+    try {
+        const result = await courseModel.getAll()
+        return result
+    } catch (error) {
+        throw error
+    }
+}
 export const courseService = {
     getCourseByUserId,
     getCourseById,
-    getCourseBySemesterIdAndSubjectId
+    getCourseBySemesterIdAndSubjectId,
+    updateCourse,
+    createCourse,
+    deleteCourse,
+    getAllCourses
 }
