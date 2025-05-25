@@ -54,6 +54,11 @@ const data = {
             url: "/manage-schedules",
             icon: CalendarIcon,
         },
+        {
+            title: "Semesters",
+            url: "/manage-semesters",
+            icon: Receipt,
+        },
 
     ],
 
