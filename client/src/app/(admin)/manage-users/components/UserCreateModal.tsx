@@ -40,7 +40,6 @@ export default function UserCreateModal({ open, onClose, onSubmit }: Props) {
         role,
         isActive,
       });
-      alert("Tạo người dùng thành công! Mật khẩu đã được gửi đến email.");
       // reset form
       setUsername("");
       setDisplayName("");
@@ -49,7 +48,6 @@ export default function UserCreateModal({ open, onClose, onSubmit }: Props) {
       setIsActive(true);
       onClose();
     } catch (error) {
-      alert("Tạo người dùng thất bại. Vui lòng thử lại.");
       console.error(error);
     } finally {
       setSubmitting(false);

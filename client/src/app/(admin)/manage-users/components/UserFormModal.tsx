@@ -7,6 +7,7 @@ import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { User } from "@/types";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 interface Props {
   open: boolean;
@@ -42,16 +43,13 @@ export default function UserFormModal({ open, onClose, initial, onSubmit }: Prop
         role,
         isActive,
       });
-      alert("Cập nhật thành công!");
       onClose();
     } catch (error) {
-      alert("Cập nhật thất bại. Vui lòng thử lại.");
       console.error(error);
     } finally {
       setSubmitting(false);
     }
   };
-
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md">

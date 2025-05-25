@@ -8,9 +8,9 @@ import { EyeIcon, PencilIcon, Trash2Icon, PlusIcon } from "lucide-react";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import UserFormModal from "./components/UserFormModal";
-import UserCreateModal from "./components/UserCreateModal"; // Modal riêng cho tạo mới
-
+import UserCreateModal from "./components/UserCreateModal";
 import { fetchUsers, createUser, updateUser, deleteUser } from "@/apis/user.apis";
+import { toast } from "react-toastify"; // ✅ Thêm react-toastify
 
 export default function ManageUserPage() {
   const [users, setUsers] = useState<User[]>([]);
@@ -19,7 +19,6 @@ export default function ManageUserPage() {
   const [editUser, setEditUser] = useState<User | null>(null);
   const [viewUser, setViewUser] = useState<User | null>(null);
 
-  // Mở modal tạo mới nếu có query ?create=true
   const searchParams = useSearchParams();
   const shouldOpenCreate = searchParams.get("create") === "true";
 
@@ -30,53 +29,54 @@ export default function ManageUserPage() {
     }
   }, [shouldOpenCreate]);
 
-  // Load danh sách user từ API khi mount
+  const loadUsers = async () => {
+    try {
+      const res = await fetchUsers();
+      setUsers(res.data);
+    } catch (err) {
+      console.error(err);
+      toast.error("Không thể lấy danh sách người dùng", { icon: false });
+    }
+  };
+
   useEffect(() => {
-    fetchUsers()
-      .then((res) => {
-        setUsers(res.data);
-      })
-      .catch((err) => {
-        console.error("Lấy danh sách user lỗi:", err);
-        alert("Không thể lấy danh sách người dùng");
-      });
+    loadUsers();
   }, []);
 
-  // Xử lý submit tạo người dùng
   const handleCreateSubmit = async (data: Partial<User>) => {
     try {
       const res = await createUser(data);
       setUsers((prev) => [...prev, res.data]);
+      toast.success("Tạo người dùng thành công", { icon: false });
       setCreateFormOpen(false);
     } catch (error) {
       console.error(error);
-      alert("Có lỗi khi tạo người dùng.");
+      toast.error("Có lỗi khi tạo người dùng", { icon: false });
     }
   };
 
-  // Xử lý submit sửa người dùng
   const handleEditSubmit = async (data: Partial<User>) => {
     try {
       if (!editUser) return;
       const res = await updateUser(editUser._id!, data);
       setUsers((prev) => prev.map((u) => (u._id === editUser._id ? res.data : u)));
+      toast.success("Cập nhật người dùng thành công", { icon: false });
       setEditFormOpen(false);
       setEditUser(null);
     } catch (error) {
       console.error(error);
-      alert("Có lỗi khi cập nhật người dùng.");
+      toast.error("Có lỗi khi cập nhật người dùng", { icon: false });
     }
   };
 
-  // Xử lý xoá user
   const handleDelete = async (id: string) => {
-    if (!window.confirm("Bạn có chắc muốn xoá người dùng này?")) return;
     try {
       await deleteUser(id);
       setUsers((prev) => prev.filter((u) => u._id !== id));
+      toast.success("Xoá người dùng thành công", { icon: false });
     } catch (error) {
       console.error(error);
-      alert("Xoá người dùng thất bại.");
+      toast.error("Xoá người dùng thất bại", { icon: false });
     }
   };
 
@@ -145,10 +145,8 @@ export default function ManageUserPage() {
         </Table>
       </div>
 
-      {/* Modal tạo mới người dùng */}
       <UserCreateModal open={createFormOpen} onClose={() => setCreateFormOpen(false)} onSubmit={handleCreateSubmit} />
 
-      {/* Modal chỉnh sửa người dùng */}
       <UserFormModal
         open={editFormOpen}
         onClose={() => {
@@ -164,18 +162,10 @@ export default function ManageUserPage() {
           <DialogHeader>
             <DialogTitle>Chi tiết người dùng</DialogTitle>
           </DialogHeader>
-          <p>
-            <strong>Họ tên:</strong> {viewUser?.displayName}
-          </p>
-          <p>
-            <strong>Email:</strong> {viewUser?.email}
-          </p>
-          <p>
-            <strong>Vai trò:</strong> {viewUser?.role}
-          </p>
-          <p>
-            <strong>Trạng thái:</strong> {viewUser?.isActive ? "Hoạt động" : "Tạm khoá"}
-          </p>
+          <p><strong>Họ tên:</strong> {viewUser?.displayName}</p>
+          <p><strong>Email:</strong> {viewUser?.email}</p>
+          <p><strong>Vai trò:</strong> {viewUser?.role}</p>
+          <p><strong>Trạng thái:</strong> {viewUser?.isActive ? "Hoạt động" : "Tạm khoá"}</p>
         </DialogContent>
       </Dialog>
     </div>
