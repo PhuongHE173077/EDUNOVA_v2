@@ -15,7 +15,8 @@ Router.route('/user_semesters')
 
 // Xóa học kỳ theo id
 Router.route('/:id')
-  .delete(authMiddlewares.isAuthorized, semesterController.deleteSemester);
+  .delete(authMiddlewares.isAuthorized, semesterController.deleteSemester)
+  .put(authMiddlewares.isAuthorized, semesterController.updateSemester)
 
 // Lấy học kỳ hiện tại
 Router.route('/current')

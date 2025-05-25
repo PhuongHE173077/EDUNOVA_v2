@@ -8,31 +8,40 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { PlusIcon, PencilIcon, Trash2Icon, EyeIcon } from "lucide-react";
 import SemesterFormModal from "./components/SemesterFormModal";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-
-// Dữ liệu mẫu (có thể thay bằng API sau)
-const mockSemesters: Semesters[] = [
-  {
-    _id: "sem1",
-    name: "Spring25",
-    startDate: new Date("2025-01-10"),
-    endDate: new Date("2025-05-15"),
-  },
-  {
-    _id: "sem2",
-    name: "Summer25",
-    startDate: new Date("2025-06-01"),
-    endDate: new Date("2025-10-01"),
-  },
-];
+import {
+  fetchSemesters,
+  createSemester,
+  updateSemester,
+  deleteSemester,
+} from "@/apis/semester.apis";
+import { toast } from "react-toastify"; // ✅ dùng react-toastify
 
 export default function ManageSemesterPage() {
-  const [semesters, setSemesters] = useState<Semesters[]>(mockSemesters);
+  const [semesters, setSemesters] = useState<Semesters[]>([]);
   const [formOpen, setFormOpen] = useState(false);
   const [editSemester, setEditSemester] = useState<Semesters | null>(null);
   const [viewSemester, setViewSemester] = useState<Semesters | null>(null);
 
   const searchParams = useSearchParams();
   const shouldOpenCreate = searchParams.get("create") === "true";
+
+  const loadSemesters = async () => {
+    try {
+      const res = await fetchSemesters();
+      const parsed = res.data.map((s: any) => ({
+        ...s,
+        startDate: new Date(s.startDate),
+        endDate: new Date(s.endDate),
+      }));
+      setSemesters(parsed);
+    } catch (err) {
+      toast.error(" Lỗi khi tải danh sách học kỳ");
+    }
+  };
+
+  useEffect(() => {
+    loadSemesters();
+  }, []);
 
   useEffect(() => {
     if (shouldOpenCreate) {
@@ -41,32 +50,47 @@ export default function ManageSemesterPage() {
     }
   }, [shouldOpenCreate]);
 
-  const handleSubmit = (data: Partial<Semesters>) => {
-    if (editSemester) {
-      // Chỉnh sửa
-      setSemesters(prev =>
-        prev.map(s => s._id === editSemester._id ? { ...s, ...data } as Semesters : s)
-      );
-    } else {
-      // Thêm mới (nếu dùng backend thật thì không cần tự tạo _id)
-      const newSemester: Semesters = {
-        _id: `sem${Date.now()}`, // Tạm thời mock _id cho React key
-        name: data.name || "Học kỳ mới",
-        startDate: data.startDate || new Date(),
-        endDate: data.endDate || new Date(),
-      };
-      setSemesters(prev => [...prev, newSemester]);
-    }
+  const handleSubmit = async (data: Partial<Semesters>) => {
+    try {
+      if (editSemester) {
+        await updateSemester(editSemester._id.toString(), data);
+        toast.success(" Cập nhật học kỳ thành công");
+      } else {
+        await createSemester(data);
+        toast.success(" Tạo học kỳ mới thành công");
+      }
 
-    setFormOpen(false);
-    setEditSemester(null);
+      await loadSemesters();
+      setFormOpen(false);
+      setEditSemester(null);
+    } catch (error) {
+      toast.error(" Lỗi khi tạo hoặc cập nhật học kỳ");
+      console.error("Lỗi khi tạo/cập nhật học kỳ:", error);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteSemester(id);
+      toast.success("🗑️ Đã xoá học kỳ");
+      await loadSemesters();
+    } catch (err) {
+      toast.error(" Lỗi khi xoá học kỳ");
+      console.error("Lỗi khi xoá học kỳ:", err);
+    }
   };
 
   return (
     <div className="p-6">
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-2xl font-bold">🗓️ Quản lý học kỳ</h1>
-        <Button onClick={() => { setFormOpen(true); setEditSemester(null); }}>
+        <Button
+          onClick={() => {
+            setEditSemester(null);
+            setFormOpen(false);
+            setTimeout(() => setFormOpen(true), 0);
+          }}
+        >
           <PlusIcon className="w-4 h-4 mr-2" />
           Tạo học kỳ
         </Button>
@@ -92,10 +116,21 @@ export default function ManageSemesterPage() {
                   <Button size="icon" variant="outline" onClick={() => setViewSemester(s)}>
                     <EyeIcon className="w-4 h-4" />
                   </Button>
-                  <Button size="icon" variant="outline" onClick={() => { setEditSemester(s); setFormOpen(true); }}>
+                  <Button
+                    size="icon"
+                    variant="outline"
+                    onClick={() => {
+                      setEditSemester(s);
+                      setFormOpen(true);
+                    }}
+                  >
                     <PencilIcon className="w-4 h-4" />
                   </Button>
-                  <Button size="icon" variant="destructive" onClick={() => setSemesters(prev => prev.filter(p => p._id !== s._id))}>
+                  <Button
+                    size="icon"
+                    variant="destructive"
+                    onClick={() => handleDelete(s._id.toString())}
+                  >
                     <Trash2Icon className="w-4 h-4" />
                   </Button>
                 </TableCell>
@@ -105,15 +140,17 @@ export default function ManageSemesterPage() {
         </Table>
       </div>
 
-      {/* Modal tạo/sửa học kỳ */}
       <SemesterFormModal
+        key={editSemester?._id?.toString() || "new"}
         open={formOpen}
-        onClose={() => { setFormOpen(false); setEditSemester(null); }}
+        onClose={() => {
+          setFormOpen(false);
+          setEditSemester(null);
+        }}
         initial={editSemester || undefined}
         onSubmit={handleSubmit}
       />
 
-      {/* Modal xem chi tiết */}
       <Dialog open={!!viewSemester} onOpenChange={() => setViewSemester(null)}>
         <DialogContent>
           <DialogHeader>
