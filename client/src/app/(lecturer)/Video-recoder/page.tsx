@@ -7,23 +7,92 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Input } from "@/components/ui/input";
 
 const mockSchedule: Course[] = [
-  {
-    _id: "c1",
-    id: "MATH12",
-    subject: { name: "Toán 12" } as any,
-    room: "BE-201",
-    startDate: "2025-05-14T08:00:00",
-    endDate: "2025-05-14T10:00:00",
-  },
-  {
-    _id: "c2",
-    id: "EN12",
-    subject: { name: "English 12" } as any,
-    room: "BE-202",
-    startDate: "2025-05-15T09:00:00",
-    endDate: "2025-05-15T11:00:00",
-  },
-];
+    {
+      _id: "c1",
+      id: "MATH12",
+      student: [
+        {
+          _id: "u1",
+          email: "hs1@gmail.com",
+          displayName: "Nguyễn Văn A",
+          avatar: "",
+          role: "student",
+          isActive: true,
+        }
+      ],
+      lecturer: {
+        _id: "u2",
+        email: "gv1@gmail.com",
+        displayName: "Thầy Nam",
+        avatar: "",
+        role: "lecturer",
+        isActive: true,
+      },
+      semester: {
+        _id: "sem1",
+        name: "HK2 2024-2025",
+        startDate: new Date("2025-01-01"),
+        endDate: new Date("2025-06-01")
+      },
+      subject: {
+        _id: "s1",
+        id: "MATH12",
+        name: "Toán 12",
+        description: "Môn toán lớp 12",
+        timeAllocation: "90",
+        curriculums: [],
+        documents: [],
+        _destroy: false
+      },
+      startDate: "2025-05-14T08:00:00",
+      endDate: "2025-05-14T10:00:00",
+      status: "ongoing",
+      room: "BE-201"
+    },
+    {
+      _id: "c2",
+      id: "EN12",
+      student: [
+        {
+          _id: "u3",
+          email: "hs2@gmail.com",
+          displayName: "Trần Thị B",
+          avatar: "",
+          role: "student",
+          isActive: true,
+        }
+      ],
+      lecturer: {
+        _id: "u4",
+        email: "gv2@gmail.com",
+        displayName: "Cô Hoa",
+        avatar: "",
+        role: "lecturer",
+        isActive: true,
+      },
+      semester: {
+        _id: "sem1",
+        name: "HK2 2024-2025",
+        startDate: new Date("2025-01-01"),
+        endDate: new Date("2025-06-01")
+      },
+      subject: {
+        _id: "s2",
+        id: "EN12",
+        name: "English 12",
+        description: "Môn tiếng Anh lớp 12",
+        timeAllocation: "90",
+        curriculums: [],
+        documents: [],
+        _destroy: false
+      },
+      startDate: "2025-05-15T09:00:00",
+      endDate: "2025-05-15T11:00:00",
+      status: "ongoing",
+      room: "BE-202"
+    }
+  ];
+  
 
 export default function VideoRecorderPage() {
   // Lưu vào localStorage
