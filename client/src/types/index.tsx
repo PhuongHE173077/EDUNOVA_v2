@@ -8,7 +8,7 @@ export interface Semesters {
 export interface Course {
     _id: string;
     id: string;
-    students: User[];
+    student: User[];
     lecturer: User;
     semester: Semesters;
     subject: Subject;
@@ -25,8 +25,8 @@ export interface CourseFormData {
     endDate: string;
     room?: string;
     status?: string;
-  }
-  
+}
+
 export interface User {
     _id: string;
     email: string;
@@ -47,7 +47,7 @@ export interface Subject {
         _id: string;
         title: string;
         content: string;
-      }[];
+    }[];
     documents: string[];
     _destroy: boolean;
 }
@@ -99,9 +99,9 @@ export interface VideoRecord {
     description?: string;           // Tóm tắt nội dung buổi học
     url: string;                    // Link nhúng YouTube, Google Meet, Drive...
     createdAt: Date;                // Thời gian ghi hình
-    type: "youtube" | "drive" | "mp4"; 
-  }
-  export interface UserRank {
+    type: "youtube" | "drive" | "mp4";
+}
+export interface UserRank {
     _id: string;
     name: string;
     avatar: string;
@@ -109,6 +109,5 @@ export interface VideoRecord {
     subject: string;
     badges?: string[];
     streak?: number;
-  }
-  
-  
+}
+

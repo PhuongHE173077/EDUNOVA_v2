@@ -59,50 +59,54 @@ export default function Page() {
             </Button>
 
             {showHeader && (
-                <div className=" p-7 pt-3 pl-1  bg-white rounded-md">
+                <div className="bg-white rounded-xl p-6 shadow-sm">
                     {/* Breadcrumb */}
-                    <div className="flex items-center gap-1 pl-1">
-                        <div className="flex items-center gap-1 text-gray-500 cursor-pointer hover:text-black">
-                            <Home className='h-4 w-4' />
+                    <div className="flex items-center gap-2 text-sm text-gray-500 pl-1">
+                        <div className="flex items-center gap-1 cursor-pointer hover:text-black transition-colors">
+                            <Home className="h-4 w-4" />
                             <span>Home</span>
                         </div>
-                        <div className="text-gray-500">/</div>
-                        <div className="text-gray-500 cursor-pointer hover:text-black">Course</div>
-                        <div className="text-gray-500">/</div>
-                        <div>{courses?.subject.name}</div>
+                        <span>/</span>
+                        <span className="cursor-pointer hover:text-black transition-colors">Course</span>
+                        <span>/</span>
+                        <span className="font-medium text-black">{courses?.subject.name}</span>
                     </div>
 
-                    {/* Info và Buttons */}
-                    <div className="mt-4 pl-6 flex items-center lg:gap-20 gap-4 flex-wrap">
-                        <div className="border-2  p-2 rounded bg-white">
-                            <strong>Class</strong>: {courses?.id}
+                    {/* Info & Actions */}
+                    <div className="mt-6 grid md:grid-cols-2 lg:grid-cols-3 gap-4 pl-1">
+                        <div className="border p-3 rounded-lg bg-gray-50 text-sm font-medium">
+                            <span className="text-gray-600">Class:</span>{' '}
+                            <span className="text-gray-800">{courses?.id}</span>
                         </div>
-                        <div className="border-2  p-2 rounded bg-white">
-                            <strong>Subject</strong>: {courses?.subject.name}
+                        <div className="border p-3 rounded-lg bg-gray-50 text-sm font-medium">
+                            <span className="text-gray-600">Subject:</span>{' '}
+                            <span className="text-gray-800">{courses?.subject.name}</span>
                         </div>
 
-                        <Button
-                            onClick={() => router.push(`Exam?courseId=${id}`)}
-                            className="bg-purple-100 border border-purple-400 text-purple-700 hover:bg-purple-200 font-semibold py-2 px-4 rounded-lg mr-2 transition-colors duration-200"
-                        >
-                            Kiểm Tra
-                        </Button>
-
-                        <Button
-                            className="bg-purple-100 border border-purple-400 text-purple-700 hover:bg-purple-200 font-semibold py-2 px-4 rounded-lg transition-colors duration-200"
-                        >
-                            Tài Liệu
-                        </Button>
-
-                        <Button
-                            onClick={() => router.push(`Student?courseId=${id}`)}
-                            className="bg-purple-100 border border-purple-400 text-purple-700 hover:bg-purple-200 font-semibold py-2 px-4 rounded-lg transition-colors duration-200"
-                        >
-                            Danh sách học sinh
-                        </Button>
+                        <div className="flex gap-3 flex-wrap">
+                            <Button
+                                onClick={() => router.push(`Exam?courseId=${id}`)}
+                                className="bg-purple-100 text-purple-700 border border-purple-300 hover:bg-purple-200 rounded-lg px-4 py-2 text-sm font-semibold transition"
+                            >
+                                Kiểm Tra
+                            </Button>
+                            <Button
+                                onClick={() => router.push(`Material?courseId=${id}`)}
+                                className="bg-purple-100 text-purple-700 border border-purple-300 hover:bg-purple-200 rounded-lg px-4 py-2 text-sm font-semibold transition"
+                            >
+                                Tài Liệu
+                            </Button>
+                            <Button
+                                onClick={() => router.push(`Student?courseId=${id}`)}
+                                className="bg-purple-100 text-purple-700 border border-purple-300 hover:bg-purple-200 rounded-lg px-4 py-2 text-sm font-semibold transition"
+                            >
+                                Danh sách học sinh
+                            </Button>
+                        </div>
                     </div>
                 </div>
             )}
+
 
             {lessons.length > 0 ? <div className=' overflow-y-auto scrollbar-custom2' style={{ maxHeight: showHeader ? '66vh' : '90vh' }} >
                 <ContentCourseDetail lesson={lessons} />

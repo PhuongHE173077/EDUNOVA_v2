@@ -1,37 +1,38 @@
 "use client"
 import { SidebarGroup, SidebarGroupContent, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar'
-import { CalendarIcon, FileBadgeIcon, FlameIcon, HomeIcon, LibraryBigIcon, PlaySquareIcon } from 'lucide-react'
+import { BookCheckIcon, CalendarIcon, FileBadgeIcon, FlameIcon, HomeIcon, LibraryBigIcon, PlaySquareIcon } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React from 'react'
 
 const items = [
   {
-    title: 'Home',
+    title: 'Trang chủ',
     url: "/Lecturer",
     icon: HomeIcon
   },
   {
-    title: 'Courses',
+    title: 'Khoá học',
     url: "/Courses",
     icon: LibraryBigIcon,
     auth: true
   },
   {
-    title: 'Schedule',
+    title: 'Lịch học',
     url: "/Schedule",
     icon: CalendarIcon,
   },
   {
-    title: 'Videos Recoder',
+    title: 'Xem lại Videos ',
     url: "/Video-recoder",
     icon: PlaySquareIcon,
   },
   {
-    title: 'Achievements',
-    url: "/Achievement",
-    icon: FileBadgeIcon,
+    title: 'Điểm Số',
+    url: "/Score",
+    icon: BookCheckIcon,
   },
+
 ]
 export const MainSection = () => {
   const pathname = usePathname();

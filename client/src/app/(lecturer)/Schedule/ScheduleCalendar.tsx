@@ -13,7 +13,7 @@ interface Props {
 
 const getGradient = (subjectId: string, isActive: boolean) => {
   // if (!isActive) return "bg-gray-500";
-  return `bg-gradient-to-br ${subjectGradients[subjectId] || "from-blue-600 to-cyan-500"}`;
+  return `bg-gradient-to-br from-indigo-500 to-pink-500 "}`;
 };
 
 export default function ScheduleCalendar({ courses }: Props) {
