@@ -15,25 +15,25 @@ import ViewQuiltRoundedIcon from '@mui/icons-material/ViewQuiltRounded';
 const items = [
   {
     icon: <ViewQuiltRoundedIcon />,
-    title: 'Dashboard',
+    title: 'Bảng điều khiển',
     description:
-      'This item could provide a snapshot of the most important metrics or data points related to the product.',
+      'Có những chức năng phân tích đữ liệu 1 cách hiệu quả .',
     imageLight: `url("${process.env.TEMPLATE_IMAGE_URL || 'https://mui.com'}/static/images/templates/templates-images/dash-light.png")`,
     imageDark: `url("${process.env.TEMPLATE_IMAGE_URL || 'https://mui.com'}/static/images/templates/templates-images/dash-dark.png")`,
   },
   {
     icon: <EdgesensorHighRoundedIcon />,
-    title: 'Mobile integration',
+    title: 'Tích hợp di động',
     description:
-      'This item could provide information about the mobile app version of the product.',
+      'Mục này có thể cung cấp thông tin về phiên bản ứng dụng di động của sản phẩm.',
     imageLight: `url("${process.env.TEMPLATE_IMAGE_URL || 'https://mui.com'}/static/images/templates/templates-images/mobile-light.png")`,
     imageDark: `url("${process.env.TEMPLATE_IMAGE_URL || 'https://mui.com'}/static/images/templates/templates-images/mobile-dark.png")`,
   },
   {
     icon: <DevicesRoundedIcon />,
-    title: 'Available on all platforms',
+    title: 'Có sẵn trên tất cả các nền tảng',
     description:
-      'This item could let users know the product is available on all platforms, such as web, mobile, and desktop.',
+      'Mục này có thể cho người dùng biết sản phẩm có sẵn trên mọi nền tảng, chẳng hạn như web, thiết bị di động và máy tính để bàn.',
     imageLight: `url("${process.env.TEMPLATE_IMAGE_URL || 'https://mui.com'}/static/images/templates/templates-images/devices-light.png")`,
     imageDark: `url("${process.env.TEMPLATE_IMAGE_URL || 'https://mui.com'}/static/images/templates/templates-images/devices-dark.png")`,
   },
@@ -152,15 +152,13 @@ export default function Features() {
           gutterBottom
           sx={{ color: 'text.primary' }}
         >
-          Product features
+          Hỗ trợ giao diện
         </Typography>
         <Typography
           variant="body1"
           sx={{ color: 'text.secondary', mb: { xs: 2, sm: 4 } }}
         >
-          Provide a brief overview of the key features of the product. For example,
-          you could list the number of features, their types or benefits, and
-          add-ons.
+          Trang web hộ trợ cho nhiều thiết bị từ máy tính đến điên thoại
         </Typography>
       </Box>
       <Box

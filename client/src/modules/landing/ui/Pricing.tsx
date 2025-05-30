@@ -85,11 +85,12 @@ export default function Pricing() {
                     gutterBottom
                     sx={{ color: 'text.primary' }}
                 >
-                    Pricing
+                    Bảng giá
+                    Dịch vụ
                 </Typography>
                 <Typography variant="body1" sx={{ color: 'text.secondary' }}>
-                    Quickly build an effective pricing table for your potential customers with
-                    this layout. <br />
+                    Nhanh chóng xây dựng bảng giá hiệu quả cho khách hàng tiềm năng của bạn bằng
+                    bố cục này. <br />
                     It&apos;s built with default Material UI components with little
                     customization.
                 </Typography>

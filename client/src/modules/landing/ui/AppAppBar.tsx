@@ -62,7 +62,7 @@ export default function AppAppBar() {
                 marginRight: 8,
               }}
             />
-            <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+            {/* <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
               <Button variant="text" color="info" size="small">
                 Features
               </Button>
@@ -81,7 +81,7 @@ export default function AppAppBar() {
               <Button variant="text" color="info" size="small" sx={{ minWidth: 0 }}>
                 Blog
               </Button>
-            </Box>
+            </Box> */}
           </Box>
           <Box
             sx={{
@@ -92,7 +92,7 @@ export default function AppAppBar() {
           >
             <Link href="/sign-in" >
               <Button color="primary" variant="contained" size="small">
-                Sign In
+                Đăng Nhập
               </Button>
             </Link>
             <ColorModeIconDropdown />
@@ -134,7 +134,7 @@ export default function AppAppBar() {
                 <Link href="/sign-in" >
                   <MenuItem>
                     <Button color="primary" variant="contained" fullWidth>
-                      Sign In
+                      Đăng Nhập
                     </Button>
                   </MenuItem>
                 </Link>

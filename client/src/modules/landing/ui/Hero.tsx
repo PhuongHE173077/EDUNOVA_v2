@@ -57,62 +57,34 @@ const Carousel = styled(Box)({
 const courses = [
   {
     id: 1,
-    title: "Track Your Progress",
+    title: "Theo dõi quá trình ",
     description:
-      "Personalized dashboards to keep track of learning progress.",
+      "Bảng thông tin được cá nhân hóa để theo dõi tiến độ học tập.",
     image:
       "https://www.shutterstock.com/image-photo/business-concept-attached-board-announcement-260nw-2160920239.jpg",
   },
   {
     id: 2,
-    title: "Plan Your Studies",
-    description: "Effective study plans tailored to your goals.",
+    title: "Lên kế hoạch cho việc học của bạn",
+    description: "Kế hoạch học tập hiệu quả phù hợp với mục tiêu của bạn.",
     image:
       "https://www.shutterstock.com/image-photo/steps-education-leading-success-goal-600nw-2309134389.jpg",
   },
   {
     id: 3,
-    title: "Exam Preparation",
-    description: "Access tools and resources to prepare for exams.",
+    title: "Hỗ Trợ kiểm tra",
+    description: "Truy cập các công cụ và tài nguyên để chuẩn bị cho kỳ thi.",
     image:
       "https://www.shutterstock.com/image-vector/exam-preparation-school-test-vector-260nw-1956280858.jpg",
   },
   {
     id: 4,
-    title: "Collaborate with Peers",
-    description: "Join study groups and share knowledge with classmates.",
+    title: "Hợp tác với đồng nghiệp",
+    description: "Tham gia nhóm học tập và chia sẻ kiến ​​thức với bạn cùng lớp.",
     image:
       "https://www.shutterstock.com/image-photo/group-young-people-thinking-together-260nw-1185545020.jpg",
-  },
-  {
-    id: 5,
-    title: "Track Your Progress",
-    description:
-      "Personalized dashboards to keep track of learning progress.",
-    image:
-      "https://www.shutterstock.com/image-photo/business-concept-attached-board-announcement-260nw-2160920239.jpg",
-  },
-  {
-    id: 6,
-    title: "Plan Your Studies",
-    description: "Effective study plans tailored to your goals.",
-    image:
-      "https://www.shutterstock.com/image-photo/steps-education-leading-success-goal-600nw-2309134389.jpg",
-  },
-  {
-    id: 7,
-    title: "Exam Preparation",
-    description: "Access tools and resources to prepare for exams.",
-    image:
-      "https://www.shutterstock.com/image-vector/exam-preparation-school-test-vector-260nw-1956280858.jpg",
-  },
-  {
-    id: 8,
-    title: "Collaborate with Peers",
-    description: "Join study groups and share knowledge with classmates.",
-    image:
-      "https://www.shutterstock.com/image-photo/group-young-people-thinking-together-260nw-1185545020.jpg",
-  },
+  }
+
 ];
 
 export default function Hero() {
@@ -224,9 +196,8 @@ export default function Hero() {
               width: { sm: '100%', md: '80%' },
             }}
           >
-            Explore our cutting-edge dashboard, delivering high-quality solutions
-            tailored to your needs. Elevate your experience with top-tier features
-            and services.
+            Trang web giáo dục hỗ trợ học sinh và giáo viên, cung cấp các giải pháp chất lượng cao
+            . Nâng cao trải nghiệm của bạn với các tính năng và dịch vụ hàng đầu.
           </Typography>
           <Stack
             direction={{ xs: 'column', sm: 'row' }}
@@ -243,7 +214,7 @@ export default function Hero() {
               size="small"
               variant="outlined"
               aria-label="Enter your email address"
-              placeholder="Your email address"
+              placeholder="Nhập địa chỉ mail"
               fullWidth
               slotProps={{
                 htmlInput: {
@@ -258,20 +229,10 @@ export default function Hero() {
               size="small"
               sx={{ minWidth: 'fit-content' }}
             >
-              Start now
+              Bắt đầu
             </Button>
           </Stack>
-          <Typography
-            variant="caption"
-            color="text.secondary"
-            sx={{ textAlign: 'center' }}
-          >
-            By clicking &quot;Start now&quot; you agree to our&nbsp;
-            <Link href="#" color="primary">
-              Terms & Conditions
-            </Link>
-            .
-          </Typography>
+
         </Stack>
 
 

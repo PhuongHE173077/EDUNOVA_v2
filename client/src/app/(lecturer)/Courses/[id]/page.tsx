@@ -74,10 +74,10 @@ export default function Page() {
 
                     {/* Info và Buttons */}
                     <div className="mt-4 pl-6 flex items-center lg:gap-20 gap-4 flex-wrap">
-                        <div className="border-2 shadow-2xl p-2 rounded bg-white">
+                        <div className="border-2  p-2 rounded bg-white">
                             <strong>Class</strong>: {courses?.id}
                         </div>
-                        <div className="border-2 shadow-2xl p-2 rounded bg-white">
+                        <div className="border-2  p-2 rounded bg-white">
                             <strong>Subject</strong>: {courses?.subject.name}
                         </div>
 
@@ -85,13 +85,20 @@ export default function Page() {
                             onClick={() => router.push(`Exam?courseId=${id}`)}
                             className="bg-purple-100 border border-purple-400 text-purple-700 hover:bg-purple-200 font-semibold py-2 px-4 rounded-lg mr-2 transition-colors duration-200"
                         >
-                            EXAM
+                            Kiểm Tra
                         </Button>
 
                         <Button
-                            className="bg-teal-100 border border-teal-400 text-teal-700 hover:bg-teal-200 font-semibold py-2 px-4 rounded-lg transition-colors duration-200"
+                            className="bg-purple-100 border border-purple-400 text-purple-700 hover:bg-purple-200 font-semibold py-2 px-4 rounded-lg transition-colors duration-200"
                         >
-                            MATERIAL
+                            Tài Liệu
+                        </Button>
+
+                        <Button
+                            onClick={() => router.push(`Student?courseId=${id}`)}
+                            className="bg-purple-100 border border-purple-400 text-purple-700 hover:bg-purple-200 font-semibold py-2 px-4 rounded-lg transition-colors duration-200"
+                        >
+                            Danh sách học sinh
                         </Button>
                     </div>
                 </div>

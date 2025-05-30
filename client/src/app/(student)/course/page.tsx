@@ -39,11 +39,13 @@ export default function page() {
   return (
     <div className="m-4">
       <div className="">
-        <HeaderCourse />
+
+
+        {/* <HeaderCourse /> */}
       </div>
 
 
-      <div className="">
+      <div className="mt-4">
         {currentSemester && <CourseContent
           courses={courses}
           semester={semesters}

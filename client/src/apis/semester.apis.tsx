@@ -4,7 +4,7 @@ export const fetchSemesters = async () => {
     return await axiosCustomize.get('v1/semesters')
 }
 export const fetchCurrentSemester = async () => {
-    return await axiosCustomize.get('v1/semesters/current_semester')
+    return await axiosCustomize.get('v1/semesters/current')
 }
 export const updateSemester = async (id: any, data: any) => {
     return await axiosCustomize.put(`v1/semesters/${id}`, data)

@@ -13,48 +13,49 @@ import { Grid2 } from '@mui/material';
 
 const userTestimonials = [
     {
-        avatar: <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />,
-        name: 'Remy Sharp',
-        occupation: 'Senior Engineer',
+        avatar: <Avatar alt="Nguyễn Văn An" src="https://randomuser.me/api/portraits/men/32.jpg" />,
+        name: 'Nguyễn Văn An',
+        occupation: 'Kỹ sư cao cấp',
         testimonial:
-            "I absolutely love how versatile this product is! Whether I'm tackling work projects or indulging in my favorite hobbies, it seamlessly adapts to my changing needs. Its intuitive design has truly enhanced my daily routine, making tasks more efficient and enjoyable.",
+            "Tôi rất ấn tượng với tính linh hoạt của trang web này! Dù học tập hay nghiên cứu, nó luôn đáp ứng nhu cầu đa dạng của tôi. Giao diện thân thiện giúp tôi tiếp thu kiến thức hiệu quả và thú vị hơn mỗi ngày.",
     },
     {
-        avatar: <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />,
-        name: 'Travis Howard',
-        occupation: 'Lead Product Designer',
+        avatar: <Avatar alt="Trần Thị Bình" src="https://randomuser.me/api/portraits/women/44.jpg" />,
+        name: 'Trần Thị Bình',
+        occupation: 'Trưởng nhóm thiết kế sản phẩm',
         testimonial:
-            "One of the standout features of this product is the exceptional customer support. In my experience, the team behind this product has been quick to respond and incredibly helpful. It's reassuring to know that they stand firmly behind their product.",
+            "Điểm nổi bật nhất của trang web này chính là dịch vụ hỗ trợ khách hàng tuyệt vời. Tôi luôn nhận được phản hồi nhanh chóng và sự giúp đỡ tận tình từ đội ngũ phát triển. Điều này tạo sự yên tâm khi sử dụng nền tảng.",
     },
     {
-        avatar: <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />,
-        name: 'Cindy Baker',
-        occupation: 'CTO',
+        avatar: <Avatar alt="Lê Minh Đức" src="https://randomuser.me/api/portraits/men/76.jpg" />,
+        name: 'Lê Minh Đức',
+        occupation: 'Giám đốc công nghệ',
         testimonial:
-            'The level of simplicity and user-friendliness in this product has significantly simplified my life. I appreciate the creators for delivering a solution that not only meets but exceeds user expectations.',
+            "Mức độ đơn giản và dễ sử dụng của trang web đã giúp tôi học tập hiệu quả hơn rất nhiều. Tôi đánh giá cao đội ngũ sáng tạo đã xây dựng một giải pháp không chỉ đáp ứng mà còn vượt qua kỳ vọng của người dùng.",
     },
     {
-        avatar: <Avatar alt="Remy Sharp" src="/static/images/avatar/4.jpg" />,
-        name: 'Julia Stewart',
-        occupation: 'Senior Engineer',
+        avatar: <Avatar alt="Phạm Thị Hương" src="https://randomuser.me/api/portraits/women/65.jpg" />,
+        name: 'Phạm Thị Hương',
+        occupation: 'Kỹ sư cao cấp',
         testimonial:
-            "I appreciate the attention to detail in the design of this product. The small touches make a big difference, and it's evident that the creators focused on delivering a premium experience.",
+            "Tôi rất trân trọng sự chú ý đến từng chi tiết trong thiết kế của trang web. Những điểm nhỏ nhưng tinh tế đã tạo ra trải nghiệm học tập cao cấp và chuyên nghiệp.",
     },
     {
-        avatar: <Avatar alt="Travis Howard" src="/static/images/avatar/5.jpg" />,
-        name: 'John Smith',
-        occupation: 'Product Designer',
+        avatar: <Avatar alt="Đặng Hoàng Nam" src="https://randomuser.me/api/portraits/men/12.jpg" />,
+        name: 'Đặng Hoàng Nam',
+        occupation: 'Nhà thiết kế sản phẩm',
         testimonial:
-            "I've tried other similar products, but this one stands out for its innovative features. It's clear that the makers put a lot of thought into creating a solution that truly addresses user needs.",
+            "Tôi đã từng thử nhiều trang web giáo dục khác, nhưng đây là nền tảng nổi bật nhờ các tính năng đổi mới. Rõ ràng đội ngũ phát triển đã dành nhiều tâm huyết để đáp ứng đúng nhu cầu của người học.",
     },
     {
-        avatar: <Avatar alt="Cindy Baker" src="/static/images/avatar/6.jpg" />,
-        name: 'Daniel Wolf',
-        occupation: 'CDO',
+        avatar: <Avatar alt="Vũ Thị Lan" src="https://randomuser.me/api/portraits/women/53.jpg" />,
+        name: 'Vũ Thị Lan',
+        occupation: 'Giám đốc phát triển',
         testimonial:
-            "The quality of this product exceeded my expectations. It's durable, well-designed, and built to last. Definitely worth the investment!",
+            "Chất lượng của trang web vượt xa mong đợi của tôi. Giao diện đẹp, nội dung chất lượng và vận hành mượt mà. Đây thực sự là một đầu tư xứng đáng cho việc học tập và phát triển bản thân!",
     },
 ];
+
 
 const whiteLogos = [
     'https://assets-global.website-files.com/61ed56ae9da9fd7e0ef0a967/6560628e8573c43893fe0ace_Sydney-white.svg',
@@ -108,12 +109,12 @@ export default function Testimonials() {
                     gutterBottom
                     sx={{ color: 'text.primary' }}
                 >
-                    Testimonials
+                    Đánh Giá về Chúng Tôi
                 </Typography>
                 <Typography variant="body1" sx={{ color: 'text.secondary' }}>
-                    See what our customers love about our products. Discover how we excel in
-                    efficiency, durability, and satisfaction. Join us for quality, innovation,
-                    and reliable support.
+                    Xem khách hàng của chúng tôi yêu thích điều gì ở sản phẩm của chúng tôi. Khám phá cách chúng tôi vượt trội về
+                    hiệu quả, độ bền và sự hài lòng. Tham gia cùng chúng tôi để có chất lượng, sự đổi mới,
+                    và hỗ trợ đáng tin cậy.
                 </Typography>
             </Box>
             <Grid2 container spacing={2}>
@@ -149,11 +150,11 @@ export default function Testimonials() {
                                     title={testimonial.name}
                                     subheader={testimonial.occupation}
                                 />
-                                <img
+                                {/* <img
                                     src={logos[index]}
                                     alt={`Logo ${index + 1}`}
                                     style={logoStyle}
-                                />
+                                /> */}
                             </Box>
                         </Card>
                     </Grid2>

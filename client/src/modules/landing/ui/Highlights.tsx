@@ -14,41 +14,42 @@ import Typography from '@mui/material/Typography';
 const items = [
   {
     icon: <SettingsSuggestRoundedIcon />,
-    title: 'Adaptable performance',
+    title: 'Hiệu suất linh hoạt',
     description:
-      'Our product effortlessly adjusts to your needs, boosting efficiency and simplifying your tasks.',
+      'Trang web của chúng tôi dễ dàng điều chỉnh phù hợp với nhu cầu học tập đa dạng, giúp bạn học tập hiệu quả và tiết kiệm thời gian.',
   },
   {
     icon: <ConstructionRoundedIcon />,
-    title: 'Built to last',
+    title: 'Nền tảng ổn định bền bỉ',
     description:
-      'Experience unmatched durability that goes above and beyond with lasting investment.',
+      'Trải nghiệm một hệ thống vận hành ổn định, đáng tin cậy, giúp bạn yên tâm sử dụng lâu dài mà không gặp gián đoạn.',
   },
   {
     icon: <ThumbUpAltRoundedIcon />,
-    title: 'Great user experience',
+    title: 'Trải nghiệm người dùng tuyệt vời',
     description:
-      'Integrate our product into your routine with an intuitive and easy-to-use interface.',
+      'Giao diện thân thiện, dễ dùng giúp bạn nhanh chóng làm quen và tận dụng tối đa các tính năng học tập trên trang.',
   },
   {
     icon: <AutoFixHighRoundedIcon />,
-    title: 'Innovative functionality',
+    title: 'Tính năng sáng tạo, tiên tiến',
     description:
-      'Stay ahead with features that set new standards, addressing your evolving needs better than the rest.',
+      'Luôn cập nhật những công cụ và tính năng mới nhất, giúp bạn học tập và phát triển kỹ năng một cách hiệu quả và hiện đại.',
   },
   {
     icon: <SupportAgentRoundedIcon />,
-    title: 'Reliable support',
+    title: 'Hỗ trợ khách hàng tận tâm',
     description:
-      'Count on our responsive customer support, offering assistance that goes beyond the purchase.',
+      'Đội ngũ hỗ trợ chuyên nghiệp, phản hồi nhanh chóng và luôn sẵn sàng giải đáp mọi thắc mắc của bạn trong quá trình sử dụng.',
   },
   {
     icon: <QueryStatsRoundedIcon />,
-    title: 'Precision in every detail',
+    title: 'Chú trọng chi tiết tỉ mỉ',
     description:
-      'Enjoy a meticulously crafted product where small touches make a significant impact on your overall experience.',
+      'Mỗi tính năng đều được thiết kế cẩn thận, tạo nên trải nghiệm học tập trọn vẹn và chất lượng cho người dùng.',
   },
 ];
+
 
 export default function Highlights() {
   return (
@@ -77,12 +78,10 @@ export default function Highlights() {
           }}
         >
           <Typography component="h2" variant="h4" gutterBottom>
-            Highlights
+            Hỗ Trợ
           </Typography>
           <Typography variant="body1" sx={{ color: 'grey.400' }}>
-            Explore why our product stands out: adaptability, durability,
-            user-friendly design, and innovation. Enjoy reliable customer support and
-            precision in every detail.
+            Chúng tôi có nhưng sự hỗ trợ khách hàng 1 cách tối ưu nhất về mọi mặt
           </Typography>
         </Box>
         <Grid2 container spacing={2}>

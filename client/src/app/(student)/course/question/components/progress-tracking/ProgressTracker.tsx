@@ -40,11 +40,11 @@ function ProgressTracker() {
 
     return (
         <div>
-            <ChartStatistics totalStudents={totalStudents} studentsCommented={studentsCommented} />
-            <hr style={{
+            {/* <ChartStatistics totalStudents={totalStudents} studentsCommented={studentsCommented} /> */}
+            {/* <hr style={{
                 border: "1px solid lightgray",
                 margin: "8px auto"
-            }} />
+            }} /> */}
             {questions && <UpcomingQuestionsTable questions={questions} questionId={id!} courseId={courseId!} lessonId={lessonId!} />}
 
         </div>

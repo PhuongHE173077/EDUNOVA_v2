@@ -1,3 +1,4 @@
+'use client'
 import React, { useEffect, useState } from "react";
 import { Box, Container, Typography, Button, IconButton, Select, MenuItem, SelectChangeEvent, FormControl, InputLabel } from "@mui/material";
 import QuestionAnswerIcon from "@mui/icons-material/QuestionAnswer";
@@ -5,12 +6,22 @@ import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Swal from "sweetalert2";
+import { fetchLessonById } from "@/apis/lession.apis";
+import { useSearchParams } from "next/navigation";
 
 
 
-const ContentSes = ({ questionSlot, assignmentSlot }: any) => {
-
-
+const ContentSes = () => {
+  const searchParams = useSearchParams();
+  const id = searchParams.get('id');
+  const [lesson, setLesson] = useState<any>(null);
+  useEffect(() => {
+    if (id) {
+      fetchLessonById(id).then((res) => {
+        setLesson(res.data);
+      });
+    }
+  }, [id]);
   return (
     <Container sx={{ padding: "8px", maxWidth: "500px", backgroundColor: "#e8eaf6" }}>
       <Box mb={2}>
