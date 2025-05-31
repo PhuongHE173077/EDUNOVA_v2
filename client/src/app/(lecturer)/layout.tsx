@@ -7,10 +7,14 @@ import { HomeLayout } from '@/modules/lecturer/ui/layouts/home-page';
 
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
+import ChatDialog from './Chat/ChatDialog';
+import { Button } from '@/components/ui/button';
+import { MessageCircleCodeIcon, MessageCircleMoreIcon } from 'lucide-react';
 function layout({ children }: { children: React.ReactNode }) {
     const currentUser = useAppSelector(selectedCurrentUser)
     const router = useRouter()
     const [mounted, setMounted] = useState(false);
+    const [open, setOpen] = useState(false);
 
     useEffect(() => {
         setMounted(true);
@@ -32,10 +36,20 @@ function layout({ children }: { children: React.ReactNode }) {
     }
 
     return (
-        <HomeLayout >
-            {children}
+        <div className='relative'>
+            <HomeLayout >
+                {children}
 
-        </HomeLayout>
+            </HomeLayout>
+            <Button
+                onClick={() => setOpen(true)}
+                className="fixed bottom-6 right-6 z-50 bg-white border h-15 border-gray-200 shadow-lg rounded-full p-3 hover:bg-gray-100"
+                variant="ghost"
+            >
+                <MessageCircleMoreIcon className="!w-7 !h-7 text-gray-700" strokeWidth={1.5} />
+            </Button>
+            <ChatDialog open={open} setOpen={setOpen} />
+        </div>
     );
 }
 
