@@ -3,9 +3,15 @@
 import React from 'react';
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Avatar, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useSelector } from 'react-redux';
+import { selectedCurrentUser } from '@/lib/redux/user/user.slide';
+import { Tooltip } from '@mui/material';
+import { UserCircleIcon, UserPlusIcon } from 'lucide-react';
 
 export default function ChatDialog({ open, setOpen }: any) {
+    const currentUser = useSelector(selectedCurrentUser);
+
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogContent className="w-full max-w-[95vw] md:max-w-5xl p-0 overflow-hidden">
@@ -16,9 +22,26 @@ export default function ChatDialog({ open, setOpen }: any) {
                     {/* Left Sidebar */}
                     <div className="md:w-1/3 w-full border-b md:border-b-0 md:border-r flex flex-col">
                         <div className="flex items-center justify-between p-3 bg-gray-100">
-                            <Avatar>
-                                <AvatarImage src="http://andressantibanez.com/res/avatar.png" />
-                            </Avatar>
+                            <div className='flex items-center'>
+                                <Avatar>
+                                    <AvatarImage src={currentUser?.avatar} />
+                                    <AvatarFallback>{currentUser?.displayName?.charAt(0)}</AvatarFallback>
+                                </Avatar>
+                                <div className="ml-3">
+                                    <p className="text-sm font-semibold">{currentUser?.displayName}</p>
+                                    <div className="flex items-center gap-1">
+                                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                                        <p className="text-xs text-gray-500">Online</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <Tooltip title='Thêm người liên hệ'>
+                                    <Button variant='ghost'>
+                                        <UserPlusIcon className='w-4 h-4' />
+                                    </Button>
+                                </Tooltip>
+                            </div>
                         </div>
                         <div className="p-2 bg-gray-50">
                             <input type="text" placeholder="Search or start new chat" className="w-full px-3 py-2 border rounded text-sm" />

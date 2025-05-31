@@ -7,7 +7,7 @@ import { HomeLayout } from '@/modules/lecturer/ui/layouts/home-page';
 
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import ChatDialog from './Chat/ChatDialog';
+import ChatDialog from '../../components/Chat/ChatDialog';
 import { Button } from '@/components/ui/button';
 import { MessageCircleCodeIcon, MessageCircleMoreIcon } from 'lucide-react';
 function layout({ children }: { children: React.ReactNode }) {
