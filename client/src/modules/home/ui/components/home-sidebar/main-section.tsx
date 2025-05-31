@@ -7,28 +7,28 @@ import React from 'react'
 
 const items = [
   {
-    title: 'Home',
+    title: 'Trang chủ',
     url: "/student",
     icon: HomeIcon
   },
   {
-    title: 'Courses',
+    title: 'Khóa học',
     url: "/course",
     icon: LibraryBigIcon,
     auth: true
   },
   {
-    title: 'Schedule',
+    title: 'Lịch học',
     url: "/schedule",
     icon: CalendarIcon,
   },
   {
-    title: 'Videos Recoder',
+    title: 'Xem lại Videos ',
     url: "/video-recoder",
     icon: PlaySquareIcon,
   },
   {
-    title: 'Achievements',
+    title: 'Điểm số',
     url: "/achievement",
     icon: FileBadgeIcon,
   },

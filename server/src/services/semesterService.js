@@ -33,8 +33,8 @@ const getCurrentSemester = async () => {
 
     const currentSemester = data.find(
       (s) =>
-        currentDate.getTime() >= new Date(s.startDate).getTime() &&
-        currentDate.getTime() <= new Date(s.endDate).getTime()
+        currentDate >= new Date(s.startDate).getTime() &&
+        currentDate <= new Date(s.endDate).getTime()
     );
 
     return currentSemester;
@@ -71,8 +71,8 @@ const getAllSemesters = async () => {
   return await semesterModel.getAll();
 };
 const updateSemester = async (id, data) => {
-    return await semesterModel.update(id, data);
-  };
+  return await semesterModel.update(id, data);
+};
 export const semesterService = {
   getSemesterByUserId,
   getCurrentSemester,
