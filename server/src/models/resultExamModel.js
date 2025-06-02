@@ -1,5 +1,7 @@
 import { pickUser } from "~/utils/slugify"
 import { questionExamModel } from "./questionExamModel"
+import { userModal } from "./userModal"
+import _ from "lodash"
 
 const { ObjectId } = require("mongodb")
 const { GET_DB } = require("~/config/mongodb")
@@ -77,6 +79,65 @@ const findByUserId = async (userId) => {
     }
 }
 
+const getResultByExamId = async (examId) => {
+    try {
+        const result = await GET_DB().collection(COLLECTION_NAME).aggregate([
+            {
+                $match: {
+                    examId: new ObjectId(examId)
+                }
+            },
+            {
+                $lookup: {
+                    from: userModal.USER_COLLECTION_NAME,
+                    localField: 'userId',
+                    foreignField: '_id',
+                    as: 'user'
+                }
+            }
+        ]).toArray()
+
+        return result.map((item) => {
+            return {
+                ...item,
+                user: pickUser(item.user[0])
+            }
+        })
+    } catch (error) {
+        throw error
+    }
+}
+
+const getResultById = async (id) => {
+    try {
+        const result = await GET_DB().collection(COLLECTION_NAME).aggregate([
+            {
+                $match: {
+                    _id: new ObjectId(id)
+                }
+            },
+            {
+                $lookup: {
+                    from: userModal.USER_COLLECTION_NAME,
+                    localField: 'userId',
+                    foreignField: '_id',
+                    as: 'user'
+                }
+            }, {
+                $lookup: {
+                    from: questionExamModel.COLLECTION_NAME,
+                    localField: 'answers._id',
+                    foreignField: '_id',
+                    as: 'questions'
+                }
+            }
+        ]).toArray()
+
+        return result[0]
+    } catch (error) {
+        throw error
+    }
+}
 
 
 
@@ -87,5 +148,7 @@ export const resultExamModel = {
     update,
     getAll,
     findByExamIdAddUserId,
-    findByUserId
+    findByUserId,
+    getResultByExamId,
+    getResultById
 }

@@ -59,7 +59,7 @@ export default function page() {
                             </TableCell>
                             <TableCell className="text-center align-middle space-x-2 w-3/12">
                                 <Button variant="warning" onClick={() => router.push(`Exam/UpdateExam?examId=${item._id}`)}>Update Detail</Button>
-                                <Button variant="success">View result</Button>
+                                <Button variant="success" onClick={() => router.push(`Exam/ViewResult?examId=${item._id}`)}>View result</Button>
                             </TableCell>
                         </TableRow>
                     ))}

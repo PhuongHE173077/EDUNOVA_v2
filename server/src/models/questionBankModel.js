@@ -1,9 +1,10 @@
+import { pickUser } from "~/utils/slugify"
 
 const { ObjectId } = require("mongodb")
 const { GET_DB } = require("~/config/mongodb")
 
 
-const Q_LESSON_COLLECTION_NAME = 'questionLessons'
+const COLLECTION_NAME = 'questionBanks'
 
 
 const INVALID_UPDATE_FILEDS = ['_id', 'email', 'username', 'createdAt']
@@ -11,7 +12,7 @@ const INVALID_UPDATE_FILEDS = ['_id', 'email', 'username', 'createdAt']
 
 const findOneById = async (id) => {
     try {
-        return await GET_DB().collection(Q_LESSON_COLLECTION_NAME).findOne({ _id: new ObjectId(id) })
+        return await GET_DB().collection(COLLECTION_NAME).findOne({ _id: new ObjectId(id) })
     } catch (error) {
         throw new Error(error)
     }
@@ -20,7 +21,15 @@ const findOneById = async (id) => {
 
 const createNew = async (data) => {
     try {
-        return await GET_DB().collection(Q_LESSON_COLLECTION_NAME).insertOne(data)
+        return await GET_DB().collection(COLLECTION_NAME).insertOne(data)
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
+const createMany = async (data) => {
+    try {
+        return await GET_DB().collection(COLLECTION_NAME).insertMany(data)
     } catch (error) {
         throw new Error(error)
     }
@@ -35,7 +44,7 @@ const update = async (id, data) => {
             }
         })
 
-        const result = await GET_DB().collection(Q_LESSON_COLLECTION_NAME).findOneAndUpdate(
+        const result = await GET_DB().collection(COLLECTION_NAME).findOneAndUpdate(
             { _id: new ObjectId(id) },
             { $set: data },
             { returnDocument: 'after' }
@@ -49,7 +58,7 @@ const update = async (id, data) => {
 
 const getAll = async () => {
     try {
-        const result = await GET_DB().collection(Q_LESSON_COLLECTION_NAME).find({}).toArray()
+        const result = await GET_DB().collection(COLLECTION_NAME).find({}).toArray()
 
         return result
 
@@ -58,21 +67,25 @@ const getAll = async () => {
     }
 }
 
-const getQuestionByLessonId = async (id) => {
+const getByUserId = async (userId) => {
     try {
-        const result = await GET_DB().collection(Q_LESSON_COLLECTION_NAME).find({ lessonId: new ObjectId(id) }).toArray()
+        const result = await GET_DB().collection(COLLECTION_NAME).find({ userId: new ObjectId(userId) }).toArray()
+
         return result
+
     } catch (error) {
         throw error
     }
 }
 
 
-export const questionLessonModel = {
-    Q_LESSON_COLLECTION_NAME,
+
+export const questionBankModel = {
+    COLLECTION_NAME,
     findOneById,
     createNew,
     update,
     getAll,
-    getQuestionByLessonId
+    createMany,
+    getByUserId
 }

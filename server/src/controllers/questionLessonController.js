@@ -1,4 +1,6 @@
 import { StatusCodes } from "http-status-codes"
+import { ObjectId } from "mongodb"
+import { questionLessonModel } from "~/models/questionLessonModel"
 import { questionLessonService } from "~/services/questionLessonService"
 
 const getQuestionByLessonId = async (req, res, next) => {
@@ -20,8 +22,28 @@ const getQuestionById = async (req, res, next) => {
     }
 }
 
+const createQuestion = async (req, res, next) => {
+    try {
+        const newData = {
+            lessonId: new ObjectId(req.body.lessonId),
+            urlFile: req.body.urlFile ? req.body.urlFile : '',
+            timeStart: new Date(req.body.timeStart),
+            timeEnd: new Date(req.body.timeEnd),
+            status: req.body.status,
+            type: req.body.type,
+            description: req.body.description,
+            title: req.body.title
+        }
+        const question = await questionLessonModel.createNew(newData)
+        res.status(StatusCodes.CREATED).json(question)
+    } catch (error) {
+        next(error)
+    }
+}
+
 
 export const questionLessonController = {
     getQuestionByLessonId,
-    getQuestionById
+    getQuestionById,
+    createQuestion
 }

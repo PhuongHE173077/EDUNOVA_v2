@@ -13,5 +13,6 @@ Router.route('/:id')
 
 Router.route('/')
     .get(authMiddlewares.isAuthorized, questionLessonController.getQuestionByLessonId)
+    .post(authMiddlewares.isAuthorized, questionLessonController.createQuestion)
 
 export const questionLessonRouter = Router

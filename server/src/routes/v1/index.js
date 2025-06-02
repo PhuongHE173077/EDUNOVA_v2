@@ -11,6 +11,7 @@ import { examRouter } from './examRouter'
 import { resultExamRouter } from './resultExamRouter'
 import { subjectRouter } from './subjectRouter'
 import { scheduleRouter } from './scheduleRouter'
+import { questionBankRouter } from './questionbank'
 
 
 const Router = express.Router()
@@ -30,6 +31,7 @@ Router.use('/exams', examRouter)
 Router.use('/result_exams', resultExamRouter)
 Router.use('/subjects', subjectRouter)
 Router.use('/schedules', scheduleRouter)
+Router.use('/question_banks', questionBankRouter)
 
 
 

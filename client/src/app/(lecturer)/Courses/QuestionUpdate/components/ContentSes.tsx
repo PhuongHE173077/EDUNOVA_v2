@@ -1,175 +1,76 @@
 'use client'
+
 import React, { useEffect, useState } from "react";
-import { Box, Container, Typography, Button, IconButton, Select, MenuItem, SelectChangeEvent, FormControl, InputLabel } from "@mui/material";
-import QuestionAnswerIcon from "@mui/icons-material/QuestionAnswer";
-import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import Swal from "sweetalert2";
-import { fetchLessonById } from "@/apis/lession.apis";
 import { useSearchParams } from "next/navigation";
+import { fetchLessonById } from "@/apis/lession.apis";
+
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
+import { Pencil, Trash2, RefreshCw } from "lucide-react";
+
+const ContentSes = ({ lesson, setLesson }: any) => {
+
+  const [statusFilter, setStatusFilter] = useState<string>("all");
 
 
 
-const ContentSes = () => {
-  const searchParams = useSearchParams();
-  const id = searchParams.get('id');
-  const [lesson, setLesson] = useState<any>(null);
-  useEffect(() => {
-    if (id) {
-      fetchLessonById(id).then((res) => {
-        setLesson(res.data);
-      });
-    }
-  }, [id]);
+  const filterQuestions = (questions: any[]) => {
+    if (statusFilter === "all") return questions;
+    return questions.filter(q => q.status?.toString() === statusFilter);
+  };
+
   return (
-    <Container sx={{ padding: "8px", maxWidth: "500px", backgroundColor: "#e8eaf6" }}>
-      <Box mb={2}>
-        <FormControl variant="standard" sx={{ m: 1, minWidth: 160 }}>
-          <InputLabel id="status-filter-label">Status Filter</InputLabel>
-          <Select
-            labelId="status-filter-label"
-            id="status-filter"
-            label="Status Filter"
-          >
-            <MenuItem value="">
-              <em>All</em>
-            </MenuItem>
-            <MenuItem value={0}>Not Started</MenuItem>
-            <MenuItem value={1}>In Progress</MenuItem>
-            <MenuItem value={2}>Finished</MenuItem>
-          </Select>
-        </FormControl>
-      </Box>
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          backgroundColor: "#f8f8f8",
-          padding: "10px",
-          borderRadius: "6px",
-          marginBottom: "6px",
-          cursor: "pointer",
-          "&:hover": {
-            backgroundColor: "#e0e0e0",
-          },
-        }}
-      >
-        <QuestionAnswerIcon sx={{ marginRight: "6px", color: "orange", fontSize: "1.5rem" }} />
-        <Box flex="1">
-          <Typography variant="body1" fontWeight="bold" sx={{ fontSize: "1rem" }}>
-            Question 1
-          </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ fontSize: "0.875rem" }}>
-            abc
-          </Typography>
-          <Typography
-            variant="caption"
-            sx={{
-              color: 'green',
-              fontWeight: "bold",
-              fontSize: "0.75rem",
-            }}
-          >
-            Not Started
-          </Typography>
-        </Box>
-        <Button
-          size="medium"
-          variant={"outlined"}
-          color={'secondary'}
+    <div className=" mx-auto p-4 bg-muted/40 rounded-xl shadow-sm">
+      <div className="mb-4 w-40">
+        <Label htmlFor="status-filter" className="text-sm font-medium text-muted-foreground">
+          Status Filter
+        </Label>
+        <Select value={statusFilter} onValueChange={setStatusFilter}>
+          <SelectTrigger id="status-filter" className="mt-1">
+            <SelectValue placeholder="All" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All</SelectItem>
+            <SelectItem value="0">Not Started</SelectItem>
+            <SelectItem value="1">In Progress</SelectItem>
+            <SelectItem value="2">Finished</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
 
-        >
-          Restart
-        </Button>
-        <IconButton >
-          <EditIcon fontSize="small" />
-        </IconButton>
-        <IconButton >
-          <DeleteIcon fontSize="small" />
-        </IconButton>
-      </Box>
-
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          backgroundColor: "#f0f8ff",
-          padding: "10px",
-          borderRadius: "6px",
-          marginBottom: "6px",
-          cursor: "pointer",
-          "&:hover": {
-            backgroundColor: "#e0e0e0",
-          },
-        }}
-      >
-        <AssignmentTurnedInIcon sx={{ marginRight: "6px", color: "purple", fontSize: "1.5rem" }} />
-        <Box flex="1">
-          <Typography variant="body1" fontWeight="bold" sx={{ fontSize: "1rem" }}>
-            Assignment 1
-          </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ fontSize: "0.875rem" }}>
-            abc
-          </Typography>
-          <Typography
-            variant="caption"
-            sx={{
-              color: "gray",
-              fontWeight: "bold",
-              fontSize: "0.75rem",
-            }}
-          >
-            Finish
-          </Typography>
-        </Box>
-        <Button
-          size="medium"
-          variant={"outlined"}
-          color={"secondary"}
-
-        >
-          Restart
-        </Button>
-        <IconButton >
-          <EditIcon fontSize="small" />
-        </IconButton>
-        <IconButton >
-          <DeleteIcon fontSize="small" />
-        </IconButton>
-      </Box>
-      {/* Modals */}
-      {/* <QuestionSlotUpdate
-          open={openQuestionModal}
-          question={selectedQuestion}
-          onClose={() => setOpenQuestionModal(false)}
-          onSave={(updatedQuestion) => {
-            setQuestionsslotStatus((prevQuestions) =>
-              prevQuestions.map((qs) =>
-                qs.QuestionID === updatedQuestion.QuestionID ? updatedQuestion : qs
-              )
-            );
-            setOpenQuestionModal(false);
-          }}
-
-        />
-      )}
-      {openAssignmentModal && selectedAssignment && (
-        <AssignmentSlotUpdateModal
-          open={openAssignmentModal}
-          assignment={selectedAssignment}
-          onClose={() => setOpenAssignmentModal(false)}
-          onSave={(updatedAssignment) => {
-            setAssignmentsslotStatus((prevAssignments) =>
-              prevAssignments.map((asm) =>
-                asm.AssignmentID === updatedAssignment.AssignmentID ? updatedAssignment : asm
-              )
-            );
-            setOpenAssignmentModal(false);
-          }}
-        />
-      )} */}
-    </Container>
+      {filterQuestions(lesson?.questions || []).map((item: any, index: number) => (
+        <Card key={index} className="mb-3 hover:bg-muted transition-colors cursor-pointer">
+          <CardContent className="flex items-start gap-4 py-4 px-5">
+            <div className="mt-1 text-orange-500">
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16h6M3 8h18M4 6h16M5 4h14" />
+              </svg>
+            </div>
+            <div className="flex-1">
+              <p className="text-base font-semibold text-foreground">{item.title}</p>
+              <p className="text-sm text-muted-foreground">{item.description}</p>
+              <span className="text-xs font-medium text-green-600">
+                {item.status === 0 ? "Not Started" : item.status === 1 ? "In Progress" : "Finished"}
+              </span>
+            </div>
+            <div className="flex gap-1 items-center">
+              <Button size="sm" variant="outline" className="text-xs px-2 py-1 h-auto">
+                <RefreshCw className="w-3 h-3 mr-1" />
+                Restart
+              </Button>
+              <Button size="icon" variant="ghost">
+                <Pencil className="w-4 h-4 text-blue-500" />
+              </Button>
+              <Button size="icon" variant="ghost">
+                <Trash2 className="w-4 h-4 text-red-500" />
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
   );
 };
 

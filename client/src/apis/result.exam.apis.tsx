@@ -11,3 +11,10 @@ export const updateRsExam = async (examId: any, data: any) => {
 export const fetchAFewRsExam = async () => {
     return await axiosCustomize.get('v1/result_exams/af')
 }
+
+export const fetchExamByExamId = async (examId: any) => {
+    return await axiosCustomize.get('v1/result_exams?examId=' + examId)
+}
+export const fetchExamById = async (id: any) => {
+    return await axiosCustomize.get('v1/result_exams/' + id)
+}

@@ -9,8 +9,11 @@ const Router = express.Router()
 Router.route('/')
     .post(authMiddlewares.isAuthorized, resultExamController.createNew)
     .put(authMiddlewares.isAuthorized, resultExamController.updateResult)
+    .get(authMiddlewares.isAuthorized, resultExamController.getResultByExamId)
 
 Router.route('/af')
     .get(authMiddlewares.isAuthorized, resultExamController.getAFew)
+Router.route('/:id')
+    .get(authMiddlewares.isAuthorized, resultExamController.getDetail)
 
 export const resultExamRouter = Router

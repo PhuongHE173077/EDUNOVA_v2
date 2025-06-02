@@ -1,6 +1,7 @@
 'use client'
 import { createNewExam } from '@/apis/exam.apis'
 import { uploadImageAPIs } from '@/apis/image.apis'
+import { createNewQuestionBank } from '@/apis/question.bank'
 import { UploadFileDialog } from '@/components/dialog/upload.file.xlsx'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
@@ -23,6 +24,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import { v4 as uuidv4 } from 'uuid'
 import * as XLSX from 'xlsx';
+import QuestionDialog from './components/QuestionBlank'
 export default function Page() {
     const [viewAnswer, setViewAnswer] = useState(true);
     const [viewDate, setViewDate] = useState(false);
@@ -33,6 +35,7 @@ export default function Page() {
     const fileQuestionRef = useRef<{ [key: string]: HTMLInputElement | null }>({});
     const questionRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
     const [file, setFile] = useState(null);
+    const [title, setTitle] = useState('');
 
     const handleFileChangeF = (e: any) => {
         setFile(e.target.files[0]);
@@ -85,6 +88,8 @@ export default function Page() {
     const searchParams = useSearchParams();
     const courseId = searchParams.get('courseId');
     const [open2, setOpen2] = useState(false);
+    const [open3, setOpen3] = useState(false);
+    const [open4, setOpen4] = useState(false);
 
     const router = useRouter();
 
@@ -211,6 +216,18 @@ export default function Page() {
     }
 
 
+    const saveQB = async () => {
+        const newData = {
+            title,
+            questions: questions
+        }
+
+        await createNewQuestionBank(newData).then((res) => {
+            toast.success('Success save question bank');
+
+        })
+    }
+
 
     const handleFileChange = async (e: any) => {
         const image = await uploadImage(e);
@@ -286,7 +303,7 @@ export default function Page() {
         const invalidQuestionIds = questions
             .filter((question) => {
                 const hasValidDescription = question.description.trim() !== '';
-                const allOptionsHaveContent = question.options.every(option => option.content.trim() !== '');
+                const allOptionsHaveContent = question.options.every(option => option.content !== '');
                 const hasAtLeastOneCorrect = question.options.some(option => option.isCorrect === true);
 
                 return !(hasValidDescription && allOptionsHaveContent && hasAtLeastOneCorrect);
@@ -311,229 +328,41 @@ export default function Page() {
 
 
     return (
-        <Dialog open={open} onOpenChange={setOpen}>
 
-            {/**Header */}
-            <div className=" border shadow-sm ">
-                <div className="flex justify-between p-3" >
-                    <div>Add Exam</div>
-                    <div className='flex gap-2'>
-                        <Button variant={'outline'} onClick={save}>Save</Button>
+        <div>
+            <Dialog open={open} onOpenChange={setOpen}>
 
-                        <Button onClick={handleCheckError}>Create</Button>
+                {/**Header */}
+                <div className=" border shadow-sm ">
+                    <div className="flex justify-between p-3" >
+                        <div></div>
+                        <div className='flex gap-2'>
+                            <Button
+                                className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold shadow-md px-6 py-2  transition-all duration-200"
 
-                    </div>
-                </div>
-            </div>
+                                variant={'outline'} onClick={() => setOpen3(true)}>Save to Question Bank</Button>
+                            <Button variant={'outline'} onClick={save}>Save</Button>
 
-            {/**Body */}
-            <div className="w-full flex gap-10" style={{ padding: "20px 20px 0px 20px" }}>
-
-                {/* Timer */}
-                <div className="hidden lg:block lg:w-1/5 md:block md:w-1/4">
-                    <div className="w-full border-2  p-5 rounded-lg" style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }}>
-                        <div className="">
-                            <FormLabel className="text-black !text-black font-semibold">Timer:</FormLabel>
-                            <Controller
-                                name="time"
-                                control={control}
-                                render={({ field }) => (
-                                    <>
-                                        <FormLabel className="text-black !text-black font-semibold">Timer:</FormLabel>
-                                        <Select onValueChange={field.onChange} value={field.value}>
-                                            <SelectTrigger className="w-full">
-                                                <SelectValue placeholder="Please select" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value="180">180 minutes</SelectItem>
-                                                <SelectItem value="120">120 minutes</SelectItem>
-                                                <SelectItem value="90">90 minutes</SelectItem>
-                                                <SelectItem value="60">60 minutes</SelectItem>
-                                                <SelectItem value="45">45 minutes</SelectItem>
-                                                <SelectItem value="30">30 minutes</SelectItem>
-                                                <SelectItem value="15">15 minutes</SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                    </>
-                                )}
-                            />
-                        </div>
-
-                    </div>
-                    <div className="text-center mt-5 ">
-                        <Button className='bg-[#1dd1a1] hover:bg-[#1dd1a1]/80 text-black' onClick={() => setOpen2(true)}>
-                            Add File (.xlsx)
-                        </Button>
-                    </div>
-                </div>
-
-                {/* Questions */}
-                <div className="w-full lg:w-4/5 flex flex-col gap-5 overflow-y-auto scrollbar-custom2" style={{ maxHeight: '77vh' }}>
-                    {questions.map((qs, index) => (
-                        <div
-                            className=" w-full border-2 rounded-lg"
-                            style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }}
-                            key={index}
-                            ref={(el) => (questionRefs.current[qs.id] = el)}
-                        >
-
-                            {/* Option type */}
-                            <div className="flex p-3 justify-between items-center">
-                                {/* Select option type */}
-                                <div className="flex  items-center">
-                                    {!isMobile ? <strong>Question </strong> : <strong>Q </strong>}
-                                    <strong className='ml-2 mr-2'>{index + 1}:</strong>
-                                    <Select
-                                        value={qs.type}
-                                        onValueChange={(value) => handleUpdateQuestion(qs.id, 'type', value, '')}
-                                    >
-                                        <SelectTrigger className="w-[180px]">
-                                            <SelectValue placeholder="Please select " />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value={TYPE_QUESTION_EXAM.MULTIPLE}>Multiple</SelectItem>
-                                            <SelectItem value={TYPE_QUESTION_EXAM.SINGLE}>Single</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                    {
-                                        error.includes(qs.id) && !isMobile && <span className='text-red-600'>* This question has no title or no options or no correct answer</span>
-                                    }
-                                </div>
-
-                                {/* Add or remove question */}
-                                <div className="flex gap-5">
-                                    {questions.length === 1 ?
-                                        <Tooltip title="Delete Question" >
-                                            <Trash2Icon size={20} className="cursor-pointer text-gray-500" />
-                                        </Tooltip>
-                                        : <Tooltip title="Delete Question" disableHoverListener={questions.length === 1} onClick={() => handleQuestion(qs.id, 'delete')} >
-                                            <Trash2Icon size={20} className="cursor-pointer text-black hover:text-black" />
-                                        </Tooltip>}
-
-
-                                    <Tooltip title="Add question" onClick={() => handleQuestion(qs.id, 'add')}>
-                                        <CirclePlus size={20} className="cursor-pointer text-black hover:text-black" />
-                                    </Tooltip>
-                                </div>
-                            </div>
-                            {
-                                error.includes(qs.id) && isMobile && <span className='text-red-600 px-3'>* This question has no title or no options or no correct answer</span>
-                            }
-
-                            {/* Question content */}
-                            <div style={{ padding: '10px 40px 40px 40px' }}>
-
-                                {/* Description and image */}
-                                <div className='flex gap-5 items-center'>
-                                    <Input placeholder='Question title'
-                                        className='w-full'
-                                        value={qs.description}
-                                        onChange={(e) => handleUpdateQuestion(qs.id, 'description', e.target.value, '1')} />
-
-                                    <Tooltip title="Upload Image">
-                                        <div className="" onClick={() => fileQuestionRef.current[qs.id]?.click()}>
-                                            <ImageIcon size={35} className="cursor-pointer text-gray-600 hover:text-black"
-
-                                            />
-                                            <Input type='file' ref={(el) => (fileQuestionRef.current[qs.id] = el)} onChange={(e) => handleImageInQuestion(qs.id, e)} className='hidden' />
-                                        </div>
-                                    </Tooltip>
-                                </div>
-                                {qs.image &&
-                                    <div className="flex justify-center my-2 relative group">
-                                        <img
-                                            src={qs.image}
-                                            style={{ maxHeight: '150px' }}
-                                            className="rounded object-cover"
-                                        />
-
-                                        <button
-                                            className="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-                                            onClick={() => handleUpdateQuestion(qs.id, 'image', '', '1')}
-                                        >
-                                            Xóa
-                                        </button>
-                                    </div>
-
-                                }
-
-
-                                {/* Answer Option */}
-                                <div className="my-5">
-                                    <div className="mb-2">Answer question:</div>
-                                    <div className="flex flex-col gap-2">
-                                        {qs.options.map((ans, index) => (
-                                            <div className="flex gap-2" key={index}>
-
-                                                <Input
-                                                    type={qs.type === TYPE_QUESTION_EXAM.MULTIPLE ? 'checkbox' : 'radio'}
-                                                    checked={ans.isCorrect ?? false} className='w-4'
-                                                    onChange={(e: any) => handleAnswer(qs.id, ans.id, 'answerCorrect', e.target.checked)} />
-
-                                                <Input
-                                                    placeholder={'Answer ' + (index + 1)}
-                                                    className='w-11/12' value={ans.content}
-                                                    onChange={(e) => handleUpdateQuestion(qs.id, 'answerContent', e.target.value, ans.id)} />
-                                                <Popover>
-                                                    <PopoverTrigger asChild>
-                                                        <Button variant="outline">
-                                                            <EllipsisVertical className="h-5 w-5" />
-                                                        </Button>
-                                                    </PopoverTrigger>
-                                                    <PopoverContent className="w-13" side='top' align="start">
-                                                        <div className="grid gap-4">
-
-                                                            <div className="grid gap-2">
-                                                                <Button variant={'destructive'} onClick={() => handleAnswer(qs.id, ans.id, 'delete', false)} disabled={qs.options.length === 1}>
-                                                                    Delete
-                                                                </Button>
-                                                                <Button variant={'outline'} onClick={() => handleAnswer(qs.id, ans.id, 'add', false)}>
-                                                                    Add
-                                                                </Button>
-                                                            </div>
-                                                        </div>
-                                                    </PopoverContent>
-                                                </Popover>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
+                            <Button onClick={handleCheckError}>Create</Button>
 
                         </div>
-                    ))}
+                    </div>
                 </div>
-            </div >
-            <DialogContent className="max-w-2xl bg-white">
-                <DialogHeader>
-                    <DialogTitle>Exam Settings</DialogTitle>
-                </DialogHeader>
-                <form onSubmit={handleSubmit(onSubmit)} >
-                    <div className='flex gap-5 items-center'>
-                        <div className="w-1/2">
 
-                            <div className="mb-2">
-                                <FormLabel className="text-black !text-black font-semibold">Title exam</FormLabel>
-                                <Input
-                                    type="text"
-                                    {...register("title", { required: "Title is required" })}
-                                    placeholder="Title exam"
-                                    className="w-full" />
-                                {errors.title && (
-                                    <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>
-                                )}
-                            </div>
+                {/**Body */}
+                <div className="w-full flex gap-10" style={{ padding: "20px 20px 0px 20px" }}>
 
-                            {/* Timer */}
-                            <div className="mb-2">
+                    {/* Timer */}
+                    <div className="hidden lg:block lg:w-1/5 md:block md:w-1/4">
+                        <div className="w-full border-2  p-5 rounded-lg" style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }}>
+                            <div className="">
                                 <FormLabel className="text-black !text-black font-semibold">Timer:</FormLabel>
                                 <Controller
-                                    control={control}
                                     name="time"
-                                    rules={{ required: 'Please select a time' }}
-                                    render={({ field, fieldState }) => (
+                                    control={control}
+                                    render={({ field }) => (
                                         <>
-                                            <FormLabel className="text-black font-semibold">Timer:</FormLabel>
+                                            <FormLabel className="text-black !text-black font-semibold">Timer:</FormLabel>
                                             <Select onValueChange={field.onChange} value={field.value}>
                                                 <SelectTrigger className="w-full">
                                                     <SelectValue placeholder="Please select" />
@@ -548,99 +377,322 @@ export default function Page() {
                                                     <SelectItem value="15">15 minutes</SelectItem>
                                                 </SelectContent>
                                             </Select>
-                                            {fieldState.error && (
-                                                <p className="text-red-500 text-sm mt-1">{fieldState.error.message}</p>
-                                            )}
                                         </>
                                     )}
-
                                 />
                             </div>
 
-                            {/* View Answer */}
-
-                            <div className="mb-2">
-                                <FormLabel className="text-black !text-black font-semibold">View Answer:</FormLabel>
-                                <Select
-                                    value={viewAnswer.toString()}
-                                    onValueChange={(e) => setViewAnswer(e === "true")}
-                                >
-                                    <SelectTrigger className="w-full">
-                                        <SelectValue placeholder="Please select" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="true">Yes</SelectItem>
-                                        <SelectItem value="false">No</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </div>
-
-                            {/* Set Working Date */}
-                            <div className="mb-2">
-                                <FormLabel className="text-black !text-black font-semibold">Do you want to set working date:</FormLabel>
-                                <Select
-                                    value={viewDate.toString()}
-                                    onValueChange={(e) => {
-                                        if (e === "false") {
-                                            setDate('')
-                                            setViewDate(false)
-                                        } else {
-                                            setViewDate(true)
-                                        }
-
-                                    }}
-                                >
-                                    <SelectTrigger className="w-full">
-                                        <SelectValue placeholder="Please select" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="true">Yes</SelectItem>
-                                        <SelectItem value="false">No</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                            {viewDate && <div className="mb-2">
-                                <FormLabel className="text-black !text-black font-semibold">Working Date:</FormLabel>
-                                <Input type={'date'} value={date} onChange={(e) => setDate(e.target.value)} />
-                            </div>}
                         </div>
-                        {
-                            imageCover ?
-                                <div className="w-1/2 relative group">
-                                    <img src={imageCover} alt="" className="h-3/4 object-cover rounded-lg" />
+                        <div className="text-center mt-5 ">
+                            <Button className='bg-[#1dd1a1] hover:bg-[#1dd1a1]/80 text-black mb-2' onClick={() => setOpen2(true)}>
+                                Add File (.xlsx)
+                            </Button>
 
-                                    <button
-                                        className="absolute top-2 right-2 bg-gray-500 text-white text-sm px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-                                        onClick={() => setImageCover('')}
+                            <Button
+                                className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold shadow-md px-6 py-2  transition-all duration-200"
+                                onClick={() => setOpen4(true)}
+                            >
+                                Question Bank
+                            </Button>
+
+
+                        </div>
+                    </div>
+
+                    {/* Questions */}
+                    <div className="w-full lg:w-4/5 flex flex-col gap-5 overflow-y-auto scrollbar-custom2" style={{ maxHeight: '77vh' }}>
+                        {questions.map((qs, index) => (
+                            <div
+                                className=" w-full border-2 rounded-lg"
+                                style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }}
+                                key={index}
+                                ref={(el) => (questionRefs.current[qs.id] = el)}
+                            >
+
+                                {/* Option type */}
+                                <div className="flex p-3 justify-between items-center">
+                                    {/* Select option type */}
+                                    <div className="flex  items-center">
+                                        {!isMobile ? <strong>Question </strong> : <strong>Q </strong>}
+                                        <strong className='ml-2 mr-2'>{index + 1}:</strong>
+                                        <Select
+                                            value={qs.type}
+                                            onValueChange={(value) => handleUpdateQuestion(qs.id, 'type', value, '')}
+                                        >
+                                            <SelectTrigger className="w-[180px]">
+                                                <SelectValue placeholder="Please select " />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value={TYPE_QUESTION_EXAM.MULTIPLE}>Multiple</SelectItem>
+                                                <SelectItem value={TYPE_QUESTION_EXAM.SINGLE}>Single</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                        {
+                                            error.includes(qs.id) && !isMobile && <span className='text-red-600'>* This question has no title or no options or no correct answer</span>
+                                        }
+                                    </div>
+
+                                    {/* Add or remove question */}
+                                    <div className="flex gap-5">
+                                        {questions.length === 1 ?
+                                            <Tooltip title="Delete Question" >
+                                                <Trash2Icon size={20} className="cursor-pointer text-gray-500" />
+                                            </Tooltip>
+                                            : <Tooltip title="Delete Question" disableHoverListener={questions.length === 1} onClick={() => handleQuestion(qs.id, 'delete')} >
+                                                <Trash2Icon size={20} className="cursor-pointer text-black hover:text-black" />
+                                            </Tooltip>}
+
+
+                                        <Tooltip title="Add question" onClick={() => handleQuestion(qs.id, 'add')}>
+                                            <CirclePlus size={20} className="cursor-pointer text-black hover:text-black" />
+                                        </Tooltip>
+                                    </div>
+                                </div>
+                                {
+                                    error.includes(qs.id) && isMobile && <span className='text-red-600 px-3'>* This question has no title or no options or no correct answer</span>
+                                }
+
+                                {/* Question content */}
+                                <div style={{ padding: '10px 40px 40px 40px' }}>
+
+                                    {/* Description and image */}
+                                    <div className='flex gap-5 items-center'>
+                                        <Input placeholder='Question title'
+                                            className='w-full'
+                                            value={qs.description}
+                                            onChange={(e) => handleUpdateQuestion(qs.id, 'description', e.target.value, '1')} />
+
+                                        <Tooltip title="Upload Image">
+                                            <div className="" onClick={() => fileQuestionRef.current[qs.id]?.click()}>
+                                                <ImageIcon size={35} className="cursor-pointer text-gray-600 hover:text-black"
+
+                                                />
+                                                <Input type='file' ref={(el) => (fileQuestionRef.current[qs.id] = el)} onChange={(e) => handleImageInQuestion(qs.id, e)} className='hidden' />
+                                            </div>
+                                        </Tooltip>
+                                    </div>
+                                    {qs.image &&
+                                        <div className="flex justify-center my-2 relative group">
+                                            <img
+                                                src={qs.image}
+                                                style={{ maxHeight: '150px' }}
+                                                className="rounded object-cover"
+                                            />
+
+                                            <button
+                                                className="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                                                onClick={() => handleUpdateQuestion(qs.id, 'image', '', '1')}
+                                            >
+                                                Xóa
+                                            </button>
+                                        </div>
+
+                                    }
+
+
+                                    {/* Answer Option */}
+                                    <div className="my-5">
+                                        <div className="mb-2">Answer question:</div>
+                                        <div className="flex flex-col gap-2">
+                                            {qs.options.map((ans, index) => (
+                                                <div className="flex gap-2" key={index}>
+
+                                                    <Input
+                                                        type={qs.type === TYPE_QUESTION_EXAM.MULTIPLE ? 'checkbox' : 'radio'}
+                                                        checked={ans.isCorrect ?? false} className='w-4'
+                                                        onChange={(e: any) => handleAnswer(qs.id, ans.id, 'answerCorrect', e.target.checked)} />
+
+                                                    <Input
+                                                        placeholder={'Answer ' + (index + 1)}
+                                                        className='w-11/12' value={ans.content}
+                                                        onChange={(e) => handleUpdateQuestion(qs.id, 'answerContent', e.target.value, ans.id)} />
+                                                    <Popover>
+                                                        <PopoverTrigger asChild>
+                                                            <Button variant="outline">
+                                                                <EllipsisVertical className="h-5 w-5" />
+                                                            </Button>
+                                                        </PopoverTrigger>
+                                                        <PopoverContent className="w-13" side='top' align="start">
+                                                            <div className="grid gap-4">
+
+                                                                <div className="grid gap-2">
+                                                                    <Button variant={'destructive'} onClick={() => handleAnswer(qs.id, ans.id, 'delete', false)} disabled={qs.options.length === 1}>
+                                                                        Delete
+                                                                    </Button>
+                                                                    <Button variant={'outline'} onClick={() => handleAnswer(qs.id, ans.id, 'add', false)}>
+                                                                        Add
+                                                                    </Button>
+                                                                </div>
+                                                            </div>
+                                                        </PopoverContent>
+                                                    </Popover>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        ))}
+                    </div>
+                </div >
+                <DialogContent className="max-w-2xl bg-white">
+                    <DialogHeader>
+                        <DialogTitle>Exam Settings</DialogTitle>
+                    </DialogHeader>
+                    <form onSubmit={handleSubmit(onSubmit)} >
+                        <div className='flex gap-5 items-center'>
+                            <div className="w-1/2">
+
+                                <div className="mb-2">
+                                    <FormLabel className="text-black !text-black font-semibold">Title exam</FormLabel>
+                                    <Input
+                                        type="text"
+                                        {...register("title", { required: "Title is required" })}
+                                        placeholder="Title exam"
+                                        className="w-full" />
+                                    {errors.title && (
+                                        <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>
+                                    )}
+                                </div>
+
+                                {/* Timer */}
+                                <div className="mb-2">
+                                    <FormLabel className="text-black !text-black font-semibold">Timer:</FormLabel>
+                                    <Controller
+                                        control={control}
+                                        name="time"
+                                        rules={{ required: 'Please select a time' }}
+                                        render={({ field, fieldState }) => (
+                                            <>
+                                                <FormLabel className="text-black font-semibold">Timer:</FormLabel>
+                                                <Select onValueChange={field.onChange} value={field.value}>
+                                                    <SelectTrigger className="w-full">
+                                                        <SelectValue placeholder="Please select" />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        <SelectItem value="180">180 minutes</SelectItem>
+                                                        <SelectItem value="120">120 minutes</SelectItem>
+                                                        <SelectItem value="90">90 minutes</SelectItem>
+                                                        <SelectItem value="60">60 minutes</SelectItem>
+                                                        <SelectItem value="45">45 minutes</SelectItem>
+                                                        <SelectItem value="30">30 minutes</SelectItem>
+                                                        <SelectItem value="15">15 minutes</SelectItem>
+                                                    </SelectContent>
+                                                </Select>
+                                                {fieldState.error && (
+                                                    <p className="text-red-500 text-sm mt-1">{fieldState.error.message}</p>
+                                                )}
+                                            </>
+                                        )}
+
+                                    />
+                                </div>
+
+                                {/* View Answer */}
+
+                                <div className="mb-2">
+                                    <FormLabel className="text-black !text-black font-semibold">View Answer:</FormLabel>
+                                    <Select
+                                        value={viewAnswer.toString()}
+                                        onValueChange={(e) => setViewAnswer(e === "true")}
                                     >
-                                        <Trash2 className="w-4 h-4" />
-                                    </button>
+                                        <SelectTrigger className="w-full">
+                                            <SelectValue placeholder="Please select" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="true">Yes</SelectItem>
+                                            <SelectItem value="false">No</SelectItem>
+                                        </SelectContent>
+                                    </Select>
                                 </div>
 
-                                : <div className="border-2 p-10 h-full w-1/2 rounded-lg flex items-center justify-center" onClick={handleIconClick}>
-                                    <Tooltip title="Upload Image">
-                                        <ImagePlus className="w-8 h-8 text-gray-500 cursor-pointer" />
-                                    </Tooltip>
+                                {/* Set Working Date */}
+                                <div className="mb-2">
+                                    <FormLabel className="text-black !text-black font-semibold">Do you want to set working date:</FormLabel>
+                                    <Select
+                                        value={viewDate.toString()}
+                                        onValueChange={(e) => {
+                                            if (e === "false") {
+                                                setDate('')
+                                                setViewDate(false)
+                                            } else {
+                                                setViewDate(true)
+                                            }
 
-                                    <Input type={'file'} ref={fileInputRef} className="hidden" onChange={handleFileChange} />
+                                        }}
+                                    >
+                                        <SelectTrigger className="w-full">
+                                            <SelectValue placeholder="Please select" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="true">Yes</SelectItem>
+                                            <SelectItem value="false">No</SelectItem>
+                                        </SelectContent>
+                                    </Select>
                                 </div>
-                        }
-                    </div>
-                    <div className='flex justify-end'>
-                        <Button type="submit">Save</Button>
-                    </div>
-                </form>
-            </DialogContent>
+                                {viewDate && <div className="mb-2">
+                                    <FormLabel className="text-black !text-black font-semibold">Working Date:</FormLabel>
+                                    <Input type={'date'} value={date} onChange={(e) => setDate(e.target.value)} />
+                                </div>}
+                            </div>
+                            {
+                                imageCover ?
+                                    <div className="w-1/2 relative group">
+                                        <img src={imageCover} alt="" className="h-3/4 object-cover rounded-lg" />
+
+                                        <button
+                                            className="absolute top-2 right-2 bg-gray-500 text-white text-sm px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                                            onClick={() => setImageCover('')}
+                                        >
+                                            <Trash2 className="w-4 h-4" />
+                                        </button>
+                                    </div>
+
+                                    : <div className="border-2 p-10 h-full w-1/2 rounded-lg flex items-center justify-center" onClick={handleIconClick}>
+                                        <Tooltip title="Upload Image">
+                                            <ImagePlus className="w-8 h-8 text-gray-500 cursor-pointer" />
+                                        </Tooltip>
+
+                                        <Input type={'file'} ref={fileInputRef} className="hidden" onChange={handleFileChange} />
+                                    </div>
+                            }
+                        </div>
+                        <div className='flex justify-end'>
+                            <Button type="submit">Save</Button>
+                        </div>
+                    </form>
+                </DialogContent>
 
 
-            <UploadFileDialog
-                open={open2}
-                setOpen={setOpen2}
-                handleChange={handleFileChangeF}
-                handleDownload={handleDownloadTemplate}
-                handleUpload={handleUpload}
-                required={'Question, Type, Answer(A,B,...), Answer correct'}
-            />
-        </Dialog >
+                <UploadFileDialog
+                    open={open2}
+                    setOpen={setOpen2}
+                    handleChange={handleFileChangeF}
+                    handleDownload={handleDownloadTemplate}
+                    handleUpload={handleUpload}
+                    required={'Question, Type, Answer(A,B,...), Answer correct'}
+                />
+
+                <Dialog open={open3} onOpenChange={setOpen3}>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Title save in question bank</DialogTitle>
+                        </DialogHeader>
+                        <div className="">
+                            <Input type='text' value={title} onChange={(e) => setTitle(e.target.value)} />
+                        </div>
+                        <div className='flex justify-end'>
+                            <Button type="submit" onClick={saveQB}>Save</Button>
+                        </div>
+
+
+                    </DialogContent>
+                </Dialog>
+
+
+            </Dialog >
+            <QuestionDialog open={open4} setOpen={setOpen4} setQs={setQuestions} />
+        </div>
     )
 }
