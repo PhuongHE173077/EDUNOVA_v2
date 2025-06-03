@@ -7,7 +7,6 @@ const getSubjects = async (semesterId, userId) => {
         // console.log("🚀 ~ getSubjects ~ subjects:", subjects)
         if (semesterId) {
             const course = await courseModel.getCourseBySemesterId(semesterId)
-            console.log("🚀 ~ getSubjects ~ course:", course)
             const uniqueSubjectIds = [...new Set(course.map(item => item.subjectId))];
             // console.log("🚀 ~ getSubjects ~ uniqueSubjectIds:", uniqueSubjectIds)
             const uniqueSubjectIdsStr = uniqueSubjectIds.map(id => id.toString());

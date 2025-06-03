@@ -7,6 +7,7 @@ import { Course } from "@/types";
 import { formatISO } from "date-fns";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import { subjectGradients } from "@/lib/constants";
+import { useRouter } from "next/navigation";
 interface Props {
   courses: Course[];
 }
@@ -30,6 +31,7 @@ export default function ScheduleCalendar({ courses }: Props) {
     },
   }));
 
+  const router = useRouter();
   return (
     <div className="p-4 flex-1 overflow-auto ">
       <FullCalendar
@@ -81,7 +83,7 @@ export default function ScheduleCalendar({ courses }: Props) {
                 h-full w-full overflow-hidden transition-all duration-200
                 ${gradient} hover:scale-[1.01] hover:brightness-110
               `}
-
+              onClick={() => router.push(`/Attendance?id=${arg.event.id}&courseId=${arg.event.id}`)}
               title={`${arg.event.title} - ${lecturer} - Phòng ${room}`}
             >
               <div className="font-bold text-sm leading-snug text-white">

@@ -6,19 +6,22 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { Users, BookOpen, CalendarCheck, Megaphone, TrendingUp, LogOut } from 'lucide-react'
+import { useAppSelector } from '@/lib/redux/store'
+import { selectedCurrentUser } from '@/lib/redux/user/user.slide'
 
 export default function TeacherOverview() {
+    const currentUser = useAppSelector(selectedCurrentUser)
     return (
         <div className="min-h-screen bg-gradient-to-br from-white to-gray-100 p-6">
             {/* Header */}
             <div className="flex items-center justify-between mb-8">
                 <div className="flex items-center gap-4">
                     <Avatar className="h-14 w-14 ring-2 ring-primary">
-                        <AvatarImage src="https://i.pravatar.cc/150?img=11" />
+                        <AvatarImage src={currentUser?.avatar} />
                         <AvatarFallback>GV</AvatarFallback>
                     </Avatar>
                     <div>
-                        <p className="text-xl font-bold text-gray-800">Chào mừng, Thầy/Cô</p>
+                        <p className="text-xl font-bold text-gray-800">Chào mừng, Cô {currentUser?.displayName}</p>
                         <p className="text-sm text-gray-500">Giáo viên môn Toán - Trường THPT Việt Đức</p>
                     </div>
                 </div>

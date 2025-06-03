@@ -96,6 +96,16 @@ export default function HeaderCourseDetail({ course }: { course: Course }) {
                     >
                         EXAM
                     </Button>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => router.push(`material?courseId=${course?._id}`)}
+                        size="medium"
+                        sx={{ whiteSpace: 'nowrap' }}
+                    >
+                        Tài liệu
+                    </Button>
+
                 </Box>
             </Collapse>
 

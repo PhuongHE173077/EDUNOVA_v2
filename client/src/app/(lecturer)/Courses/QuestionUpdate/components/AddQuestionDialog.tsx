@@ -19,6 +19,7 @@ export default function AddQuestionDialog({ open, setOpen, id, fetchData }: any)
     const handleAdd = async () => {
         if (!title || !description || !timeStart || !timeEnd) {
             alert("Vui lòng nhập đầy đủ thông tin")
+            return
         }
 
         const question = {
@@ -27,6 +28,7 @@ export default function AddQuestionDialog({ open, setOpen, id, fetchData }: any)
             timeStart,
             timeEnd,
             status: "pendding",
+            type: "question",
             lessonId: id
         }
 

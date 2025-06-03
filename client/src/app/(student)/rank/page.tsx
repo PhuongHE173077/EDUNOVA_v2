@@ -10,7 +10,7 @@ const dummyRankings: UserRank[] = [
   { _id: "u1", name: "Nguyễn Văn A", avatar: "https://i.pravatar.cc/150?u=1", score: 920, subject: "Toán cao cấp" },
   { _id: "u2", name: "Trần Thị B", avatar: "https://i.pravatar.cc/150?u=2", score: 870, subject: "Lập trình Web" },
   { _id: "u3", name: "Lê Văn C", avatar: "https://i.pravatar.cc/150?u=3", score: 850, subject: "Tiếng Anh chuyên ngành" },
-  { _id: "u4", name: "Phạm Thị D", avatar: "https://i.pravatar.cc/150?u=4", score: 820, subject: "Toán cao cấp" },
+  { _id: "u4", name: "Đỗ Đăng Phương", avatar: "https://res.cloudinary.com/dl3ucqngx/image/upload/v1741961877/hot-soup_rx8dt3.png", score: 820, subject: "Toán cao cấp" },
   { _id: "u5", name: "Vũ Hữu E", avatar: "https://i.pravatar.cc/150?u=5", score: 790, subject: "Lập trình Web" },
 ];
 

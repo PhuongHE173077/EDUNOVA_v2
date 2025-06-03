@@ -13,9 +13,8 @@ type Student = {
 };
 
 const initialStudents: Student[] = [
-    { id: 1, name: "Nguyễn Văn A", present: false },
-    { id: 2, name: "Trần Thị B", present: false },
-    { id: 3, name: "Lê Văn C", present: false },
+    { id: 1, name: "Đỗ Phương", present: false },
+    { id: 2, name: "Đỗ Đăng Phương", present: false },
 ];
 
 
@@ -34,7 +33,7 @@ export default function page() {
     };
 
     return (
-        <div className="max-w-2xl mx-auto mt-10 p-4">
+        <div className=" mx-auto mt-10 p-4">
             <Card className="shadow-xl rounded-2xl border border-gray-200">
                 <CardContent className="p-6">
                     <h2 className="text-2xl font-semibold text-gray-800 mb-4">

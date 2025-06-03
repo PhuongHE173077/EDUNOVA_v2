@@ -6,30 +6,61 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
+import { toast } from "react-toastify"
+import { createNewAssignment } from "@/apis/question.lesion.apis"
+import { uploadFileAPIs } from "@/apis/image.apis"
 
 export default function AddAssignmentDialog({ open, setOpen, id, fetchData }: any) {
     const [title, setTitle] = useState("")
     const [description, setDescription] = useState("")
     const [deadline, setDeadline] = useState("")
     const [file, setFile] = useState<File | null>(null)
+    const [fileUrl, setFileUrl] = useState("")
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
-            setFile(e.target.files[0])
+            const formData = new FormData()
+            formData.append("file", e.target?.files[0])
+            await toast.promise(
+                uploadFileAPIs(formData),
+                {
+                    pending: 'Loading',
+                    success: 'Success',
+                    error: 'Error',
+                }
+            ).then((res) => {
+                setFile(e.target.files[0])
+                setFileUrl(res.data)
+            })
+
         }
     }
 
-    const handleAdd = () => {
+    const handleAdd = async () => {
         const formData = new FormData()
-        formData.append("title", title)
-        formData.append("description", description)
-        formData.append("deadline", deadline)
-        if (file) formData.append("file", file)
 
-        console.log("Form Data:", { title, description, deadline, file })
 
-        // TODO: Gửi formData đến API xử lý upload
-        // fetch('/api/upload', { method: 'POST', body: formData })
+
+        await toast.promise(
+            uploadFileAPIs(formData),
+            {
+                pending: 'Loading',
+                success: 'Success',
+                error: 'Error',
+            }
+        ).then(async (res) => {
+            await createNewAssignment({
+                title,
+                description,
+                deadline,
+                file: res.data.url,
+                courseId: id
+            }).then(() => {
+                setOpen(false)
+                fetchData()
+            })
+        })
+
     }
 
     return (

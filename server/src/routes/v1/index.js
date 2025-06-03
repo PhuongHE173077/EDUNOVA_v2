@@ -12,6 +12,7 @@ import { resultExamRouter } from './resultExamRouter'
 import { subjectRouter } from './subjectRouter'
 import { scheduleRouter } from './scheduleRouter'
 import { questionBankRouter } from './questionbank'
+import { fileRouter } from './fileRouter'
 
 
 const Router = express.Router()
@@ -27,6 +28,7 @@ Router.use('/lessons', lessonRouter)
 Router.use('/question_lessons', questionLessonRouter)
 Router.use('/answer_lessons', answerLessonRouter)
 Router.use('/image', imageRouter)
+Router.use('/files', fileRouter)
 Router.use('/exams', examRouter)
 Router.use('/result_exams', resultExamRouter)
 Router.use('/subjects', subjectRouter)

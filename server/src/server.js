@@ -7,6 +7,7 @@ import { APIs_V1 } from './routes/v1'
 import { errorHandlingMiddleware } from './middlewares/erroHandlingMiddlewares'
 import { corsOptions } from './config/cors'
 import cookieParser from 'cookie-parser'
+import { googleDriveProvider } from './providers/GoogleDriveProvider'
 var cors = require('cors')
 
 const http = require('http')
@@ -31,6 +32,7 @@ const START_SERVER = () => {
   app.use(express.json())
 
   app.use('/api/v1', APIs_V1)
+
 
   //middleware erro (allways in last)
   app.use(errorHandlingMiddleware)
