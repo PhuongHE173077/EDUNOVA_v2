@@ -1,10 +1,11 @@
 import { questionLessonModel } from "./questionLessonModel"
+import { userModal } from "./userModal"
 
 const { ObjectId } = require("mongodb")
 const { GET_DB } = require("~/config/mongodb")
 
 
-const LESSON_COLLECTION_NAME = 'lessons'
+const COLLECTION_NAME = 'messages'
 
 
 const INVALID_UPDATE_FILEDS = ['_id', 'email', 'username', 'createdAt']
@@ -12,7 +13,7 @@ const INVALID_UPDATE_FILEDS = ['_id', 'email', 'username', 'createdAt']
 
 const findOneById = async (id) => {
     try {
-        return await GET_DB().collection(LESSON_COLLECTION_NAME).findOne({ _id: new ObjectId(id) })
+        return await GET_DB().collection(COLLECTION_NAME).findOne({ _id: new ObjectId(id) })
     } catch (error) {
         throw new Error(error)
     }
@@ -21,7 +22,7 @@ const findOneById = async (id) => {
 
 const createNew = async (data) => {
     try {
-        return await GET_DB().collection(LESSON_COLLECTION_NAME).insertOne(data)
+        return await GET_DB().collection(COLLECTION_NAME).insertOne(data)
     } catch (error) {
         throw new Error(error)
     }
@@ -36,7 +37,7 @@ const update = async (id, data) => {
             }
         })
 
-        const result = await GET_DB().collection(LESSON_COLLECTION_NAME).findOneAndUpdate(
+        const result = await GET_DB().collection(COLLECTION_NAME).findOneAndUpdate(
             { _id: new ObjectId(id) },
             { $set: data },
             { returnDocument: 'after' }
@@ -50,7 +51,7 @@ const update = async (id, data) => {
 
 const getAll = async () => {
     try {
-        const result = await GET_DB().collection(LESSON_COLLECTION_NAME).find({}).toArray()
+        const result = await GET_DB().collection(COLLECTION_NAME).find({}).toArray()
 
         return result
 
@@ -59,31 +60,41 @@ const getAll = async () => {
     }
 }
 
-const getLessonByCourseId = async (courseId) => {
+const getMessagesByConversationId = async (conversationId) => {
     try {
-        const result = await GET_DB().collection(LESSON_COLLECTION_NAME).aggregate([
-            { $match: { courseId: new ObjectId(courseId) } },
+        const result = await GET_DB().collection(COLLECTION_NAME).aggregate([
+            { $match: { conversationId: new ObjectId(conversationId) } },
             {
                 $lookup: {
-                    from: questionLessonModel.Q_LESSON_COLLECTION_NAME,
-                    localField: '_id',
-                    foreignField: 'lessonId',
-                    as: 'questions'
+                    from: userModal.USER_COLLECTION_NAME,
+                    localField: 'senderId',
+                    foreignField: '_id',
+                    as: 'sender'
                 }
             }
 
         ]).toArray()
-        return result
+
+
+
+        return result.map((message) => {
+            return {
+                ...message,
+                sender: message.sender[0]
+            }
+        })
     } catch (error) {
         throw error
     }
 }
 
-export const lessonModel = {
-    LESSON_COLLECTION_NAME,
+
+
+export const messageModel = {
+    COLLECTION_NAME,
     findOneById,
     createNew,
     update,
     getAll,
-    getLessonByCourseId
+    getMessagesByConversationId
 }

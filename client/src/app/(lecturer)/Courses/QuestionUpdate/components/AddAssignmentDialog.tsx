@@ -37,29 +37,25 @@ export default function AddAssignmentDialog({ open, setOpen, id, fetchData }: an
     }
 
     const handleAdd = async () => {
-        const formData = new FormData()
-
-
-
-        await toast.promise(
-            uploadFileAPIs(formData),
-            {
-                pending: 'Loading',
-                success: 'Success',
-                error: 'Error',
-            }
-        ).then(async (res) => {
-            await createNewAssignment({
-                title,
-                description,
-                deadline,
-                file: res.data.url,
-                courseId: id
-            }).then(() => {
-                setOpen(false)
-                fetchData()
-            })
+        if (!title || !description || !deadline || !fileUrl) {
+            alert("Vui lòng nhập đày đủ thông tin")
+            return
+        }
+        const assignment = {
+            title,
+            description,
+            timeStart: new Date(),
+            timeEnd: deadline,
+            urlFile: fileUrl,
+            status: "pendding",
+            type: "assignment",
+            lessonId: id
+        }
+        await createNewAssignment(assignment).then(() => {
+            fetchData(id)
+            setOpen(false)
         })
+
 
     }
 

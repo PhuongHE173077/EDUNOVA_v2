@@ -13,5 +13,5 @@ export const createNewQuestion = async (data: any) => {
 }
 
 export const createNewAssignment = async (data: any) => {
-    return await axiosCustomize.post(`v1/question_lessons/assignment`, data)
+    return await axiosCustomize.post(`v1/question_lessons`, data)
 }

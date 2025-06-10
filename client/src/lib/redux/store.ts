@@ -3,6 +3,7 @@ import { useDispatch, TypedUseSelectorHook, useSelector } from "react-redux";
 import authReducer from "@/lib/redux/user/user.slide";
 import storage from 'redux-persist/lib/storage'
 import { persistReducer } from 'redux-persist'
+import chatSlide from "./chat/chat.slide";
 const rootPersistConfig = {
   key: "root",
   storage: storage,
@@ -10,7 +11,8 @@ const rootPersistConfig = {
   blacklist: [],
 };
 const rootReducer = combineReducers({
-  user: authReducer
+  user: authReducer,
+  chat: chatSlide
 });
 
 const persistedReducer = persistReducer(rootPersistConfig, rootReducer)

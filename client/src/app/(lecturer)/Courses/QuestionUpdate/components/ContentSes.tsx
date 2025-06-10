@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
-import { Pencil, Trash2, RefreshCw } from "lucide-react";
+import { Pencil, Trash2, RefreshCw, FileQuestionIcon, NotebookIcon, NotebookTextIcon } from "lucide-react";
 
 const ContentSes = ({ lesson, setLesson }: any) => {
 
@@ -19,6 +19,12 @@ const ContentSes = ({ lesson, setLesson }: any) => {
   const filterQuestions = (questions: any[]) => {
     if (statusFilter === "all") return questions;
     return questions.filter(q => q.status?.toString() === statusFilter);
+  };
+
+  const isOverdue = (date: string) => {
+    const today = new Date();
+    const dueDate = new Date(date);
+    return today > dueDate;
   };
 
   return (
@@ -44,22 +50,33 @@ const ContentSes = ({ lesson, setLesson }: any) => {
         <Card key={index} className="mb-3 hover:bg-muted transition-colors cursor-pointer">
           <CardContent className="flex items-start gap-4 py-4 px-5">
             <div className="mt-1 text-orange-500">
-              <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16h6M3 8h18M4 6h16M5 4h14" />
-              </svg>
+              {item.type === 'question' ?
+                <FileQuestionIcon className="w-6 h-6" /> :
+
+                <NotebookTextIcon className="w-6 h-6" color="#8b5cf6" />}
             </div>
             <div className="flex-1">
               <p className="text-base font-semibold text-foreground">{item.title}</p>
               <p className="text-sm text-muted-foreground">{item.description}</p>
-              <span className="text-xs font-medium text-green-600">
-                {item.status === 0 ? "Not Started" : item.status === 1 ? "In Progress" : "Finished"}
-              </span>
             </div>
             <div className="flex gap-1 items-center">
-              <Button size="sm" variant="outline" className="text-xs px-2 py-1 h-auto">
-                <RefreshCw className="w-3 h-3 mr-1" />
-                Restart
-              </Button>
+              {
+                item.status === "pendding" ?
+                  <Button size="sm" variant="outline" className="text-xs px-2 py-1 h-auto">
+                    <RefreshCw className="w-3 h-3 mr-1" />
+                    Start
+                  </Button> :
+                  item.status === "doing" ?
+                    <Button size="sm" variant="outline" className="text-xs px-2 py-1 h-auto bg-red-300 hover:bg-red-400" >
+                      <RefreshCw className="w-3 h-3 mr-1" />
+                      Finish
+                    </Button> :
+                    <Button size="sm" variant="outline" className="text-xs px-2 py-1 h-auto">
+                      <RefreshCw className="w-3 h-3 mr-1" />
+                      Restart
+                    </Button>
+              }
+
               <Button size="icon" variant="ghost">
                 <Pencil className="w-4 h-4 text-blue-500" />
               </Button>

@@ -1,13 +1,13 @@
 
 
+import cookieParser from 'cookie-parser'
 import express from 'express'
+import { corsOptions } from './config/cors'
 import { env } from './config/environment'
 import { CONNECT_DB } from './config/mongodb'
-import { APIs_V1 } from './routes/v1'
 import { errorHandlingMiddleware } from './middlewares/erroHandlingMiddlewares'
-import { corsOptions } from './config/cors'
-import cookieParser from 'cookie-parser'
-import { googleDriveProvider } from './providers/GoogleDriveProvider'
+import { APIs_V1 } from './routes/v1'
+import { app, server } from './sockets/socket'
 var cors = require('cors')
 
 const http = require('http')
@@ -15,7 +15,7 @@ const socketIo = require('socket.io')
 
 
 const START_SERVER = () => {
-  const app = express()
+
 
   app.use((req, res, next) => {
     res.set('Cache-Control', ' no-store')
@@ -36,16 +36,6 @@ const START_SERVER = () => {
 
   //middleware erro (allways in last)
   app.use(errorHandlingMiddleware)
-
-  const server = http.createServer(app)
-
-  const io = socketIo(server, { cors: corsOptions })
-
-  io.on('connection', (socket) => {
-    socket.on('FE_INVITED_TO_BOARD', (invitation) => {
-      socket.broadcast.emit('BE_INVITED_TO_BOARD', invitation)
-    })
-  })
 
   server.listen(port, hostname, () => {
     // eslint-disable-next-line no-console

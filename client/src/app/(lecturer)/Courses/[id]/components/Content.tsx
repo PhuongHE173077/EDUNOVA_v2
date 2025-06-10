@@ -14,6 +14,7 @@ import {
     ListItemText,
     Typography,
 } from '@mui/material';
+import { NotebookTextIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import React, { useRef, useState } from 'react';
 
@@ -118,7 +119,7 @@ export default function ContentCourseDetail({ lesson }: { lesson: lesson[] }) {
                                     }}
                                 >
                                     <ListItemIcon sx={{ minWidth: '36px', mt: 0.5 }}>
-                                        <HelpOutlineIcon color="primary" />
+                                        {qs.type === 'question' ? <HelpOutlineIcon color="primary" /> : <NotebookTextIcon className='text-primary' />}
                                     </ListItemIcon>
                                     <ListItemText
                                         primary={`Q${qIndex + 1}: ${qs.title}`}
