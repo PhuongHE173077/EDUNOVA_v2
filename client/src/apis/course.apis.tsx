@@ -16,6 +16,10 @@ export const updateCourse = async (id: string, data: any) => {
     return await axiosCustomize.put(`v1/courses/${id}`, data);
 };
 
+// 
+
+// updateCourse(id: string, {studentIds:[]})
+
 export const deleteCourse = async (id: any) => {
     return await axiosCustomize.delete(`v1/courses/${id}`)
 }

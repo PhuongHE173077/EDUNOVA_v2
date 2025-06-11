@@ -48,17 +48,28 @@ const updateCourse = async (req, res, next) => {
     try {
         const courseId = req.params.id;
         const data = req.body;
+        let result
+        if (data.studentIds) {
+            const dataNew = data.studentIds.map((id) => {
+                return new ObjectId(id);
+            });
+            data.studentIds = dataNew;
 
-        // Chuyển các trường id sang ObjectId nếu tồn tại
-        if (data.lecturerId) data.lecturerId = new ObjectId(data.lecturerId);
-        if (data.subjectId) data.subjectId = new ObjectId(data.subjectId);
-        if (data.semesterId) data.semesterId = new ObjectId(data.semesterId);
+            result = await courseService.updateCourse(courseId, data);
+        } else {
+            if (data.lecturerId) data.lecturerId = new ObjectId(data.lecturerId);
+            if (data.subjectId) data.subjectId = new ObjectId(data.subjectId);
+            if (data.semesterId) data.semesterId = new ObjectId(data.semesterId);
 
-        // Nếu có ngày thì chuyển sang Date object
-        if (data.startDate) data.startDate = new Date(data.startDate);
-        if (data.endDate) data.endDate = new Date(data.endDate);
 
-        const result = await courseService.updateCourse(courseId, data);
+            if (data.startDate) data.startDate = new Date(data.startDate);
+            if (data.endDate) data.endDate = new Date(data.endDate);
+
+            result = await courseService.updateCourse(courseId, data);
+        }
+
+
+
 
         res.status(200).json(result);
     } catch (error) {
