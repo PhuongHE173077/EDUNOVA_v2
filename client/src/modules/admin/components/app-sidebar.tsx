@@ -74,12 +74,12 @@ const data = {
     navSecondary: [
         {
             title: "Feedback",
-            url: "#",
+            url: "/manage-feedbacks",
             icon: MessageSquareTextIcon,
         },
         {
             title: "Notifications",
-            url: "#",
+            url: "/manage-notifications",
             icon: Bell,
         },
 
