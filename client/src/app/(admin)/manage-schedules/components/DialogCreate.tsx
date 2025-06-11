@@ -12,6 +12,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { createSchedule } from "@/apis/schedule.apis";
+import { toast } from "react-toastify";
 
 const daysOfWeek = [
     { label: "Thứ 2", value: "monday" },
@@ -23,10 +24,11 @@ const daysOfWeek = [
     { label: "Chủ nhật", value: "sunday" },
 ];
 
-export default function ScheduleDialog({ open, setOpen, course }: any) {
+export default function ScheduleDialog({ open, setOpen, course, fetchData }: any) {
     const [startTime, setStartTime] = useState("");
     const [endTime, setEndTime] = useState("");
     const [selectedDays, setSelectedDays] = useState<string[]>([]);
+    const [room, setRoom] = useState<string>("");
 
     const handleToggleDay = (day: string) => {
         setSelectedDays((prev) =>
@@ -41,9 +43,17 @@ export default function ScheduleDialog({ open, setOpen, course }: any) {
             startTime,
             endTime,
             days: selectedDays,
-            courseId: course._id
+            courseId: course._id,
+            room
         };
-        await createSchedule(scheduleData);
+        await toast.promise(createSchedule(scheduleData), {
+            pending: "Đang tạo lịch học",
+            success: "Tạo lịch học thành công",
+            error: "Lỗi khi tạo lịch học"
+        }).then(() => {
+            fetchData();
+            setOpen(false);
+        });
     };
 
     return (
@@ -83,6 +93,11 @@ export default function ScheduleDialog({ open, setOpen, course }: any) {
                                 </div>
                             ))}
                         </div>
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium mb-1">Phòng học</label>
+                        <Input value={room} onChange={e => setRoom(e.target.value)} />
                     </div>
                 </div>
 

@@ -1,4 +1,8 @@
-//
+const dayjs = require('dayjs');
+const utc = require('dayjs/plugin/utc');
+const timezone = require('dayjs/plugin/timezone');
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 export const deleteFields = (object, fields) => {
     fields.forEach(field => {
@@ -55,3 +59,37 @@ export const generatePassword = () => {
 
     return password.split('').sort(() => Math.random() - 0.5).join('');
 };
+
+
+
+const weekdayMap = {
+    sunday: 0,
+    monday: 1,
+    tuesday: 2,
+    wednesday: 3,
+    thursday: 4,
+    friday: 5,
+    saturday: 6,
+};
+
+export function generateSlots(startDate, startTime, endTime, days, slotCount) {
+    const activeWeekdays = days.map((d) => weekdayMap[d.toLowerCase()]);
+    const results = [];
+
+    let current = dayjs(startDate).startOf('day');
+
+    while (results.length < slotCount) {
+        if (activeWeekdays.includes(current.day())) {
+            const start = current.hour(Number(startTime.split(':')[0])).minute(Number(startTime.split(':')[1])).second(0);
+            const end = current.hour(Number(endTime.split(':')[0])).minute(Number(endTime.split(':')[1])).second(0);
+
+            results.push({
+                start: start.toISOString(),
+                end: end.toISOString(),
+            });
+        }
+        current = current.add(1, 'day');
+    }
+
+    return results;
+}

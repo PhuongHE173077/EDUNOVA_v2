@@ -21,7 +21,15 @@ const findOneById = async (id) => {
 
 const createNew = async (data) => {
     try {
-        return await GET_DB().collection(COLLECTION_NAME).insertOne(validData)
+        return await GET_DB().collection(COLLECTION_NAME).insertOne(data)
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
+const createMany = async (data) => {
+    try {
+        return await GET_DB().collection(COLLECTION_NAME).insertMany(data)
     } catch (error) {
         throw new Error(error)
     }
@@ -93,5 +101,6 @@ export const scheduleModel = {
     update,
     getAll,
     getScheduleByLectureId,
-    getScheduleByCourseId
+    getScheduleByCourseId,
+    createMany
 }

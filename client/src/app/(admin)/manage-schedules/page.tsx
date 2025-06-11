@@ -44,15 +44,19 @@ export default function page() {
 
     useEffect(() => {
 
+        fetchData()
+
+    }, [currentSemester])
+
+    const fetchData = async () => {
         if (currentSemester) {
 
-            fetchCourseBySemesterId(currentSemester._id).then((res) => {
+            await fetchCourseBySemesterId(currentSemester._id).then((res) => {
                 setCourses(res.data)
 
             })
         }
-
-    }, [currentSemester])
+    }
 
     if (loading) return <div className='max-h-[70vh]'><Loading /></div>
 
@@ -124,7 +128,7 @@ export default function page() {
                     </TableBody>
                 </Table>
             </div>
-            <ScheduleDialog open={openDialogCreate} setOpen={setOpenDialogCreate} course={activeCourse} />
+            <ScheduleDialog open={openDialogCreate} setOpen={setOpenDialogCreate} course={activeCourse} fetchData={fetchData} />
         </div>
     )
 }
