@@ -10,7 +10,7 @@ import { User, Subject, Semesters, CourseFormData } from "@/types";
 interface Props {
   open: boolean;
   onClose: () => void;
-  initial?: any; // giữ any để tránh lỗi kiểu do initial là Course
+  initial?: any;
   onSubmit: (data: CourseFormData) => void;
   lecturers: User[];
   subjects: Subject[];
@@ -29,28 +29,19 @@ export default function CourseFormModal({
   const [subjectId, setSubjectId] = useState<string>("");
   const [lecturerId, setLecturerId] = useState<string>("");
   const [semesterId, setSemesterId] = useState<string>("");
-  const [room, setRoom] = useState("");
   const [start, setStart] = useState("");
-  const [end, setEnd] = useState("");
-  const [status, setStatus] = useState<string>("active");
 
   useEffect(() => {
     if (initial) {
       setSubjectId(initial.subject?._id || "");
       setLecturerId(initial.lecturer?._id || "");
       setSemesterId(initial.semester?._id || "");
-      setRoom(initial.room || "");
       setStart(initial.startDate ? initial.startDate.slice(0, 10) : "");
-      setEnd(initial.endDate ? initial.endDate.slice(0, 10) : "");
-      setStatus(initial.status || "active");
     } else {
       setSubjectId("");
       setLecturerId("");
       setSemesterId("");
-      setRoom("");
       setStart("");
-      setEnd("");
-      setStatus("active");
     }
   }, [initial]);
 
@@ -105,46 +96,33 @@ export default function CourseFormModal({
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Phòng học</label>
-            <Input value={room} onChange={e => setRoom(e.target.value)} />
-          </div>
-
-          <div className="flex gap-4">
-            <div className="flex-1">
-              <label className="block text-sm font-medium mb-1">Ngày bắt đầu</label>
-              <Input type="date" value={start} onChange={e => setStart(e.target.value)} />
-            </div>
-            <div className="flex-1">
-              <label className="block text-sm font-medium mb-1">Ngày kết thúc</label>
-              <Input type="date" value={end} onChange={e => setEnd(e.target.value)} />
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-1">Trạng thái</label>
-            <Select value={status} onValueChange={setStatus}>
-              <SelectTrigger>
-                <SelectValue placeholder="Chọn trạng thái" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="active">Hoạt động</SelectItem>
-                <SelectItem value="inactive">Tạm khoá</SelectItem>
-              </SelectContent>
-            </Select>
+            <label className="block text-sm font-medium mb-1">Ngày bắt đầu</label>
+            <Input type="date" value={start} onChange={e => setStart(e.target.value)} />
           </div>
 
           <div className="flex justify-end gap-2">
             <Button variant="ghost" onClick={onClose}>Huỷ</Button>
+            {/* Nút thêm học sinh - chỉ hiện khi edit (có initial) */}
+            {initial && (
+              <Button
+                variant="outline"
+                onClick={() => {
+                  // Chuyển sang trang thêm học sinh
+                  window.location.href = `/manage-courses/${initial._id}/add-students`;
+                  // Hoặc dùng router.push nếu dùng Next.js router
+                }}
+              >
+                Thêm học sinh
+              </Button>
+            )}
             <Button
               onClick={() => {
                 onSubmit({
                   subjectId,
                   lecturerId,
                   semesterId,
-                  room,
                   startDate: start,
-                  endDate: end,
-                  status,
+                  status: "inactive"
                 });
               }}
             >

@@ -2,6 +2,7 @@ import { StatusCodes } from "http-status-codes"
 import ms from "ms"
 import { userService } from "~/services/userService"
 import ApiError from "~/utils/ApiError"
+import { userModal } from "~/models/userModal"
 
 
 const createNew = async (req, res, next) => {
@@ -129,6 +130,15 @@ const getLecturers = async (req, res, next) => {
     next(error);
   }
 };
+const getStudents = async (req, res, next) => {
+  try {
+      const students = await userModal.getStudents(); // ← Sửa thành userModal
+      res.status(StatusCodes.OK).json(students);
+  } catch (error) {
+      next(error);
+  }
+};
+
 
 export const userController = {
   createNew,
@@ -139,5 +149,6 @@ export const userController = {
   update,
   getAllUser,
   deleteUser,
-  getLecturers
+  getLecturers,
+  getStudents
 }

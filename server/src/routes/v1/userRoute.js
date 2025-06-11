@@ -43,4 +43,6 @@ Router.route('/users/list')
   Router.route('/users/lecturers')
   .get(authMiddlewares.isAuthorized, userController.getLecturers);
 
+  Router.route('/students')
+  .get(authMiddlewares.isAuthorized, userController.getStudents);
 export const userRoutes = Router
