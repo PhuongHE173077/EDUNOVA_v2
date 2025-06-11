@@ -192,6 +192,7 @@
 .scrollbar-custom2::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+
 /* FullCalendar button style - hiện đại hoá */
 .fc-button {
   @apply rounded-md px-3 py-1 text-sm font-medium transition bg-white text-gray-700 border border-gray-300 hover:bg-gray-100 shadow-sm;
@@ -207,4 +208,46 @@
   border: none !important;
   border-radius: 0.75rem !important;
   padding: 0 !important;
+}
+
+@layer components {
+
+  /* Wrapper */
+
+
+  /* Toolbar chung */
+  .calendar-wrapper .fc-header-toolbar {
+    @apply flex items-center justify-between mb-4;
+  }
+
+  /* Nút điều hướng trái/phải */
+  .calendar-wrapper .fc-prev-button,
+  .calendar-wrapper .fc-next-button {
+    @apply bg-gray-700 text-white rounded-full hover:bg-gray-600 border-none shadow;
+  }
+
+  /* Nút hôm nay */
+  .calendar-wrapper .fc-today-button {
+    @apply bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-500 transition;
+  }
+
+  /* Nút chuyển chế độ (tháng / tuần / ngày) */
+  .calendar-wrapper .fc-button-group .fc-button {
+    @apply bg-gray-200 text-gray-700 px-4 py-2 rounded-md border border-gray-300 hover:bg-gray-300;
+  }
+
+  /* Nút đang active */
+  .calendar-wrapper .fc-button-group .fc-button.fc-button-active {
+    @apply bg-gray-800 text-white font-semibold;
+  }
+
+  /* Title giữa */
+  .calendar-wrapper .fc-toolbar-title {
+    @apply text-xl font-bold text-gray-800 dark:text-white text-center;
+  }
+
+  /* Cell hover */
+  .calendar-wrapper .fc-timegrid-slot:hover {
+    @apply bg-gray-100;
+  }
 }

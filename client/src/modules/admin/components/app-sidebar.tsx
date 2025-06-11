@@ -1,11 +1,15 @@
 "use client"
 
 import {
+    Bell,
     BookIcon,
+    BookMarkedIcon,
+    BookOpenCheckIcon,
     CalendarIcon,
     FolderIcon,
     HelpCircleIcon,
     LayoutDashboardIcon,
+    MessageSquareTextIcon,
     Receipt,
     SearchIcon,
     SettingsIcon,
@@ -57,27 +61,28 @@ const data = {
         {
             title: "Semesters",
             url: "/manage-semesters",
-            icon: Receipt,
+            icon: BookMarkedIcon,
+        },
+        {
+            title: "Subject",
+            url: "/manage-subjects",
+            icon: BookOpenCheckIcon,
         },
 
     ],
 
     navSecondary: [
         {
-            title: "Settings",
+            title: "Feedback",
             url: "#",
-            icon: SettingsIcon,
+            icon: MessageSquareTextIcon,
         },
         {
-            title: "Get Help",
+            title: "Notifications",
             url: "#",
-            icon: HelpCircleIcon,
+            icon: Bell,
         },
-        {
-            title: "Search",
-            url: "#",
-            icon: SearchIcon,
-        },
+
     ],
 
 }
