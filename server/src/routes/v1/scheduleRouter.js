@@ -8,5 +8,6 @@ const Router = express.Router()
 
 Router.route('/')
     .get(authMiddlewares.isAuthorized, scheduleController.getScheduleByUserId)
+    .post(authMiddlewares.isAdmin, scheduleController.createNew)
 
 export const scheduleRouter = Router

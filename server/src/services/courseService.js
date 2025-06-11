@@ -28,20 +28,20 @@ export const getCourseBySemesterIdAndSubjectId = async (semesterId, subjectId) =
 
 const updateCourse = async (courseId, data) => {
     try {
-      console.log("[Service] updateCourse - courseId:", courseId);
-      console.log("[Service] updateCourse - data:", data);
-  
-      const result = await courseModel.update(courseId, data);
-  
-      console.log("[Service] updateCourse - result:", result);
-  
-      return result;
+        console.log("[Service] updateCourse - courseId:", courseId);
+        console.log("[Service] updateCourse - data:", data);
+
+        const result = await courseModel.update(courseId, data);
+
+        console.log("[Service] updateCourse - result:", result);
+
+        return result;
     } catch (error) {
-      console.error("[Service] updateCourse - error:", error);
-      throw error;
+        console.error("[Service] updateCourse - error:", error);
+        throw error;
     }
-  };
-  
+};
+
 
 const createCourse = async (data) => {
     try {
@@ -69,6 +69,15 @@ const getAllCourses = async () => {
         throw error
     }
 }
+
+
+export const getCourseBySemesterId = async (semesterId) => {
+    try {
+        return await courseModel.getCourseBySemesterId(semesterId)
+    } catch (error) {
+        throw error
+    }
+}
 export const courseService = {
     getCourseByUserId,
     getCourseById,
@@ -76,5 +85,6 @@ export const courseService = {
     updateCourse,
     createCourse,
     deleteCourse,
-    getAllCourses
+    getAllCourses,
+    getCourseBySemesterId
 }

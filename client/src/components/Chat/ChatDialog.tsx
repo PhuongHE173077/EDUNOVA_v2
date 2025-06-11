@@ -52,13 +52,14 @@ export default function ChatDialog({ open, setOpen }: any) {
 
     const handleChatClick = (conversation: any) => {
         dispatch(activeConversation(conversation))
-        dispatch(fetchMessages(conversation._id))
+        dispatch(fetchMessages(conversation?._id))
     }
 
     const handSubmit = () => {
-        dispatch(createMessage({ cid: selectedUser._id, data: { text } }))
+        dispatch(createMessage({ cid: selectedUser?._id, data: { text } }))
         setText('')
     }
+    if (!currentUser) return null
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
@@ -103,12 +104,12 @@ export default function ChatDialog({ open, setOpen }: any) {
                                             <AvatarFallback>{conversation.name}</AvatarFallback>
                                         </Avatar> :
                                             <Avatar>
-                                                <AvatarImage src={conversation.members.find((member: any) => member._id !== currentUser._id).avatar} alt={conversation.members.find((member: any) => member._id !== currentUser._id).displayName} />
-                                                <AvatarFallback>{conversation.members.find((member: any) => member._id !== currentUser._id).displayName.charAt(0)}</AvatarFallback>
+                                                <AvatarImage src={conversation.members.find((member: any) => member?._id !== currentUser?._id).avatar} alt={conversation.members.find((member: any) => member._id !== currentUser._id).displayName} />
+                                                <AvatarFallback>{conversation.members.find((member: any) => member?._id !== currentUser?._id).displayName.charAt(0)}</AvatarFallback>
                                             </Avatar>
                                         }
                                         <div className="flex-1">
-                                            <p className="text-sm font-medium">{conversation.isGroup ? conversation.name : conversation.members.find((member: any) => member._id !== currentUser._id).displayName}</p>
+                                            <p className="text-sm font-medium">{conversation.isGroup ? conversation.name : conversation.members.find((member: any) => member?._id !== currentUser?._id).displayName}</p>
                                             <p className="text-xs text-gray-500 mt-1">{conversation.lastMessageId ? conversation.lastMessage.text : ''}</p>
                                         </div>
                                     </div>

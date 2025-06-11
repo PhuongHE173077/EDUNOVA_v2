@@ -35,3 +35,9 @@ export const USER_ROLE = {
   LECTURER: "lecturer",
   ADMIN: "admin",
 }
+
+export const COURSE_STATUS = {
+  ACTIVE: "active",
+  PENDING: "pending",
+  FINISHED: "finished"
+}

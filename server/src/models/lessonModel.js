@@ -27,6 +27,15 @@ const createNew = async (data) => {
     }
 }
 
+const createMany = async (data) => {
+    try {
+        return await GET_DB().collection(LESSON_COLLECTION_NAME).insertMany(data)
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
+
 
 const update = async (id, data) => {
     try {
@@ -85,5 +94,7 @@ export const lessonModel = {
     createNew,
     update,
     getAll,
-    getLessonByCourseId
+    getLessonByCourseId,
+    createMany
+
 }
