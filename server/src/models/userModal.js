@@ -141,6 +141,19 @@ const getLecturers = async () => {
     throw error;
   }
 };
+const getStudents = async () => {
+  try {
+      const result = await GET_DB().collection(USER_COLLECTION_NAME)
+          .find({ 
+              role: "student",
+              isActive: true 
+          })
+          .toArray();
+      return result;
+  } catch (error) {
+      throw new Error(error);
+  }
+};
 export const userModal = {
   USER_COLLECTION_NAME,
   USER_COLLECTION_SCHEMA,
@@ -150,5 +163,6 @@ export const userModal = {
   updateUser,
   getAllUser,
   deleteUser,
-  getLecturers
+  getLecturers,
+  getStudents
 }

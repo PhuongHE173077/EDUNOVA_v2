@@ -1,3 +1,4 @@
+// apis/course.apis.ts
 import axiosCustomize from "@/lib/axios.customize"
 
 export const fetchCourses = async () => {
@@ -16,10 +17,6 @@ export const updateCourse = async (id: string, data: any) => {
     return await axiosCustomize.put(`v1/courses/${id}`, data);
 };
 
-// 
-
-// updateCourse(id: string, {studentIds:[]})
-
 export const deleteCourse = async (id: any) => {
     return await axiosCustomize.delete(`v1/courses/${id}`)
 }
@@ -28,7 +25,12 @@ export const createCourse = async (data: any) => {
     return await axiosCustomize.post('v1/courses', data)
 }
 
-
 export const fetchCourseBySemesterId = async (semesterId: any) => {
     return await axiosCustomize.get(`v1/courses?semesterId=${semesterId}`)
 }
+
+// apis/course.apis.ts - Thêm function này
+export const fetchAllStudents = async () => {
+    return await axiosCustomize.get('v1/users/students');
+}
+
