@@ -55,33 +55,32 @@ const deleteSemester = async (req, res, next) => {
 }
 const getAllSemesters = async (req, res, next) => {
     try {
-      const semesters = await semesterService.getAllSemesters();
-      console.log("🔥 Semesters từ DB:", semesters); // 🧪 Xem trong terminal
-  
-      res.status(200).json(semesters);
+        const semesters = await semesterService.getAllSemesters();
+
+        res.status(200).json(semesters);
     } catch (error) {
-      next(error);
+        next(error);
     }
-  };
-  
-  const updateSemester = async (req, res, next) => {
+};
+
+const updateSemester = async (req, res, next) => {
     try {
-      const { id } = req.params;
-      const data = req.body;
-  
-      const newData = {
-        ...data,
-        startDate: new Date(data.startDate),
-        endDate: new Date(data.endDate)
-      };
-  
-      const result = await semesterService.updateSemester(id, newData);
-      res.status(StatusCodes.OK).json(result);
+        const { id } = req.params;
+        const data = req.body;
+
+        const newData = {
+            ...data,
+            startDate: new Date(data.startDate),
+            endDate: new Date(data.endDate)
+        };
+
+        const result = await semesterService.updateSemester(id, newData);
+        res.status(StatusCodes.OK).json(result);
     } catch (error) {
-      next(error);
+        next(error);
     }
-  };
-  
+};
+
 export const semesterController = {
     getSemesterByUserId,
     getCurrentSemester,
