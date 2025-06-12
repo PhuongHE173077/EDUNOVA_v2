@@ -38,7 +38,6 @@ Router.use('/schedules', scheduleRouter)
 Router.use('/question_banks', questionBankRouter)
 Router.use('/conversations', conversationRouter)
 Router.use('/messages', messageRouter)
-Router.use('/users', userRoutes);
 
 
 

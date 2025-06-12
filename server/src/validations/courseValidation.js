@@ -11,7 +11,7 @@ const create = async (req, res, next) => {
     subjectId: Joi.string().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE).required(),
     semesterId: Joi.string().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE).required(),
     startDate: Joi.date().required(),
-    endDate: Joi.date(),
+    endDate: Joi.date().required(),
     status: Joi.string().valid('active', 'inactive').optional()
   });
   try {
