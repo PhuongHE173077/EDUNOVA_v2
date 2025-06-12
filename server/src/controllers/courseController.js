@@ -94,9 +94,10 @@ const createCourse = async (req, res, next) => {
             studentIds: [],
             subjectId: new ObjectId(req.body.subjectId),
             startDate: new Date(req.body.startDate),
-            endDate: null, // ← SỬA Ở ĐÂY: Truyền null thay vì new Date(req.body.endDate)
+            endDate: new Date(req.body.endDate),
             status: COURSE_STATUS.PENDING
         }
+
         const result = await courseService.createCourse(data)
 
         const newLesson = Subjects.curriculums.map(item => ({

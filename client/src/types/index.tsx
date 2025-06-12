@@ -22,10 +22,10 @@ export interface CourseFormData {
     lecturerId: string;
     semesterId: string;
     startDate: string;
-    endDate?: string; // Thêm dấu ? để không bắt buộc
-    status: string;
-  }
-  
+    endDate: string;
+    room?: string;
+    status?: string;
+}
 
 export interface User {
     _id: string;
