@@ -2,17 +2,17 @@ const { google } = require("googleapis")
 
 const SCOPES = ['https://www.googleapis.com/auth/drive'];
 
-const fs = require('fs');
-import apikeys from "../../google_apikey.json"
 import streamifier from "streamifier";
+import { env } from "~/config/environment";
 
 
 // Function to authorize and get access to Google Drive API
 async function authorize() {
+    const serviceAccount = JSON.parse(env.GOOGLE_SERVICE_ACCOUNT);
     const auth = new google.auth.JWT(
-        apikeys.client_email,
+        serviceAccount.client_email,
         null,
-        apikeys.private_key,
+        serviceAccount.private_key,
         SCOPES
     );
 
