@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import { BookOpenIcon, BuildingIcon, CheckCircleIcon, ClockIcon, VideoIcon } from "lucide-react";
 interface Props {
   courses: Course[];
+  attends: any;
 }
 
 const getGradient = (subjectId: string, isActive: boolean) => {
@@ -18,7 +19,7 @@ const getGradient = (subjectId: string, isActive: boolean) => {
   return `bg-gradient-to-br from-indigo-500 to-pink-500 "}`;
 };
 
-export default function ScheduleCalendar({ courses }: Props) {
+export default function ScheduleCalendar({ courses, attends }: Props) {
   const events = courses.map((course: any) => ({
     id: course._id,
     title: `${course.course.subject.name}`,
@@ -29,6 +30,9 @@ export default function ScheduleCalendar({ courses }: Props) {
       status: course?.status,
       subjectId: course.course.subject?.id,
       lecturer: course?.course?.lecturer?.displayName,
+      course: course.courseId,
+      courseName: course.course.id,
+      attended: attends?.some((attend: any) => attend.scheduleId === course._id) || false,
     },
   }));
 
@@ -61,7 +65,7 @@ export default function ScheduleCalendar({ courses }: Props) {
           events={events}
 
           eventContent={(arg) => {
-            const { status, room, subjectId, lecturer } = arg.event.extendedProps;
+            const { status, room, subjectId, lecturer, course, courseName, attended } = arg.event.extendedProps;
             const start = new Date(arg.event.start!);
             const end = new Date(arg.event.end!);
             const isActive = status === "active";
@@ -70,52 +74,59 @@ export default function ScheduleCalendar({ courses }: Props) {
             if (viewType === "dayGridMonth") {
               return (
                 <div
-                  className={`rounded-lg px-2 w-full py-1 text-white text-xs ${gradient} hover:brightness-110`}
+                  className={`relative rounded-lg px-2 w-full py-1 text-white text-xs ${gradient} hover:brightness-110 flex items-center`}
                   title={`${arg.event.title} - ${lecturer} - Phòng ${room}`}
                 >
-                  <div className="font-semibold text-[12px] truncate">{arg.event.title}</div>
+                  {attended && (
+                    <div className="h-5 w-1 rounded bg-green-500 mr-2 absolute left-0 top-1" />
+                  )}
+                  <div className="font-semibold text-[12px] truncate ml-3">{arg.event.title}</div>
                 </div>
               );
             }
 
             return (
               <div
-                className="rounded-xl border border-green-400 bg-white px-3 py-2 shadow-md transition-all hover:scale-[1.01] hover:brightness-105 cursor-pointer"
+                className="relative rounded-xl border border-green-400 bg-white px-3 py-2 shadow-md transition-all hover:scale-[1.01] hover:brightness-105 cursor-pointer flex"
                 onClick={() =>
-                  router.push(`/Attendance?id=${arg.event.id}&courseId=${arg.event.id}`)
+                  router.push(`/Attendance?id=${arg.event.id}&courseId=${course}`)
                 }
                 title={`${arg.event.title} - ${lecturer} - Phòng ${room}`}
               >
-                {/* Dòng đầu: Mã môn học + icon */}
-                <div className="flex items-center justify-between">
-                  <span className="text-blue-600 font-semibold text-sm">{arg.event.title}</span>
-                  <div className="flex items-center space-x-1">
-                    {/* <VideoIcon className="w-4 h-4 text-green-500" />
-                  <CheckCircleIcon className="w-4 h-4 text-green-500" /> */}
+                {attended && (
+                  <div className="h-8 w-1 rounded bg-green-500 mr-2 absolute left-0 top-3" />
+                )}
+                <div className="flex-1 ml-3">
+                  {/* Dòng đầu: Mã môn học + icon */}
+                  <div className="flex items-center justify-between">
+                    <span className="text-blue-600 font-semibold text-sm">{arg.event.title}</span>
+                    <div className="flex items-center space-x-1">
+                      {/* <VideoIcon className="w-4 h-4 text-green-500" />
+                    <CheckCircleIcon className="w-4 h-4 text-green-500" /> */}
+                    </div>
+                  </div>
+
+                  {/* Dòng thời gian */}
+                  <div className="flex items-center text-gray-500 text-xs mt-1">
+                    <ClockIcon className="w-4 h-4 mr-1" />
+                    {start.getHours().toString().padStart(2, '0')}:
+                    {start.getMinutes().toString().padStart(2, '0')} -
+                    {end.getHours().toString().padStart(2, '0')}:
+                    {end.getMinutes().toString().padStart(2, '0')}
+                  </div>
+
+                  {/* Dòng phòng học */}
+                  <div className="flex items-center text-gray-400 text-xs mt-0.5">
+                    <BuildingIcon className="w-4 h-4 mr-1" />
+                    {courseName}
+                  </div>
+
+                  {/* Icon mở rộng (như hình có cuốn sách) */}
+                  <div className="flex justify-end mt-1">
+                    <BookOpenIcon className="w-4 h-4 text-blue-400" />
                   </div>
                 </div>
-
-                {/* Dòng thời gian */}
-                <div className="flex items-center text-gray-500 text-xs mt-1">
-                  <ClockIcon className="w-4 h-4 mr-1" />
-                  {start.getHours().toString().padStart(2, '0')}:
-                  {start.getMinutes().toString().padStart(2, '0')} -
-                  {end.getHours().toString().padStart(2, '0')}:
-                  {end.getMinutes().toString().padStart(2, '0')}
-                </div>
-
-                {/* Dòng phòng học */}
-                <div className="flex items-center text-gray-400 text-xs mt-0.5">
-                  <BuildingIcon className="w-4 h-4 mr-1" />
-                  {room}
-                </div>
-
-                {/* Icon mở rộng (như hình có cuốn sách) */}
-                <div className="flex justify-end mt-1">
-                  <BookOpenIcon className="w-4 h-4 text-blue-400" />
-                </div>
               </div>
-
             );
           }}
         /></div>

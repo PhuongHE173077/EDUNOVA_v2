@@ -1,6 +1,6 @@
 export interface Semesters {
-    _id: String,
-    name: String,
+    _id: string,
+    name: string,
     startDate: Date,
     endDate: Date
 }

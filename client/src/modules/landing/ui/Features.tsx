@@ -18,7 +18,7 @@ const items = [
     title: 'Bảng điều khiển',
     description:
       'Có những chức năng phân tích đữ liệu 1 cách hiệu quả .',
-    imageLight: `url("${process.env.TEMPLATE_IMAGE_URL || 'https://mui.com'}/static/images/templates/templates-images/dash-light.png")`,
+    imageLight: `url("https://res.cloudinary.com/dl3ucqngx/image/upload/v1752543262/1c37d360-5cf8-4b8e-b491-1c6ada03207c.png")`,
     imageDark: `url("${process.env.TEMPLATE_IMAGE_URL || 'https://mui.com'}/static/images/templates/templates-images/dash-dark.png")`,
   },
   {
@@ -101,8 +101,9 @@ export function MobileLayout({
         <Box
           sx={(theme) => ({
             mb: 2,
-            backgroundSize: 'cover',
+            backgroundSize: 'contain', // đổi từ 'cover' sang 'contain'
             backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
             minHeight: 280,
             backgroundImage: 'var(--items-imageLight)',
             ...theme.applyStyles('dark', {
@@ -248,7 +249,9 @@ export default function Features() {
                 m: 'auto',
                 width: 420,
                 height: 500,
-                backgroundSize: 'contain',
+                backgroundSize: 'contain', // đổi từ 'cover' sang 'contain'
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
                 backgroundImage: 'var(--items-imageLight)',
                 ...theme.applyStyles('dark', {
                   backgroundImage: 'var(--items-imageDark)',

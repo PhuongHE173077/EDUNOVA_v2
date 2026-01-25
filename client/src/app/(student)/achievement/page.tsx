@@ -14,36 +14,26 @@ import { useRouter } from 'next/navigation';
 
 const courses2 = [
   {
-    name: 'Experiential Entrepreneurship 1 (EXE101)',
-    code: 'IB1802-LOG',
-    dates: '09/01/2025 - 27/03/2025',
+    name: 'Tiếng anh 10',
+    code: 'toan10',
+    dates: '01/07/2025 - 1/09/2025',
     grades: [
       {
-        category: 'Assignment', items: [
-          { name: 'Assignment 1', weight: '5.0%', value: '8.9' },
-          { name: 'Assignment 2', weight: '5.0%', value: '8.3' },
-          { name: 'Assignment 3', weight: '5.0%', value: '8.1' },
+        category: 'Điểm 15p', items: [
+          { name: 'Điểm 1', weight: '5.0%', value: '8.9' },
+          { name: 'Điểm 2', weight: '5.0%', value: '8.3' },
+          { name: 'Điểm 3', weight: '5.0%', value: '8.1' },
         ]
       },
       {
-        category: 'Progress Test', items: [
-          { name: 'Progress Test 1', weight: '7.5%', value: '8.3' },
-          { name: 'Progress Test 2', weight: '7.5%', value: '9.0' },
+        category: 'Kiểm tra 1 tiết ', items: [
+          { name: 'Kiểm tra 1', weight: '7.5%', value: '8.3' },
+          { name: 'Kiểm tra 2', weight: '7.5%', value: '9.0' },
         ]
       },
       {
-        category: 'Project', items: [
-          { name: 'Final Project', weight: '20.0%', value: '8.5' },
-        ]
-      },
-      {
-        category: 'Practical Exam', items: [
-          { name: 'Lab Test', weight: '20.0%', value: '9.0' },
-        ]
-      },
-      {
-        category: 'Final Exam', items: [
-          { name: 'Theory Final', weight: '30.0%', value: '8.0' },
+        category: 'Kiểm tra cuối kỳ', items: [
+          { name: 'Kiểm tra cuối kỳ', weight: '20.0%', value: '8.5' },
         ]
       },
     ],
@@ -51,9 +41,9 @@ const courses2 = [
     status: 'PASSED'
   },
   {
-    name: 'Philosophy of Marxism – Leninism (MLN111)',
-    code: 'GD1719-AD',
-    dates: '07/01/2025 - 21/02/2025',
+    name: 'Tiếng Anh 11',
+    code: 'Kiểm tra cuối kỳ',
+    dates: '01/07/2025 - 1/09/2025',
     grades: [],
     average: '',
     status: ''
@@ -61,7 +51,7 @@ const courses2 = [
 ];
 
 export default function CourseGradesPage() {
-  const [selectedCourse, setSelectedCourse] = useState(null);
+  const [selectedCourse, setSelectedCourse] = useState<any>(null);
   const [semesters, setSemesters] = useState<Semesters[]>([])
   const [currentSemester, setCurrentSemester] = useState<Semesters>()
   const [courses, setCourses] = useState<Course[]>([])
@@ -144,7 +134,7 @@ export default function CourseGradesPage() {
           <CardContent>
             <ScrollArea className="h-[calc(100vh-280px)] pr-2">
               <ul className="space-y-2">
-                {courses2.map((course, index) => (
+                {courses2.map((course: any, index) => (
                   <li key={index}>
                     <button
                       onClick={() => setSelectedCourse(course)}
@@ -180,8 +170,8 @@ export default function CourseGradesPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {selectedCourse.grades.map((group, i) =>
-                      group.items.map((item, j) => (
+                    {selectedCourse.grades.map((group: any, i: number) =>
+                      group.items.map((item: any, j: number) => (
                         <tr key={`${i}-${j}`} className="border-t border-gray-100 hover:bg-gray-50">
                           <td className="p-3">{j === 0 ? group.category : ''}</td>
                           <td className="p-3">{item.name}</td>
@@ -192,13 +182,13 @@ export default function CourseGradesPage() {
                     )}
                     <tr className="bg-green-50 border-t font-semibold text-green-700">
                       <td colSpan={4} className="p-3 text-right">
-                        COURSE AVERAGE: {selectedCourse.average} – STATUS: {selectedCourse.status}
+                        Điểm trung bình : {selectedCourse.average}
                       </td>
                     </tr>
                   </tbody>
                 </table>
               ) : (
-                <p className="text-gray-500 italic text-sm mt-4">No grade data available for this course.</p>
+                <p className="text-gray-500 italic text-sm mt-4">Không cơ sở dữ liệu</p>
               )}
             </CardContent>
           </Card>

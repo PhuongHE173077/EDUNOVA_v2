@@ -1,13 +1,16 @@
+import { pickUser } from "~/utils/slugify"
+import { questionLessonModel } from "./questionLessonModel"
 import { userModal } from "./userModal"
+import { messageModel } from "./messageModel"
 
 const { ObjectId } = require("mongodb")
 const { GET_DB } = require("~/config/mongodb")
 
 
-const COLLECTION_NAME = 'schedules'
+const COLLECTION_NAME = 'attends'
 
 
-const INVALID_UPDATE_FILEDS = ['_id', 'createdAt']
+const INVALID_UPDATE_FILEDS = ['_id', 'email', 'username', 'createdAt']
 
 
 const findOneById = async (id) => {
@@ -22,14 +25,6 @@ const findOneById = async (id) => {
 const createNew = async (data) => {
     try {
         return await GET_DB().collection(COLLECTION_NAME).insertOne(data)
-    } catch (error) {
-        throw new Error(error)
-    }
-}
-
-const createMany = async (data) => {
-    try {
-        return await GET_DB().collection(COLLECTION_NAME).insertMany(data)
     } catch (error) {
         throw new Error(error)
     }
@@ -67,50 +62,27 @@ const getAll = async () => {
     }
 }
 
-const getScheduleByLectureId = async (userId) => {
+const findOne = async (query) => {
     try {
-        const result = await GET_DB().collection(COLLECTION_NAME).find({ lectureId: new ObjectId(userId) }).toArray()
+        return await GET_DB().collection(COLLECTION_NAME).findOne(query)
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+const getAnswerByScheduleId = async (scheduleId) => {
+    try {
+        const result = await GET_DB().collection(COLLECTION_NAME).findOne({ scheduleId: new ObjectId(scheduleId) })
         return result
     } catch (error) {
-        throw error
+        throw new Error(error)
     }
 }
 
-const getScheduleByCourseId = async (courseIds) => {
-    try {
-        const result = await GET_DB().collection(COLLECTION_NAME).aggregate([
-            { $match: { courseId: { $in: courseIds } } },
-            {
-                $lookup: {
-                    from: userModal.USER_COLLECTION_NAME,
-                    localField: 'lectureId',
-                    foreignField: '_id',
-                    as: 'lecture'
-                }
-            },
-        ]).toArray()
-        return result
-    } catch (error) {
-        throw error
-    }
-}
-
-const deleteByCourseId = async (courseId) => {
-    try {
-        const result = await GET_DB().collection(COLLECTION_NAME).deleteMany({ courseId: new ObjectId(courseId) })
-        return result
-    } catch (error) {
-        throw error
-    }
-}
-export const scheduleModel = {
-    COLLECTION_NAME,
+export const attendModel = {
     findOneById,
     createNew,
     update,
     getAll,
-    getScheduleByLectureId,
-    getScheduleByCourseId,
-    createMany,
-    deleteByCourseId
+    findOne,
+    getAnswerByScheduleId
 }

@@ -7,3 +7,7 @@ export const fetchSchedule = async () => {
 export const createSchedule = async (data: any) => {
     return await axiosCustomize.post('v1/schedules', data)
 }
+
+export const fetchScheduleById = async (id: string) => {
+    return await axiosCustomize.get(`v1/schedules/${id}`)
+}

@@ -15,6 +15,7 @@ import { questionBankRouter } from './questionbank'
 import { fileRouter } from './fileRouter'
 import { conversationRouter } from './conversationRouter'
 import { messageRouter } from './messageRouter'
+import { attendRouter } from './attendRouter'
 
 
 const Router = express.Router()
@@ -38,6 +39,7 @@ Router.use('/schedules', scheduleRouter)
 Router.use('/question_banks', questionBankRouter)
 Router.use('/conversations', conversationRouter)
 Router.use('/messages', messageRouter)
+Router.use('/attends', attendRouter)
 
 
 

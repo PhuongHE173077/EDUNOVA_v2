@@ -1,7 +1,19 @@
+'use client';
 import { Box, Typography } from "@mui/material";
 import { Colors } from "@/lib/colors";
+import { useEffect, useState } from "react";
+import { fetchSchedule } from "@/apis/schedule.apis";
+import dayjs from "dayjs";
+import "dayjs/locale/vi";
 
 export const HomepageContent = () => {
+  const [schedules, setSchedules] = useState([]);
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    fetchSchedule().then((res) => {
+      setSchedules(res.data.filter((item: any) => item.start > new Date().toISOString()));
+    })
+  }, [])
   return (
     <Box
       sx={{
@@ -29,7 +41,7 @@ export const HomepageContent = () => {
         <Typography
           sx={{ fontSize: 18, fontWeight: 600, fontFamily: "inherit" }}
         >
-          Week's schedule
+          Lịch học kế tiếp
         </Typography>
         <Box
           sx={{
@@ -40,80 +52,43 @@ export const HomepageContent = () => {
             alignItems: "center",
           }}
         >
-          <Box display="flex" alignItems="center" gap={2}>
-            <Box
-              component="img"
-              src={'/images/learning-to-learn.png'}
-              alt=""
-              style={{ width: "150px" }}
+          {schedules.sort((a: any, b: any) => new Date(a.start).getTime() - new Date(b.start).getTime()).slice(0, 3).map((schedule: any, index: number) => (
 
-            />
-            <Box >
-              <Typography sx={{ fontSize: 16, fontWeight: 550 }}>Math 02</Typography>
+            <Box display="flex" key={index} alignItems="center" gap={2}>
               <Box
-                sx={{
-                  marginTop: 4,
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 1,
-                }}
-              >
-                <Typography>Meeting Room</Typography>
-                <Typography
-                  sx={{ display: "flex", gap: 1, color: "gray", fontSize: 14 }}
+                component="img"
+                src={'/images/learning-to-learn.png'}
+                alt=""
+                style={{ width: "150px" }}
+
+              />
+              <Box >
+                <Typography sx={{ fontSize: 16, fontWeight: 550 }}>{schedule.course?.subject?.name}</Typography>
+                <Box
+                  sx={{
+                    marginTop: 4,
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 1,
+                  }}
                 >
-                  2025/04/06
-                </Typography>
-                <Typography sx={{ color: "gray", fontSize: 14 }}>10:00 - 12:00</Typography>
+                  {/* <Typography>Meeting Room</Typography> */}
+                  <Typography
+                    sx={{ display: "flex", gap: 1, color: "gray", fontSize: 14 }}
+                  >
+                    {(() => {
+                      const str = dayjs(schedule.start).locale('vi').format('dddd, DD/MM/YYYY');
+                      return str.charAt(0).toUpperCase() + str.slice(1);
+                    })()}
+                  </Typography>
+                  <Typography sx={{ color: "gray", fontSize: 14 }}>{dayjs(schedule.start).format('HH:mm')}- {dayjs(schedule.end).format('HH:mm')}</Typography>
+                </Box>
               </Box>
             </Box>
-          </Box>
+          ))}
 
-          <Box display="flex" alignItems="center" gap={2}>
-            <img src={'/images/learning-to-learn.png'} alt="" width="150px" />
-            <Box>
-              <Typography sx={{ fontSize: 16, fontWeight: 550 }}>Math 02</Typography>
-              <Box
-                sx={{
-                  marginTop: 4,
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 1,
-                }}
-              >
-                <Typography>Meeting Room</Typography>
-                <Typography
-                  sx={{ display: "flex", gap: 1, color: "gray", fontSize: 14 }}
-                >
-                  2025/04/06
-                </Typography>
-                <Typography sx={{ color: "gray", fontSize: 14 }}>10:00 - 12:00</Typography>
-              </Box>
-            </Box>
-          </Box>
 
-          <Box display="flex" alignItems="center" gap={2}>
-            <img src={'/images/learning-to-learn.png'} alt="" width="150px" />
-            <Box>
-              <Typography sx={{ fontSize: 16, fontWeight: 550 }}>Math 02</Typography>
-              <Box
-                sx={{
-                  marginTop: 4,
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 1,
-                }}
-              >
-                <Typography>Meeting Room</Typography>
-                <Typography
-                  sx={{ display: "flex", gap: 1, color: "gray", fontSize: 14 }}
-                >
-                  2025/04/06
-                </Typography>
-                <Typography sx={{ color: "gray", fontSize: 14 }}>10:00 - 12:00</Typography>
-              </Box>
-            </Box>
-          </Box>
+
         </Box>
 
         <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
@@ -151,7 +126,7 @@ export const HomepageContent = () => {
         <Typography
           sx={{ fontSize: 18, fontWeight: 600, fontFamily: "inherit" }}
         >
-          Upcoming Assignments
+          Bài tập gần đây
         </Typography>
 
         <Box sx={{ margin: 2 }}>

@@ -168,7 +168,7 @@ export default function Page() {
             if (type === 'description') {
                 updatedQuestions[index].description = value;
             } else if (type === 'answerContent') {
-                const answer = updatedQuestions[index].options.find((a: any) => a.id === aid);
+                const answer: any = updatedQuestions[index].options.find((a: any) => a.id === aid);
                 answer.content = value;
             } else if (type === 'type') {
                 if (value === TYPE_QUESTION_EXAM.SINGLE) {
@@ -196,7 +196,7 @@ export default function Page() {
                 updatedQuestions[index].options = updatedQuestions[index].options.filter((a: any) => a.id !== id);
             }
             else if (type === 'answerCorrect') {
-                const answer = updatedQuestions[index].options.find((a: any) => a.id === id);
+                const answer: any = updatedQuestions[index].options.find((a: any) => a.id === id);
                 if (updatedQuestions[index].type === TYPE_QUESTION_EXAM.SINGLE) {
                     updatedQuestions[index].options.forEach((opt: any) => {
                         opt.isCorrect = opt.id === id ? value : false;
@@ -406,7 +406,7 @@ export default function Page() {
                                 className=" w-full border-2 rounded-lg"
                                 style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }}
                                 key={index}
-                                ref={(el) => (questionRefs.current[qs.id] = el)}
+                                ref={(el) => { questionRefs.current[qs.id] = el }}
                             >
 
                                 {/* Option type */}
@@ -467,7 +467,7 @@ export default function Page() {
                                                 <ImageIcon size={35} className="cursor-pointer text-gray-600 hover:text-black"
 
                                                 />
-                                                <Input type='file' ref={(el) => (fileQuestionRef.current[qs.id] = el)} onChange={(e) => handleImageInQuestion(qs.id, e)} className='hidden' />
+                                                <Input type='file' ref={(el) => { fileQuestionRef.current[qs.id] = el }} onChange={(e) => handleImageInQuestion(qs.id, e)} className='hidden' />
                                             </div>
                                         </Tooltip>
                                     </div>

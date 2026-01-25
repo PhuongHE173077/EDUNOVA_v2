@@ -160,7 +160,7 @@ export default function page() {
                             </div>
                             <div className="flex items-center gap-5 w-full ">
                                 <FormLabel className="text-black !text-black font-semibold">Timer:</FormLabel>
-                                <Select value={time} onValueChange={(e: any) => setTime(e)}>
+                                <Select value={time + ''} onValueChange={(e: any) => setTime(e)}>
                                     <SelectTrigger className="w-full">
                                         <SelectValue placeholder="Please select" />
                                     </SelectTrigger>
@@ -209,7 +209,7 @@ export default function page() {
                     {exam.questions.map((question: any, index: number) => (
                         <div className=" w-full border-2 rounded-lg"
                             style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }}
-                            ref={(el) => (questionRefs.current[index] = el)}
+                            ref={(el) => { questionRefs.current[index] = el }}
                             key={index}
                         >
                             <div className="flex p-3 justify-between items-center">

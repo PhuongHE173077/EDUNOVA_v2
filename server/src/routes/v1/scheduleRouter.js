@@ -10,4 +10,8 @@ Router.route('/')
     .get(authMiddlewares.isAuthorized, scheduleController.getScheduleByUserId)
     .post(authMiddlewares.isAdmin, scheduleController.createNew)
 
+Router.route('/:id')
+    .get(authMiddlewares.isAuthorized, scheduleController.getScheduleById)
+
+
 export const scheduleRouter = Router

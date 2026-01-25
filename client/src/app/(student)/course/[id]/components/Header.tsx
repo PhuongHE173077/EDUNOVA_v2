@@ -35,11 +35,11 @@ export default function HeaderCourseDetail({ course }: { course: Course }) {
             <Breadcrumbs aria-label="breadcrumb" sx={{ mb: 2 }}>
                 <Link href="/student" color="inherit" underline="hover" display="flex" alignItems="center">
                     <HomeIcon fontSize="small" sx={{ mr: 0.5 }} />
-                    Home
+                    Trang chủ
                 </Link>
                 <Link href="/course" color="inherit" underline="hover" display="flex" alignItems="center">
                     <Typography color="text.secondary" display="flex" alignItems="center">
-                        Course
+                        Khóa học
                     </Typography>
                 </Link>
 
@@ -60,11 +60,11 @@ export default function HeaderCourseDetail({ course }: { course: Course }) {
                         // onChange={handleSlotChange}
                         defaultValue=""
                     >
-                        <MenuItem value="">Select Slot</MenuItem>
+                        <MenuItem value="">Tất cả  </MenuItem>
 
-                        <MenuItem key={`slt-1`} value={1}>
-                            Slot 1
-                        </MenuItem>
+                        {[...Array(10)].map((_, index) => <MenuItem key={index} value={1}>
+                            Tiết  {index + 1}
+                        </MenuItem>)}
 
                     </Select>
 
@@ -79,7 +79,7 @@ export default function HeaderCourseDetail({ course }: { course: Course }) {
 
 
                         <MenuItem value="index">
-                            12
+                            20
 
 
                         </MenuItem>
@@ -94,7 +94,7 @@ export default function HeaderCourseDetail({ course }: { course: Course }) {
                         size="medium"
                         sx={{ whiteSpace: 'nowrap' }}
                     >
-                        EXAM
+                        Kiểm tra
                     </Button>
                     <Button
                         variant="contained"
@@ -126,7 +126,7 @@ export default function HeaderCourseDetail({ course }: { course: Course }) {
                     marginTop: '8px',
                 }}
             >
-                {isVisible ? 'Hide Options' : 'Show Options'}
+                {isVisible ? 'Ẩn lựa trọn ' : 'Hiện lựa chọn'}
             </Button>
 
             {/* Teacher Information */}

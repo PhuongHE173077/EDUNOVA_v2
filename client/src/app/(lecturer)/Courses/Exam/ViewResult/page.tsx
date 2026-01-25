@@ -45,7 +45,7 @@ export default function StudentScoreTable() {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {data.map((student, index) => (
+                            {data.map((student: any, index) => (
                                 <TableRow key={index}>
                                     <TableCell>{index + 1}</TableCell>
                                     <TableCell>{student.user.displayName}</TableCell>

@@ -38,8 +38,8 @@ export default function TeacherOverview() {
                         <Users className="h-5 w-5 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">3</div>
-                        <p className="text-xs text-muted-foreground">Lớp 10A1, 11B2, 12C3</p>
+                        <div className="text-2xl font-bold">2</div>
+                        <p className="text-xs text-muted-foreground">Lớp tienganh10-04, tienganh11-04</p>
                     </CardContent>
                 </Card>
 
@@ -49,7 +49,7 @@ export default function TeacherOverview() {
                         <BookOpen className="h-5 w-5 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">12</div>
+                        <div className="text-2xl font-bold">4</div>
                         <p className="text-xs text-muted-foreground">Đã lên kế hoạch</p>
                     </CardContent>
                 </Card>
@@ -60,7 +60,7 @@ export default function TeacherOverview() {
                         <CalendarCheck className="h-5 w-5 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">5</div>
+                        <div className="text-2xl font-bold">4</div>
                         <p className="text-xs text-muted-foreground">Ca dạy tuần này</p>
                     </CardContent>
                 </Card>

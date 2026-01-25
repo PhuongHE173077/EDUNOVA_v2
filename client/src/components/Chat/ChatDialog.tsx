@@ -40,11 +40,7 @@ export default function ChatDialog({ open, setOpen }: any) {
 
     }, []);
 
-    useEffect(() => {
-        if (bottomRef.current) {
-            bottomRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
-    }, [messages]);
+    // Đã dùng flex-col-reverse và reverse() để luôn show tin nhắn cuối cùng, không cần scroll thủ công
 
     const timeAgo = (time: any) => {
         return formatDistanceToNow(new Date(time), { addSuffix: true, locale: vi })
@@ -153,19 +149,37 @@ export default function ChatDialog({ open, setOpen }: any) {
                                         <p className="text-xs text-gray-500">{selectedUser.isGroup ? `${selectedUser.members.length + selectedUser.owners.length} thành viên ` : 'truy cập 15 phút trước'}</p>
                                     </div>
                                 </div>
-                                <div className="flex-1 overflow-auto p-4 space-y-4 bg-gray-50">
-                                    {messages?.map((message: any, i: number) => (
-                                        <div className="bg-white p-3 rounded shadow text-sm" key={i}>
-                                            <p className="font-semibold text-teal-600">{message?.sender?.displayName}</p>
-                                            <p className="mt-1">{message?.text}</p>
-                                        </div>
-                                    ))}
-                                    <div ref={bottomRef} />
+                                <div className="flex-1 overflow-auto p-4 bg-gray-50 flex flex-col-reverse gap-2">
+                                    {messages && messages.length > 0 && messages.slice().reverse().map((message: any, i: number) => {
+                                        const isMine = message?.sender?._id === currentUser?._id;
+                                        return (
+                                            <div
+                                                key={i}
+                                                className={`max-w-[70%] p-3 rounded shadow text-sm ${isMine ? 'ml-auto bg-teal-100 border border-teal-200' : 'mr-auto bg-white border border-gray-200'} flex flex-col ${isMine ? 'items-end' : 'items-start'}`}
+                                            >
+                                                <div className="flex items-center gap-2 mb-1">
+                                                    {!isMine && (
+                                                        <Avatar className="w-6 h-6">
+                                                            <AvatarImage src={message?.sender?.avatar} alt={message?.sender?.displayName} />
+                                                            <AvatarFallback>{message?.sender?.displayName?.charAt(0)}</AvatarFallback>
+                                                        </Avatar>
+                                                    )}
+                                                    <span className={`font-semibold text-xs ${isMine ? 'text-teal-700' : 'text-gray-700'}`}>{message?.sender?.displayName}</span>
+                                                </div>
+                                                <p className="mt-1 text-sm break-words w-full">{message?.text}</p>
+                                            </div>
+                                        );
+                                    })}
                                 </div>
                                 <div className="p-3 border-t bg-white flex items-center gap-3">
-
-                                    <input className="flex-1 border rounded px-3 py-2 text-sm" placeholder="Nhập tin nhắn..." value={text} onChange={(e) => setText(e.target.value)} />
-                                    <Button size="sm" onClick={() => handSubmit()}>Gửi</Button>
+                                    <input
+                                        className="flex-1 border rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-400"
+                                        placeholder="Nhập tin nhắn..."
+                                        value={text}
+                                        onChange={(e) => setText(e.target.value)}
+                                        onKeyDown={e => { if (e.key === 'Enter') handSubmit(); }}
+                                    />
+                                    <Button size="sm" onClick={() => handSubmit()} disabled={!text.trim()} className="bg-teal-500 hover:bg-teal-600 text-white">Gửi</Button>
                                 </div>
                             </>}
                     </div>

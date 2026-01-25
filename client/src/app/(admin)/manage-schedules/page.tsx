@@ -65,8 +65,8 @@ export default function page() {
         <div className='p-7'>
             <div className="w-40">
                 <FormLabel className='mb-2 !text-black'>Semester: </FormLabel>
-                <Select
-                    value={currentSemester?._id}
+                {currentSemester && <Select
+                    value={currentSemester._id}
                     onValueChange={(value) => {
                         const selected = semesters.find((sem) => sem._id === value)
                         if (selected) setCurrentSemester(selected)
@@ -82,7 +82,7 @@ export default function page() {
                             </SelectItem>
                         ))}
                     </SelectContent>
-                </Select>
+                </Select>}
             </div>
             <div className="rounded-2xl border shadow-md p-4 bg-white dark:bg-gray-950 mt-4">
                 <h2 className="text-xl font-bold mb-4">Danh sách lớp học</h2>

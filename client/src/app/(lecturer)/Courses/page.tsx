@@ -5,6 +5,8 @@ import { fetchSubjects } from '@/apis/subject.apis'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Loading } from '@/components/ui/loading'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { useAppSelector } from '@/lib/redux/store'
+import { selectedCurrentUser } from '@/lib/redux/user/user.slide'
 import { Course, Semesters, Subject } from '@/types'
 import { FormLabel } from '@mui/material'
 import { ArrowDown, ChevronDown } from 'lucide-react'
@@ -22,12 +24,13 @@ export default function page() {
     const [subjects, setSubjects] = useState<Subject[]>([])
     const router = useRouter()
     const [activeIndex, setActiveIndex] = useState(null);
+    const currentUser = useAppSelector(selectedCurrentUser)
 
     const toggleCollapse = async (index: any, id: string) => {
         setActiveIndex(prevIndex => prevIndex === index ? null : index);
         if (!currentSemester) return
         await fetchCourseBySemesterIdAndSubjectId(currentSemester._id, id).then((res) => {
-            setCourses(res.data)
+            setCourses(res.data.filter((course: any) => course.subjectId === id && course.lecturer._id === currentUser._id))
         })
     };
     useEffect(() => {

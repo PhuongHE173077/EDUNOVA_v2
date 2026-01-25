@@ -178,7 +178,7 @@ const getCourseByUserId = async (userId) => {
   try {
     const conditionQuery = {
       $or: [
-        { studentIds: { $all: [new ObjectId(userId)] } },
+        { studentIds: new ObjectId(userId) },
         { lecturerId: new ObjectId(userId) }
       ]
     }
@@ -247,6 +247,60 @@ const getCourseBySemesterId = async (semesterId) => {
   try {
     const result = await GET_DB().collection(COURSE_COLLECTION_NAME).aggregate([
       { $match: { semesterId: new ObjectId(semesterId) } },
+      {
+        $lookup: {
+          from: userModal.USER_COLLECTION_NAME,
+          localField: 'lecturerId',
+          foreignField: '_id',
+          as: 'lecturer'
+        }
+      },
+      {
+        $lookup: {
+          from: userModal.USER_COLLECTION_NAME,
+          localField: 'studentIds',
+          foreignField: '_id',
+          as: 'student'
+        }
+      },
+      {
+        $lookup: {
+          from: semesterModel.SEMESTER_COLLECTION_NAME,
+          localField: 'semesterId',
+          foreignField: '_id',
+          as: 'semester'
+        }
+      },
+      {
+        $lookup: {
+          from: subjectModel.SUBJECT_COLLECTION_NAME,
+          localField: 'subjectId',
+          foreignField: '_id',
+          as: 'subject'
+        }
+      }
+    ]).toArray()
+
+    const data = result.map(course => ({
+      ...course,
+      lecturer: course.lecturer.length > 0 ? pickUser(course.lecturer[0]) : null,
+      student: course.student || [],
+      semester: course.semester.length > 0 ? course.semester[0] : null,
+      subject: course.subject.length > 0 ? course.subject[0] : null,
+    }))
+
+    const fieldName = ['lecturerId', 'studentIds', 'semesterId']
+
+    return data.map(course => deleteFields(course, fieldName))
+  } catch (error) {
+    throw error
+  }
+}
+
+const getCourseBySemesterIdAndLecturerId = async (semesterId, lecturerId) => {
+  try {
+    const result = await GET_DB().collection(COURSE_COLLECTION_NAME).aggregate([
+      { $match: { semesterId: new ObjectId(semesterId), lecturerId: new ObjectId(lecturerId) } },
       {
         $lookup: {
           from: userModal.USER_COLLECTION_NAME,
@@ -368,5 +422,6 @@ export const courseModel = {
   getCourseByUserId,
   getCourseBySemesterId,
   getCourseBySemesterIdAndSubjectId,
-  deleteById
+  deleteById,
+  getCourseBySemesterIdAndLecturerId
 }

@@ -36,11 +36,18 @@ const START_SERVER = () => {
 
   //middleware erro (allways in last)
   app.use(errorHandlingMiddleware)
+  if (env.BUILD_MODE === 'production') {
+    server.listen(port, hostname, () => {
+      // eslint-disable-next-line no-console
+      console.log(`Production:Hello ${env.AUTHOR}, I am running at http://${hostname}:${port}/`)
+    })
+  } else {
+    server.listen(port, hostname, () => {
+      // eslint-disable-next-line no-console
+      console.log(`Hello ${env.AUTHOR}, I am running at http://${hostname}:${port}/`)
+    })
+  }
 
-  server.listen(port, hostname, () => {
-    // eslint-disable-next-line no-console
-    console.log(`Hello ${env.AUTHOR}, I am running at http://${hostname}:${port}/`)
-  })
 }
 
 CONNECT_DB()

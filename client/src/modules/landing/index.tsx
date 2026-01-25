@@ -23,10 +23,10 @@ export default function LandingPage(props: { disableCustomTheme?: boolean }) {
         <AppAppBar />
         <Hero />
         <div>
-          <LogoCollection />
+          {/* <LogoCollection /> */}
           <Features />
           <Divider />
-          <Testimonials />
+          {/* <Testimonials /> */}
           <Divider />
           <Highlights />
           <Divider />

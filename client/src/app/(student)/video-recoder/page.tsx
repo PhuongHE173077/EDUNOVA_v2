@@ -7,42 +7,7 @@ import { VideoRecord } from "@/types";
 import VideoCard from "./VideoCard";
 
 const dummyVideos: VideoRecord[] = [
-  {
-    _id: "v1",
-    courseId: "C001",
-    title: "Buổi 1 - Giới thiệu môn Toán cao cấp",
-    description: "Tổng quan môn học, phương pháp học và bài tập.",
-    url: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    createdAt: new Date("2025-05-10T10:00:00"),
-    type: "youtube",
-  },
-  {
-    _id: "v2",
-    courseId: "C003",
-    title: "Buổi 2 - Lập trình với React",
-    description: "Giới thiệu component, props, state trong React.",
-    url: "https://www.youtube.com/embed/Ke90Tje7VS0",
-    createdAt: new Date("2025-05-11T13:30:00"),
-    type: "youtube",
-  },
-  {
-    _id: "v3",
-    courseId: "C004",
-    title: "Buổi 1 - Vật lý đại cương: Cơ học cơ bản",
-    description: "Định luật Newton, chuyển động thẳng, gia tốc.",
-    url: "https://www.youtube.com/embed/1AxTCZKaAjY",
-    createdAt: new Date("2025-05-12T09:00:00"),
-    type: "youtube",
-  },
-  {
-    _id: "v4",
-    courseId: "C005",
-    title: "Buổi 1 - Lịch sử văn minh thế giới: Ai Cập cổ đại",
-    description: "Nền văn minh sông Nile và những điều huyền bí.",
-    url: "https://www.youtube.com/embed/lrYx7HaUlMY",
-    createdAt: new Date("2025-05-13T14:00:00"),
-    type: "youtube",
-  },
+
   {
     _id: "v5",
     courseId: "C002",
@@ -51,52 +16,7 @@ const dummyVideos: VideoRecord[] = [
     url: "https://www.youtube.com/embed/ScMzIvxBSi4",
     createdAt: new Date("2025-05-14T10:30:00"),
     type: "youtube",
-  },
-  {
-    _id: "v6",
-    courseId: "C003",
-    title: "Buổi 4 - Lập trình với React: Hooks cơ bản",
-    description: "useState, useEffect và cách quản lý dữ liệu.",
-    url: "https://www.youtube.com/embed/f687hBjwFcM",
-    createdAt: new Date("2025-05-15T08:15:00"),
-    type: "youtube",
-  },
-  {
-    _id: "v7",
-    courseId: "C001",
-    title: "Buổi 2 - Toán cao cấp: Giải tích 1 chiều",
-    description: "Đạo hàm, tích phân và ứng dụng.",
-    url: "https://www.youtube.com/embed/zOjov-2OZ0E",
-    createdAt: new Date("2025-05-16T13:00:00"),
-    type: "youtube",
-  },
-  {
-    _id: "v8",
-    courseId: "C005",
-    title: "Buổi 2 - Văn minh phương Tây: Hy Lạp cổ đại",
-    description: "Thành bang, thần thoại, nền dân chủ đầu tiên.",
-    url: "https://www.youtube.com/embed/PYyAXYRIymY",
-    createdAt: new Date("2025-05-17T15:45:00"),
-    type: "youtube",
-  },
-  {
-    _id: "v9",
-    courseId: "C004",
-    title: "Buổi 2 - Vật lý: Động lực học và ma sát",
-    description: "Ma sát trượt, thế năng, bảo toàn cơ năng.",
-    url: "https://www.youtube.com/embed/Iwpi1Lm6dFo",
-    createdAt: new Date("2025-05-18T09:30:00"),
-    type: "youtube",
-  },
-  {
-    _id: "v10",
-    courseId: "C002",
-    title: "Buổi 4 - Speaking Practice: Business English",
-    description: "Thực hành hội thoại trong môi trường công sở.",
-    url: "https://www.youtube.com/embed/E7wJTI-1dvQ",
-    createdAt: new Date("2025-05-19T11:00:00"),
-    type: "youtube",
-  },
+  }
 ];
 
 const subjectMap: Record<string, string> = {

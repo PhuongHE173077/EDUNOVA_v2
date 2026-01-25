@@ -29,7 +29,7 @@ export default function AddAssignmentDialog({ open, setOpen, id, fetchData }: an
                     error: 'Error',
                 }
             ).then((res) => {
-                setFile(e.target.files[0])
+                setFile(e.target.files![0])
                 setFileUrl(res.data)
             })
 

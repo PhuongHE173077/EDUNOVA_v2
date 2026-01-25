@@ -47,7 +47,7 @@ export default function ContentCourseDetail({ lesson }: { lesson: lesson[] }) {
                             boxShadow: `0 6px 12px ${Colors.SHADOW}`,
                         },
                     }}
-                    ref={(el: HTMLDivElement | null) => (slotRefs.current[ls._id] = el)}
+                    ref={(el: HTMLDivElement | null) => { slotRefs.current[ls._id] = el }}
                     onClick={() => toggleVisibility(ls._id)}
                 >
                     <Box bgcolor="grey.100" borderRadius="8px" p={2}>
@@ -62,22 +62,13 @@ export default function ContentCourseDetail({ lesson }: { lesson: lesson[] }) {
                                 }}
                             >
                                 <Typography variant="subtitle2" color="black" fontSize={15}>
-                                    Slot {index + 1}
+                                    Tiết {index + 1}
                                 </Typography>
                             </Box>
                             <Box display="flex" alignItems="center" gap={2}>
-                                <Typography variant="body2" color="textSecondary">
-                                    2025
-                                </Typography>
 
-                                <Button
 
-                                    variant="outlined"
-                                    color="secondary"
-                                    size="small"
-                                >
-                                    View Slots
-                                </Button>
+
                             </Box>
                         </Box>
                         <Typography
@@ -101,7 +92,7 @@ export default function ContentCourseDetail({ lesson }: { lesson: lesson[] }) {
                     {/* Questions and Assignments */}
                     <Collapse in={visibleSlots[ls._id]}>
                         <Typography variant="subtitle1" color="primary" gutterBottom>
-                            Questions
+                            Câu hỏi
                         </Typography>
                         <List>
                             {ls.questions

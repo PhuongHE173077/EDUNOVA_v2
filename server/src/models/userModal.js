@@ -31,7 +31,7 @@ const USER_COLLECTION_SCHEMA = Joi.object({
     USER_ROLES.STUDENT,
     USER_ROLES.LECTURER
   ).default(USER_ROLES.CLIENT),
-  
+
 
 
   isActive: Joi.boolean().default(true),
@@ -44,7 +44,7 @@ const USER_COLLECTION_SCHEMA = Joi.object({
 })
 
 
-const INVALID_UPDATE_FILEDS = ['_id', 'email', 'username','createdAt']
+const INVALID_UPDATE_FILEDS = ['_id', 'email', 'username', 'createdAt']
 
 
 const validateData = async (data) => {
@@ -141,6 +141,15 @@ const getLecturers = async () => {
     throw error;
   }
 };
+
+const addManyUsers = async (users) => {
+  try {
+    const result = await GET_DB().collection(USER_COLLECTION_NAME).insertMany(users);
+    return result;
+  } catch (error) {
+    throw error;
+  }
+};
 export const userModal = {
   USER_COLLECTION_NAME,
   USER_COLLECTION_SCHEMA,
@@ -150,5 +159,6 @@ export const userModal = {
   updateUser,
   getAllUser,
   deleteUser,
-  getLecturers
+  getLecturers,
+  addManyUsers
 }

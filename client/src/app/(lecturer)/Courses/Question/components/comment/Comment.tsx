@@ -94,7 +94,7 @@ export const Comment = ({ answer, handleVote }: { answer: answerLesson, handleVo
                 <Rating
                     name="simple-controlled"
                     value={answer.star}
-                    onClick={(e) => handleVote(answer, e.target.value)}
+                    onClick={(e: any) => handleVote(answer, e.target.value)}
                 />
 
             </Box>

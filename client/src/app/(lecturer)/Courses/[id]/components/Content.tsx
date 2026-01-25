@@ -51,7 +51,9 @@ export default function ContentCourseDetail({ lesson }: { lesson: lesson[] }) {
                             boxShadow: `0 6px 14px rgba(155, 89, 182, 0.3)`,
                         },
                     }}
-                    ref={(el: HTMLDivElement | null) => (slotRefs.current[ls._id] = el)}
+                    ref={(el: HTMLDivElement | null) => {
+                        slotRefs.current[ls._id] = el;
+                    }}
                     onClick={() => toggleVisibility(ls._id)}
                 >
                     <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
@@ -99,7 +101,7 @@ export default function ContentCourseDetail({ lesson }: { lesson: lesson[] }) {
                             Questions
                         </Typography>
                         <List disablePadding>
-                            {ls.questions.map((qs, qIndex) => (
+                            {ls.questions.map((qs: any, qIndex) => (
                                 <ListItem
                                     key={`qs-${qIndex}`}
                                     onClick={(e) => {
@@ -125,7 +127,7 @@ export default function ContentCourseDetail({ lesson }: { lesson: lesson[] }) {
                                         primary={`Q${qIndex + 1}: ${qs.title}`}
                                         secondary={qs.description
                                             .split('\n')
-                                            .map((line, i) => (
+                                            .map((line: any, i: number) => (
                                                 <React.Fragment key={i}>
                                                     {line}
                                                     <br />

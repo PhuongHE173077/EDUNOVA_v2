@@ -17,11 +17,14 @@ import { Course, Semesters } from "@/types";
 import { Colors } from "@/lib/colors";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useSelector } from "react-redux";
+import { selectedCurrentUser } from "@/lib/redux/user/user.slide";
 
 export const CourseContent = ({ courses, semester, currentSemester }: { courses: Course[], semester: Semesters[], currentSemester: Semesters }) => {
     const [selectedSemester, setSelectedSemester] = useState<Semesters>(currentSemester);
+    const currentUser = useSelector(selectedCurrentUser);
     const [filteredCourses, setFilteredCourses] = useState<Course[]>(
-        courses.filter((course) => course.semester._id === selectedSemester._id)
+        courses.filter((course) => course.semester._id === selectedSemester._id && course?.student.some((s) => s?._id === currentUser?._id))
     );
 
     const router = useRouter();
@@ -30,7 +33,7 @@ export const CourseContent = ({ courses, semester, currentSemester }: { courses:
         if (selectedSemester) {
             setSelectedSemester(selectedSemester);
             setFilteredCourses(
-                courses.filter((course) => course.semester._id === selectedSemester._id)
+                courses.filter((course) => course.semester._id === selectedSemester._id && course.student.some((s) => s?._id === currentUser?._id))
             );
         }
     }

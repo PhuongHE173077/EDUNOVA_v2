@@ -32,7 +32,7 @@ Router.route('/users/list')
   .get(authMiddlewares.isAuthorized, userController.getAllUser)
 
 
-  Router.route('/user/:id')
+Router.route('/user/:id')
   .put(
     authMiddlewares.isAuthorized,
     multerUploadMiddlewares.upload.single('avatar'),
@@ -40,7 +40,10 @@ Router.route('/users/list')
     userController.update
   );
 
-  Router.route('/users/lecturers')
+Router.route('/users/lecturers')
   .get(authMiddlewares.isAuthorized, userController.getLecturers);
+
+Router.route('/users/create-many')
+  .post(userController.addManyUsers);
 
 export const userRoutes = Router

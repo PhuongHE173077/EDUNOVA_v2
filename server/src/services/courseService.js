@@ -1,4 +1,5 @@
 import { courseModel } from "~/models/courseModel"
+import { scheduleModel } from "~/models/scheduleModel"
 
 const getCourseByUserId = async (userId) => {
     try {
@@ -55,6 +56,7 @@ const createCourse = async (data) => {
 const deleteCourse = async (courseId) => {
     try {
         const result = await courseModel.deleteById(courseId)
+        await scheduleModel.deleteByCourseId(courseId)
         return result
     } catch (error) {
         throw error

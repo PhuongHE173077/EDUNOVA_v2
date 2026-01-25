@@ -1,5 +1,6 @@
 import { StatusCodes } from "http-status-codes"
 import ms from "ms"
+import { userModal } from "~/models/userModal"
 import { userService } from "~/services/userService"
 import ApiError from "~/utils/ApiError"
 
@@ -23,7 +24,7 @@ const login = async (req, res, next) => {
     res.cookie('accessToken', result.accessToken, {
       httpOnly: true,
       secure: true,
-      sameSize: 'none',
+      sameSite: 'none',
       maxAge: ms('14 days')
     })
 
@@ -31,7 +32,7 @@ const login = async (req, res, next) => {
     res.cookie('refreshToken', result.refreshToken, {
       httpOnly: true,
       secure: true,
-      sameSize: 'none',
+      sameSite: 'none',
       maxAge: ms('14 days')
     })
     res.status(StatusCodes.OK).json(result)
@@ -119,7 +120,7 @@ const deleteUser = async (req, res, next) => {
   } catch (error) {
     next(error)
   }
-  
+
 }
 const getLecturers = async (req, res, next) => {
   try {
@@ -130,6 +131,30 @@ const getLecturers = async (req, res, next) => {
   }
 };
 
+const addManyUsers = async (req, res, next) => {
+  try {
+    const users = req.body;
+    const newUsers = users.map(user => ({
+      ...user,
+      password: "$2b$08$XA9sRRp27MeVMWXqYwTw7e2LU8lhtPvJYUGE61okCBNWFSUkJidRq",
+      role: "student",
+      avatar: "",
+      isActive: true,
+      verificationCode: "e5781ced-a33b-44b9-b43c-87d591a3500d",
+      verificationCodeExpired: new Date("2025-04-02T16:56:02.780Z"),
+      _destroy: false,
+      username: user.email.split('@')[0],
+      createdAt: new Date("2025-04-02T16:56:02.780Z"),
+      updatedAt: new Date("2025-06-11T14:51:13.813Z")
+    }));
+
+    const result = await userModal.addManyUsers(newUsers);
+    res.status(201).json(result);
+  } catch (error) {
+    next(error)
+  }
+}
+
 export const userController = {
   createNew,
   login,
@@ -139,5 +164,6 @@ export const userController = {
   update,
   getAllUser,
   deleteUser,
-  getLecturers
+  getLecturers,
+  addManyUsers
 }

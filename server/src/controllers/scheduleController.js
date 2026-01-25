@@ -53,4 +53,14 @@ const createNew = async (req, res, next) => {
     }
 }
 
-export const scheduleController = { getScheduleByUserId, createNew }
+const getScheduleById = async (req, res, next) => {
+    try {
+        const scheduleId = req.params.id
+        const schedule = await scheduleModel.findOneById(scheduleId)
+        res.status(StatusCodes.OK).json(schedule)
+    } catch (error) {
+        next(error)
+    }
+}
+
+export const scheduleController = { getScheduleByUserId, createNew, getScheduleById }

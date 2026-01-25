@@ -4,11 +4,10 @@ import { subjectModel } from "~/models/subjectModel"
 const getSubjects = async (semesterId, userId) => {
     try {
         const subjects = await subjectModel.getAll()
-        // console.log("🚀 ~ getSubjects ~ subjects:", subjects)
         if (semesterId) {
-            const course = await courseModel.getCourseBySemesterId(semesterId)
+            const course = await courseModel.getCourseBySemesterIdAndLecturerId(semesterId, userId)
             const uniqueSubjectIds = [...new Set(course.map(item => item.subjectId))];
-            // console.log("🚀 ~ getSubjects ~ uniqueSubjectIds:", uniqueSubjectIds)
+
             const uniqueSubjectIdsStr = uniqueSubjectIds.map(id => id.toString());
             return subjects.filter(item => uniqueSubjectIdsStr.includes(item._id.toString()));
         }
